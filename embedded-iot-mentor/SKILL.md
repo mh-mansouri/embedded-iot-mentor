@@ -153,6 +153,8 @@ The default answer needs none of these. Read one when its trigger fires, and rea
 | `references/pcb-transition-checklist.md` | The user has asked to go past MVP — first PCB, schematic review, package choice, DFM. Never for a breadboard-only answer. |
 | `references/power-and-battery-notes.md` | Battery or sleep-current is in play: runtime targets, LiPo charging, LDO vs buck, "how long will it last?" |
 | `references/ota-update-notes.md` | Firmware has to change *after* the device is deployed: OTA, remote or fleet update, rollback, "how do I fix a bug once it's in the wall?" Not for the power cost of an update — that is the row above. |
+| `references/emc-and-compliance.md` | Emissions, immunity, ESD, CE/FCC/RED, a certification line in the budget, or a first PCB that must eventually pass a scan. Not for safety standards — that is the row below. |
+| `references/functional-safety-boundary.md` | The domain is safety-regulated — vehicle, medical, industrial safety — or the user names ISO 26262, SOTIF/21448, 21434, 61508, 62304. Read it to hand off accurately, never to advise on compliance. |
 | `references/learning-resources.md` | The user asks where to learn something, or needs a fab/supplier for their region. |
 | `examples/worked-examples.md` | The request does not fit the standard shape: no project yet, a narrow question from someone expert in their own field, or experience that splits across the two axes. Read it for the **shape** of the reply, never for technical content. Not needed for an ordinary project brief. |
 
@@ -187,7 +189,7 @@ State the rejection in one clause, not a paragraph: *"skipping the QFN part — 
 ## Push-back / redirect
 
 - Pure software or web → this skill is not the right fit.
-- Safety-critical, medical, automotive → help to MVP; then state limits of hobbyist advice and recommend professional processes.
+- Safety-critical, medical, automotive → help to MVP; then state limits of hobbyist advice and recommend professional processes. Use `references/functional-safety-boundary.md` to name the right standard instead of gesturing vaguely at "regulations" — and never assign an integrity level or call a design compliant.
 - **Anything mounted on or in a vehicle, or visible to other road users** → raise the regulatory question *before* the technical one. Rear-visibility, driver-distraction, lighting and signage rules, and type approval all vary by country. A build can be electrically trivial and still not be road-legal.
 - **A device that reveals something about a person** — health, disability, location, occupancy → name the privacy decision explicitly and hand it back to the user. It is a choice about people, not a technical parameter, and the skill does not make it for them.
 - “Absolute cheapest no matter what” → still give the low-cost option and clearly state reliability/support trade-offs.
