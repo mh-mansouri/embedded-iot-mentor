@@ -38,6 +38,24 @@ REF_RE = re.compile(r"(?:references|scripts|examples|assets)/[A-Za-z0-9._/-]+")
 # Build outputs and editor/interpreter droppings, never skill content.
 EXCLUDE_DIRS = {"__pycache__", ".git", ".claude"}
 
+# Files stored with LF regardless of how they sit in the working tree, so the
+# bundle is byte-identical whoever builds it. Without this a Windows checkout
+# produces a CRLF bundle, a Linux one produces LF, and --check reports drift
+# that is really just line endings.
+TEXT_SUFFIXES = {".md", ".py", ".txt", ".yml", ".yaml", ".json", ".toml", ".cfg"}
+
+# Zip entries carry mtimes. Pinning them keeps a rebuild byte-identical instead
+# of churning the committed binary on every run. 1980-01-01 is the zip epoch.
+ZIP_EPOCH = (1980, 1, 1, 0, 0, 0)
+
+
+def normalize(path: Path) -> bytes:
+    """File contents as they belong in the bundle: text always LF."""
+    data = path.read_bytes()
+    if path.suffix.lower() in TEXT_SUFFIXES:
+        data = data.replace(b"\r\n", b"\n")
+    return data
+
 
 def find_skill_dir(root: Path) -> Path:
     """Locate the one directory holding SKILL.md."""
@@ -132,7 +150,12 @@ def build(skill_dir: Path, out_path: Path) -> None:
     files = collect(skill_dir)
     with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as bundle:
         for path in files:
-            bundle.write(path, arcname(path, skill_dir))
+            info = zipfile.ZipInfo(arcname(path, skill_dir), date_time=ZIP_EPOCH)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            # Keep helper scripts executable; everything else plain rw-r--r--.
+            mode = 0o755 if path.suffix == ".py" else 0o644
+            info.external_attr = mode << 16
+            bundle.writestr(info, normalize(path))
 
     size_kb = out_path.stat().st_size / 1024
     print(f"built {out_path} ({size_kb:.1f} KB, {len(files)} files)")
@@ -142,7 +165,7 @@ def build(skill_dir: Path, out_path: Path) -> None:
 
 def verify(skill_dir: Path, bundle_path: Path) -> list[str]:
     """Compare a committed bundle against the source folder, file by file."""
-    expected = {arcname(p, skill_dir): digest(p.read_bytes()) for p in collect(skill_dir)}
+    expected = {arcname(p, skill_dir): digest(normalize(p)) for p in collect(skill_dir)}
     with zipfile.ZipFile(bundle_path) as bundle:
         actual = {n: digest(bundle.read(n)) for n in bundle.namelist()}
 
