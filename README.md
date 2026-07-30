@@ -142,7 +142,13 @@ the download would ship a different version than the source folder.
 ```bash
 python embedded-iot-mentor/scripts/cost_estimator.py 1 4.50 "ESP32 DevKit" 10 0.12 "10k resistor"
 python embedded-iot-mentor/scripts/footprint_hint.py 0603
+python embedded-iot-mentor/scripts/sleep_budget.py --capacity 2000 --active-ma 80 \
+    --active-ms 250 --sleep-ua 15 --interval-s 600
 ```
+
+`sleep_budget.py` takes duty-cycle inputs rather than an average current, because the
+average is the number nobody knows up front. Same firmware, same battery, sleep current
+changed from 15 µA to a dev board's 8 mA regulator: **3.8 years becomes 8.3 days.**
 
 ## Contributing
 
