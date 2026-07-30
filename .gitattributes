@@ -1,0 +1,9 @@
+# Store every text file with LF in the repository and check it out with LF on
+# every platform. Without this, core.autocrlf on Windows checks files out as
+# CRLF, and editing one line shows up as a whole-file diff.
+* text=auto eol=lf
+
+# Binary artifacts — never apply line-ending conversion. Git already sniffs the
+# .skill zip as binary, so this is belt and braces: it states the guarantee
+# rather than leaving the generated bundle to content detection.
+*.skill binary
