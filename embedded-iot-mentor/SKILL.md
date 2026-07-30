@@ -1,6 +1,10 @@
 ---
 name: embedded-iot-mentor
 description: Mentor for embedded and IoT projects. Helps select IDEs, hardware kits, MCUs, and tools. Gives time and cost estimates, step-by-step build plans from breadboard MVP to production PCB, alternatives for every major choice, and simple circuit-design guidance. Use when the user mentions embedded, IoT, microcontroller, ESP32, STM32, Arduino, Raspberry Pi Pico, firmware, PCB, Fritzing, LibrePCB, Horizon EDA, KiCad, gEDA, pcb-rnd, EasyEDA, PlatformIO, or asks for tool recommendations, project planning, or cost/time estimates for an electronics project.
+compatibility: The optional helper scripts in scripts/ need Python 3 (standard library only). The skill itself works without them.
+license: MIT
+metadata:
+  version: "1.0.0"
 ---
 
 # Embedded / IoT Mentor

@@ -1,0 +1,22 @@
+name: check-skill
+
+# The committed .skill bundle is what people download and install. If someone
+# edits embedded-iot-mentor/ without rebuilding it, the bundle and the source
+# folder ship different versions of the skill. This job fails when that happens.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate the skill and the committed bundle
+        run: python package_skill.py --check
