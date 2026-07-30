@@ -1,0 +1,37 @@
+name: "💡 Skill improvement"
+description: "The skill missed something, over-explained, read the wrong reference, or its instructions could be worded better."
+title: "[Improvement]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of improvement?
+      options:
+        - The skill missed a risk it should have flagged
+        - The skill went past MVP without being asked
+        - A reference file was read when it wasn't needed (or ignored when it was)
+        - The answer was too long or not scannable
+        - Out-of-date tool, part, supplier, or price
+        - Better wording for the skill's instructions
+        - New capability idea
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe it
+      description: What happened (or what's missing), and what you'd expect instead.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Project brief to reproduce it (optional)
+      description: >
+        The prompt you gave, ideally with goal, experience level, budget, timeline, and
+        power source. A concrete brief makes the issue far easier to act on.
+      placeholder: |
+        "I want to log soil moisture in a greenhouse and see it on my phone.
+         A couple of Arduino sketches under my belt. €100, one month."

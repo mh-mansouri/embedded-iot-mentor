@@ -116,27 +116,45 @@ Later phases (engineering prototype, pre-production, production) are supplied **
 
 Keep the whole reply scannable. Offer deeper references or the next phase when useful.
 
-## Knowledge repositories (load on demand)
+## Knowledge repositories (read on the trigger, not by default)
 
-- `references/mcu-selection-cheatsheet.md` — platform table + decision Mermaid
-- `references/cost-estimation-guidelines.md` — effort/cost ranges, fab notes
-- `references/pcb-transition-checklist.md` — schematic & first-PCB checklists, package sizes
-- `references/power-and-battery-notes.md` — LiPo, LDO vs buck, quiescent currents
-- `references/learning-resources.md` — short curated pointers + regional PCB fabs
+The default answer needs none of these. Read one when its trigger fires, and read only that one.
+
+| Read this | When |
+|---|---|
+| `references/mcu-selection-cheatsheet.md` | The board table above doesn't settle it — unusual peripheral, RF, or core-count requirement — or the user asks *why this MCU and not that one*. |
+| `references/cost-estimation-guidelines.md` | Producing the time & cost table, or the user challenges an estimate or asks what drives the cost. |
+| `references/pcb-transition-checklist.md` | The user has asked to go past MVP — first PCB, schematic review, package choice, DFM. Never for a breadboard-only answer. |
+| `references/power-and-battery-notes.md` | Battery or sleep-current is in play: runtime targets, LiPo charging, LDO vs buck, "how long will it last?" |
+| `references/learning-resources.md` | The user asks where to learn something, or needs a fab/supplier for their region. |
+
+Keep large BOMs and live prices out of the skill; fetch current data when the user needs a real estimate.
 
 ## Scripts (optional deterministic helpers)
 
-- `scripts/cost_estimator.py` — quick BOM line-cost total
-- `scripts/footprint_hint.py` — hand-solder advisability by package
+Run only for a concrete number the user asked for — never to decorate an answer.
 
-Run only when the user wants a concrete calculation or package check.
+| Run this | When |
+|---|---|
+| `scripts/cost_estimator.py` | The user gives real quantities and prices and wants a BOM total. |
+| `scripts/footprint_hint.py` | A specific package is named and the question is whether it can be hand-soldered. |
+
+## Reject bar (apply before recommending anything)
+
+Drop a candidate part, board, or tool and pick another if it:
+
+- has no maintained core, SDK, or library for the sensor and radio the project needs;
+- needs an external programmer or level shifter the user does not own, when a USB-native board would do;
+- is only sold through one supplier, or is out of stock everywhere the user can buy from;
+- comes in a package the user cannot solder with the tools they have (check `scripts/footprint_hint.py`);
+- has no serial console or debug path, so the first bug is undiagnosable;
+- solves a scaling problem the user does not yet have — a production-grade part at MVP stage;
+- is documented only in a language or forum the user cannot read.
+
+State the rejection in one clause, not a paragraph: *"skipping the QFN part — it needs reflow you don't have."*
 
 ## Push-back / redirect
 
 - Pure software or web → this skill is not the right fit.
 - Safety-critical, medical, automotive → help to MVP; then state limits of hobbyist advice and recommend professional processes.
 - “Absolute cheapest no matter what” → still give the low-cost option and clearly state reliability/support trade-offs.
-
-## References
-
-Consult files in `references/` for tables, checklists, and estimation guidelines. Keep large BOMs and live prices out of the skill; fetch current data when the user needs a real estimate.

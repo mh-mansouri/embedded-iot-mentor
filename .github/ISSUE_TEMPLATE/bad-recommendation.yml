@@ -1,0 +1,51 @@
+name: "🔧 A recommendation that didn't work out"
+description: "The mentor suggested a part, board, or toolchain that failed on a real bench — the most useful kind of report."
+title: "[Recommendation]: "
+labels: ["bad-recommendation", "hardware-knowledge"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Real bench experience is the most valuable contribution to this skill.
+        You don't need to be a programmer to fill this in.
+  - type: input
+    id: project
+    attributes:
+      label: The project
+      description: One line on what you were building.
+      placeholder: "e.g. battery soil-moisture sensor, one year on 2×AA"
+    validations:
+      required: true
+  - type: input
+    id: recommendation
+    attributes:
+      label: What the mentor recommended
+      placeholder: "e.g. ESP32 DevKit v1 with deep sleep"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong
+      description: >
+        Part unobtainable, toolchain wouldn't build, power budget missed, package
+        unsolderable, no debug path — explain the why so others can learn from it.
+    validations:
+      required: true
+  - type: input
+    id: better
+    attributes:
+      label: What worked instead (optional)
+      placeholder: "e.g. ESP32-C3 bare module + external LDO; 12 µA sleep instead of 8 mA"
+  - type: input
+    id: region
+    attributes:
+      label: Where you buy parts (optional)
+      description: Availability is regional, and it's the most common reason a good plan stalls.
+      placeholder: "e.g. Germany / EU, or Iran, or US"
+  - type: input
+    id: experience
+    attributes:
+      label: Your experience level (optional)
+      description: Helps us tell "bad advice" apart from "advice pitched at the wrong level".
+      placeholder: "e.g. some Arduino, first battery project"
