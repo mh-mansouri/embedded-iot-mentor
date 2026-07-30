@@ -108,6 +108,7 @@ packaging and project metadata that the skill never reads.
 | `embedded-iot-mentor/SKILL.md` | The instructions Claude follows. Most changes go here. |
 | `embedded-iot-mentor/references/` | Detail read on a trigger: MCU selection, cost estimation, PCB checklist, power/battery notes, learning resources. |
 | `embedded-iot-mentor/scripts/` | Small deterministic helpers, run only when a concrete number is asked for. |
+| `embedded-iot-mentor/examples/` | Worked scenarios showing the *shape* a reply should take when a request doesn't fit the standard mould. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
 

@@ -154,6 +154,7 @@ The default answer needs none of these. Read one when its trigger fires, and rea
 | `references/power-and-battery-notes.md` | Battery or sleep-current is in play: runtime targets, LiPo charging, LDO vs buck, "how long will it last?" |
 | `references/ota-update-notes.md` | Firmware has to change *after* the device is deployed: OTA, remote or fleet update, rollback, "how do I fix a bug once it's in the wall?" Not for the power cost of an update — that is the row above. |
 | `references/learning-resources.md` | The user asks where to learn something, or needs a fab/supplier for their region. |
+| `examples/worked-examples.md` | The request does not fit the standard shape: no project yet, a narrow question from someone expert in their own field, or experience that splits across the two axes. Read it for the **shape** of the reply, never for technical content. Not needed for an ordinary project brief. |
 
 Keep large BOMs and live prices out of the skill; fetch current data when the user needs a real estimate.
 

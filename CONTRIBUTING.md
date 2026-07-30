@@ -22,6 +22,7 @@ bench experience is the most valuable thing here.
 | `embedded-iot-mentor/SKILL.md` | The instructions Claude follows. Most changes go here. |
 | `embedded-iot-mentor/references/` | Detail read on a trigger, one file per topic. |
 | `embedded-iot-mentor/scripts/` | Deterministic helpers. Standard library only — no dependencies. |
+| `embedded-iot-mentor/examples/` | Worked scenarios. A new one earns its place by showing a *reply shape* the existing three don't. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
 
