@@ -86,7 +86,8 @@ or
 > I have an ESP32 and a BME280 sitting in a drawer. What's worth building with them?
 
 It will ask a couple of short questions if the goal, experience level, power source, or
-timeline are still unclear — then answer in tables rather than essays.
+timeline are still unclear — then answer in tables rather than essays. A whole project
+plan is meant to fit on one screen; if you want the reasoning behind a pick, ask for it.
 
 ## Good to know
 
