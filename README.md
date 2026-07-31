@@ -1,5 +1,7 @@
 # Embedded / IoT Mentor — a Claude Skill
 
+**English** · [Svenska](./README.sv.md) · [فارسی](./README.fa.md)
+
 A skill for [Claude](https://claude.ai) that acts as an experienced embedded-systems mentor:
 it picks the microcontroller, board, and toolchain for your project, estimates what it will
 cost and how long it will take, and hands you a build plan that stops at a **working
