@@ -2,68 +2,68 @@
 
 [English](./README.md) · **Svenska** · [فارسی](./README.fa.md)
 
-En skill för [Claude](https://claude.ai) som agerar erfaren mentor inom inbyggda system:
-den väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar vad det
-kommer att kosta och hur lång tid det tar, och ger dig en byggplan som stannar vid ett
-**fungerande kopplingsdäck** i stället för en produktionslinje du aldrig bad om.
+En skill för [Claude](https://claude.ai) som är en van mentor inom inbyggda system: den
+väljer mikrokontroller, kort och verktygskedja åt ditt projekt, gissar vad det kommer att
+kosta och hur lång tid det tar, och ger dig en byggplan som slutar vid ett **kopplingsdäck
+som funkar** i stället för en produktionslinje du aldrig bad om.
 
-De flesta råd om inbyggda system missar åt ett av två håll — en komponentlista utan plan,
+De flesta råd om inbyggda system går fel åt ett av två håll: en komponentlista utan plan,
 eller en produktionsplan till någon som ännu inte fått en lysdiod att blinka. Den här
-skillen frågar vad du faktiskt har byggt tidigare, och svarar sedan på den nivån.
+skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivån.
 
 ## Demo
 
 ![En bonde vill mäta markfuktighet och kväve över en äng; skillen avvisar kvävedelen, ställer två frågor och levererar en LoRa-plan med sex noder utan en rad kod](./embedded-iot-mentor-demo.gif)
 
-En fårbonde i Devon, ingen kod, sex mätpunkter, den längst bort 400 m från huset. Värd att
-titta på för vad skillen *inte* gör: den inleder med att avvisa halva förfrågan — ingen
-billig givare mäter kväve i jord ärligt — och låter sedan tre begränsningar göra valen.
-400 meter väljer radio framför Wi-Fi, ”jag skriver inte kod” väljer färdig firmware framför
-en verktygskedja, och en blöt äng väljer kapslingen. Kortet bestäms sist, inte först. Hela
-transkriptet finns i
+En fårbonde i Devon, ingen kod, sex mätpunkter, den längst bort 400 m från huset. Den är
+värd att titta på för vad skillen *inte* gör: den börjar med att säga nej till halva
+förfrågan — ingen billig givare mäter kväve i jord ärligt — och låter sedan tre
+begränsningar göra valen. 400 meter väljer radio framför Wi-Fi, ”jag skriver inte kod”
+väljer färdig firmware framför en verktygskedja, och en blöt äng väljer kapslingen. Kortet
+bestäms sist, inte först. Hela samtalet finns i
 [Scenario D](./embedded-iot-mentor/examples/worked-examples.md#scenario-d--when-half-the-brief-cannot-be-built).
 
 ## Vad den gör
 
 - **Väljer en plattform** — ESP32, Pico, STM32, nRF52 — och säger rakt ut varför just den,
-  plus ett eller två alternativ och när vart och ett skulle vinna i stället.
-- **Skiljer hårdvaruspåret från firmwarespåret**, så att du vet vad du ska köpa och vad du
-  ska installera utan att blanda ihop de två.
-- **Kontrollerar om du behöver skriva firmware över huvud taget.** Om ESPHome, Meshtastic
-  eller Tasmota redan gör jobbet är det svaret — att skriva kod är en kostnad, inte en
-  leverans.
-- **Uppskattar tid och kostnad** som intervall, och pekar ut vad som faktiskt driver dem —
-  inklusive vad saken kostar att *driva*, när det väl är sex noder som äter batterier ute
-  på en åker.
+  plus ett eller två alternativ och när de hade varit bättre.
+- **Håller isär hårdvaruspåret och firmwarespåret**, så att du vet vad du ska köpa och vad
+  du ska installera utan att blanda ihop dem.
+- **Kollar om du behöver skriva firmware alls.** Om ESPHome, Meshtastic eller Tasmota redan
+  gör jobbet är det svaret — att skriva kod är en kostnad, inte en leverans.
+- **Gissar tid och kostnad** som intervall, och pekar ut vad som faktiskt driver upp dem —
+  bland annat vad saken kostar att *ha igång*, när det väl är sex noder som äter batterier
+  ute på en åker.
 - **Säger vad en givare verkligen mäter.** Billiga ”NPK”-prober mäter konduktivitet och
   gissar resten; det får du veta innan du köper sex av dem, inte efteråt.
 - **Planerar fram till MVP och stannar där.** Ingenjörsprototyp, förserie och produktion
   finns som faser, men du får dem först när du ber om dem.
-- **Namnger riskerna** — energibudget, komponenttillgång, ingen felsökningsväg,
-  certifiering, inlärningskurvan för det som just rekommenderats.
-- **Underkänner sina egna förslag** mot en fast ribba: inget underhållet bibliotek,
+- **Pekar ut riskerna** — energibudget, om komponenterna går att få tag på, ingen väg att
+  felsöka, certifiering, och hur brant det är att lära sig det den just föreslog.
+- **Sågar sina egna förslag** mot en fast ribba: inget bibliotek som underhålls, en
   komponent från en enda leverantör, en kapsel du inte kan löda, ingen seriekonsol — då
-  stryks kandidaten och den väljer om.
+  stryker den kandidaten och väljer om.
 
 ## Varför den finns
 
-Felen den är byggd för att fånga:
+Misstagen den är byggd för att fånga:
 
 - **En nybörjare som pekas mot en STM32 med en ST-Link** för att ett forum sa att det var
-  ”mer professionellt” — tre kvällar förlorade på verktygskedjan innan första lysdioden.
-- **Ett batteriprojekt byggt kring ett utvecklingskort** vars regulator drar 20 mA i
-  tomgång, så att den ”två månader” långa drifttiden i själva verket är fyra dagar. Kortet
-  var aldrig problemet; ingen räknade på viloströmmen.
+  ”mer professionellt” — tre kvällar går åt till verktygskedjan innan första lysdioden
+  tänds.
+- **Ett batteriprojekt byggt kring ett utvecklingskort** vars regulator drar 20 mA när den
+  inte gör något, så att drifttiden på ”två månader” egentligen är fyra dagar. Kortet var
+  aldrig problemet; ingen räknade på viloströmmen.
 - **Ett första kretskort beställt med 0402-komponenter och en QFN**, handlött med lödkolv,
   dött vid leverans och utan testpunkter för att ta reda på varför.
-- **Sex givare utplacerade på en åker i inomhuslådor**, tätade med tejp i stället för
-  kabelgenomföringar, med kondens på sina egna kretskort redan andra veckan.
+- **Sex givare utplacerade på en åker i lådor gjorda för inomhusbruk**, tätade med tejp i
+  stället för kabelgenomföringar, med kondens på sina egna kretskort redan andra veckan.
 
 ## Installation
 
 **Alternativ A — en fil.** Ladda ner
-[`embedded-iot-mentor.skill`](./embedded-iot-mentor.skill) och öppna den i Claude.
-(Sparande av skills måste vara aktiverat för ditt konto eller din organisation.)
+[`embedded-iot-mentor.skill`](./embedded-iot-mentor.skill) och öppna den i Claude. (Ditt
+konto eller din organisation måste ha påslaget att skills får sparas.)
 
 **Alternativ B — Claude Code.** Packa upp den i din skills-katalog:
 
@@ -91,15 +91,15 @@ Copy-Item embedded-iot-mentor.skill "$env:TEMP\embedded-iot-mentor.zip"
 Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.claude\skills" -Force
 ```
 
-Claude Code hittar den vid nästa session — `/skills` listar den, och Claude laddar den även
-på eget initiativ när ett samtal matchar beskrivningen.
+Claude Code hittar den vid nästa session — `/skills` listar den, och Claude tar upp den
+själv när ett samtal passar beskrivningen.
 
 ## Använd den
 
 Beskriv bara projektet. Till exempel:
 
 > Jag vill logga markfuktighet i ett växthus och se den i mobilen. Jag har gjort ett par
-> Arduino-skisser. Budget kanske 100 €, och jag vill ha det igång inom en månad.
+> Arduino-skisser. Budget kanske 1 000 kr, och jag vill ha det igång inom en månad.
 
 eller
 
@@ -115,17 +115,17 @@ eller, den från demon ovan:
 > Jag är bonde och vill mäta markfuktighet och kväve på olika delar av min äng för att vara
 > säker på att fåren får tillräckligt med foder.
 
-Den ställer ett par korta frågor om målet, erfarenhetsnivån, strömförsörjningen, miljön
-eller tidsplanen fortfarande är oklara — och svarar sedan i tabeller i stället för uppsatser.
-En hel projektplan ska få plats på en skärm; vill du ha resonemanget bakom ett val får du
-fråga efter det.
+Är målet, din erfarenhet, strömförsörjningen, miljön eller tidsplanen fortfarande oklar
+ställer den ett par korta frågor först — och svarar sedan i tabeller i stället för långa
+utläggningar. En hel projektplan ska få plats på en skärm; vill du ha resonemanget bakom ett
+val får du fråga efter det.
 
 ## Bra att veta
 
-- **Priser och lagersaldon blir snabbt inaktuella.** Uppskattningar är intervall, inte
+- **Priser och lagersaldon blir snabbt gamla.** Uppskattningarna är intervall, inte
   offerter. Kolla LCSC, Digi-Key eller din lokala leverantör innan du beställer.
-- **Den kan inte verifiera komponenttillgången** i ditt land, och det är den vanligaste
-  orsaken till att en bra plan kör fast.
+- **Den kan inte kolla om komponenterna finns att köpa** i ditt land, och det är den
+  vanligaste orsaken till att en bra plan kör fast.
 - **Den stannar vid MVP med flit.** Be uttryckligen om de senare faserna.
 - **Inte för säkerhetskritiskt arbete.** Den hjälper dig fram till en prototyp för medicin,
   fordon eller säkerhetssystem, och säger sedan rakt ut var hobbyråden tar slut.
@@ -133,21 +133,21 @@ fråga efter det.
 ## Struktur
 
 Själva skillen ligger i `embedded-iot-mentor/`. Allt i repots rot är paketering och
-projektmetadata som skillen aldrig läser.
+projektdata som skillen aldrig läser.
 
 | Sökväg | Vad det är |
 |---|---|
 | `embedded-iot-mentor/SKILL.md` | Instruktionerna Claude följer. De flesta ändringar hör hemma här. |
-| `embedded-iot-mentor/references/` | Detaljer som läses vid en utlösare: val av MCU, uppkoppling, kostnadsuppskattning, PCB-checklista, ström och batteri, fältinstallation, OTA, EMC, säkerhetsgräns, lärresurser. |
-| `embedded-iot-mentor/scripts/` | Små deterministiska hjälpprogram, som körs bara när ett konkret tal efterfrågas. |
-| `embedded-iot-mentor/examples/` | Genomarbetade scenarier som visar vilken *form* ett svar ska ha när en förfrågan inte passar mallen. |
+| `embedded-iot-mentor/references/` | Detaljer som läses först när något drar igång dem: val av MCU, uppkoppling, kostnadsuppskattning, PCB-checklista, ström och batteri, fältinstallation, OTA, EMC, säkerhetsgräns, lärresurser. |
+| `embedded-iot-mentor/scripts/` | Små hjälpprogram som ger samma svar varje gång, och som körs bara när ett konkret tal efterfrågas. |
+| `embedded-iot-mentor/examples/` | Färdiga scenarier som visar vilken *form* ett svar ska ha när en förfrågan inte passar mallen. |
 | `embedded-iot-mentor.skill` | **Genererad.** En zip av mappen ovan — redigera den inte för hand. |
-| `package_skill.py` | Bygger, verifierar och installerar paketet. |
+| `package_skill.py` | Bygger, kollar och installerar paketet. |
 | `embedded-iot-mentor-demo.gif` | Inspelningen som visas högst upp. Ingår inte i paketet — packaren tar bara skill-mappen. |
 
-Att hålla skillen i en egen mapp spelar roll: specifikationen kräver att en skills `name`
-matchar mappnamnet, så att bygga direkt från repots rot skulle gå sönder i samma stund som
-någon laddade ner repot som ZIP och fick `embedded-iot-mentor-main/`.
+Att skillen ligger i en egen mapp spelar roll: specifikationen kräver att en skills `name`
+är samma som mappnamnet, så att bygga direkt från repots rot skulle gå sönder i samma stund
+som någon laddade ner repot som ZIP och fick `embedded-iot-mentor-main/`.
 
 ## Bygga
 
@@ -156,20 +156,21 @@ python package_skill.py          # -> ./embedded-iot-mentor.skill
 python package_skill.py --check  # validera källa + paket, bygg ingenting
 ```
 
-En `.skill`-fil är ett zip-arkiv som innehåller skill-mappen — formatet definieras av
+En `.skill`-fil är ett zip-arkiv som innehåller skill-mappen — formatet bestäms av
 [Agent Skills-specifikationen](https://agentskills.io/specification). Packaren tar med allt
-under `embedded-iot-mentor/`, så en ny referensfil plockas upp automatiskt utan att
-byggskriptet behöver ändras. Textfiler lagras med LF och zip-tidsstämplar är låsta, så
-paketet blir byte-identiskt oavsett vem som bygger det.
+under `embedded-iot-mentor/`, så en ny referensfil kommer med automatiskt utan att
+byggskriptet behöver ändras. Textfiler sparas med LF och zip-tidsstämplarna är låsta, så
+paketet blir byte för byte likadant oavsett vem som bygger det.
 
-`--check` är grinden, och CI kör den vid varje push och pull request. Den fallerar när:
+`--check` är spärren, och CI kör den vid varje push och pull request. Den stoppar bygget
+när:
 
 - frontmattern bryter mot en regel i specifikationen (`name`-mönster/längd, mappmatchning, `description`-längd);
 - `SKILL.md` pekar på en fil under `references/…` eller `scripts/…` som inte finns;
-- den incheckade `.skill`-filen inte matchar källmappen.
+- den incheckade `.skill`-filen inte stämmer med källmappen.
 
 Det sista spelar roll eftersom paketet är incheckat: ändra skillen, glöm att bygga om, och
-nedladdningen skulle leverera en annan version än källmappen.
+den som laddar ner filen får en annan version än den i källmappen.
 
 ## Skript
 
@@ -180,10 +181,9 @@ python embedded-iot-mentor/scripts/sleep_budget.py --capacity 2000 --active-ma 8
     --active-ms 250 --sleep-ua 15 --interval-s 600
 ```
 
-`sleep_budget.py` tar indata om arbetscykeln i stället för en medelström, eftersom
-medelströmmen är det tal ingen känner till i förväg. Samma firmware, samma batteri,
-viloström ändrad från 15 µA till ett utvecklingskorts 8 mA-regulator: **3,8 år blir
-8,3 dagar.**
+`sleep_budget.py` vill ha siffror på arbetscykeln i stället för en medelström, eftersom
+medelströmmen är det tal ingen vet i förväg. Samma firmware, samma batteri, viloströmmen
+ändrad från 15 µA till ett utvecklingskorts 8 mA-regulator: **3,8 år blir 8,3 dagar.**
 
 ## Bidra
 
