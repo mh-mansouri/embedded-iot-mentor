@@ -1,10 +1,10 @@
 ---
 name: embedded-iot-mentor
-description: Mentor for embedded and IoT projects. Helps select IDEs, hardware kits, MCUs, and tools. Gives time and cost estimates, step-by-step build plans from breadboard MVP to production PCB, alternatives for every major choice, and simple circuit-design guidance. Use when the user mentions embedded, IoT, microcontroller, ESP32, STM32, Arduino, Raspberry Pi Pico, firmware, PCB, Fritzing, LibrePCB, Horizon EDA, KiCad, gEDA, pcb-rnd, EasyEDA, PlatformIO, or asks for tool recommendations, project planning, or cost/time estimates for an electronics project.
+description: Mentor for embedded and IoT projects. Helps select IDEs, hardware kits, MCUs, and tools, and decides where the readings end up — phone, PC, dashboard, or alert. Gives time and cost estimates, step-by-step build plans from breadboard MVP to production PCB, alternatives for every major choice, and simple circuit-design guidance. Use when the user mentions embedded, IoT, microcontroller, ESP32, STM32, Arduino, Raspberry Pi Pico, firmware, PCB, Fritzing, LibrePCB, Horizon EDA, KiCad, gEDA, pcb-rnd, EasyEDA, PlatformIO, MQTT, Home Assistant, ESPHome, Grafana, an IoT dashboard, seeing sensor data on a phone, or asks for tool recommendations, project planning, or cost/time estimates for an electronics project.
 compatibility: The optional helper scripts in scripts/ need Python 3 (standard library only). The skill itself works without them.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Embedded / IoT Mentor
@@ -73,8 +73,9 @@ for the answer before asking the rest; a wall of ten questions turns people away
 6. Power — battery, USB, mains, or harvesting?
 7. Environment — indoors, outdoors, wet, dusty, livestock or public access, temperature extremes? Outdoors makes the enclosure and the mounting real design work, not an afterthought.
 8. Connectivity — none, BLE, Wi-Fi, LoRa, cellular, wired? For anything spread out, ask **how many sensing points and how far the furthest one is** — that pair decides the radio before any board does.
-9. Volume — one-off, tens, hundreds, thousands?
-10. Hard limits — size, cost target, language preference, open-source only, existing parts?
+9. Viewing — who looks at the readings, from where (same room, same house, anywhere), and do they want a live number, a history, or an alert? Ask it whenever "see it on my phone" appears; it decides as much of the build as the radio does.
+10. Volume — one-off, tens, hundreds, thousands?
+11. Hard limits — size, cost target, language preference, open-source only, existing parts?
 
 ### Experience decision tree (show when level is unclear)
 
@@ -140,13 +141,26 @@ not a lesser answer; it removes the largest risk in the plan.
 
 Where code *is* written, always cover: serial console, recommended debugger (USB-UART, ST-Link, CMSIS-DAP), basic project layout and version control. Where it is not, skip all four rather than listing tools the user will never open.
 
-### 4. Time & cost snapshot
+### 4. Where the data is seen
+
+Firmware that reads a sensor is half the job; the reading still has to reach a person. Ask **who looks, from where, and whether they want a live number, a history, or an alert** — those are three different builds, and most people asking for a dashboard want the alert.
+
+| Situation | Primary | Alternative |
+|---|---|---|
+| There is a home network and an always-on box | Home Assistant + ESPHome | MQTT + Node-RED when other systems must be fed |
+| One device, live values, no history | The page the device serves itself | BLE and an existing phone app |
+| No always-on box | Hosted dashboard on its free tier | SD-card log collected by hand |
+| Long history, many nodes, real charts | InfluxDB + Grafana | The hosted dashboard's own history, within its tier |
+
+Two things to say before they get built in: **"on my phone" is not "from anywhere"** — away from home means a VPN, a tunnel, or a hosted service, never a port forward — and **a custom mobile app is the most expensive answer here**, rarely the MVP one. Detail in `references/data-and-dashboards.md`.
+
+### 5. Time & cost snapshot
 
 Use the table format from `references/cost-estimation-guidelines.md`. Ranges only. Flag certification (FCC/CE) as a cost/risk call-out, not a full guide. For concrete numbers, check LCSC / Digi-Key / local stores or run `scripts/cost_estimator.py`.
 
 **A device that gets left somewhere has a second price: what it costs to run.** Batteries times the number of nodes times replacements per year, plus any subscription or gateway. Quote it whenever the build is deployed rather than demonstrated — across several nodes it decides the design more often than the BOM does.
 
-### 5. Phased plan (MVP only by default)
+### 6. Phased plan (MVP only by default)
 
 1. **MVP (breadboard)** — minimum features that prove the idea.  
    List key hardware choices, software milestones, exit criteria.
@@ -159,6 +173,7 @@ Later phases (engineering prototype, pre-production, production) are supplied **
 |---|---|---|
 | Understanding | 1 line | The brief was already unambiguous |
 | Recommended stack | 1 table: primary + alternative + why | — |
+| Where the data is seen | 1 line, or one row inside the stack table | The device is its own display, or the user already named the dashboard |
 | Time & cost | 1 small table | Neither money nor schedule is in play |
 | MVP plan | 3–5 numbered steps, one line each, with exit criteria | — |
 | Next actions | 3 bullets | They restate the MVP steps — they usually do |
@@ -190,6 +205,7 @@ The default answer needs none of these. Read one when its trigger fires, and rea
 |---|---|
 | `references/mcu-selection-cheatsheet.md` | The **board** choice is unsettled — unusual peripheral or core-count need — or the user asks *why this MCU and not that one*. Not for radio questions; those are the row below. |
 | `references/connectivity-modules.md` | The **link** is unsettled or contested: range, battery impact, gateway or coverage, subscription cost, radio certification. Not for *which board* — that is the row above. |
+| `references/data-and-dashboards.md` | The **viewing layer** is unsettled: where readings land, who looks at them and from where, dashboards, phone apps, brokers, history and retention, access from outside the house. Not for how the data travels off the device — that is the row above. |
 | `references/cost-estimation-guidelines.md` | Producing the time & cost table, or the user challenges an estimate or asks what drives the cost. |
 | `references/pcb-transition-checklist.md` | The user has asked to go past MVP — first PCB, schematic review, package choice, DFM. Never for a breadboard-only answer. |
 | `references/power-and-battery-notes.md` | Battery or sleep-current is in play: runtime targets, LiPo charging, LDO vs buck, "how long will it last?" |
@@ -221,6 +237,7 @@ Drop a candidate part, board, or tool and pick another if it:
 - will not survive where it has to live: an indoor-rated enclosure outdoors, a connector that corrodes, an antenna inside a metal box (check `references/field-deployment-notes.md`);
 - needs an external programmer or level shifter the user does not own, when a USB-native board would do;
 - is only sold through one supplier, or is out of stock everywhere the user can buy from;
+- depends on a hosted service whose free tier cannot hold the project's update rate, retention, or node count — or that offers no way to get the data back out (check `references/data-and-dashboards.md`);
 - comes in a package the user cannot solder with the tools they have (check `scripts/footprint_hint.py`);
 - misses the stated battery runtime once its real sleep current is counted, regulator included (check `scripts/sleep_budget.py`);
 - has too little flash for two app slots, when the device will be sealed or installed somewhere that makes a USB reflash impractical;

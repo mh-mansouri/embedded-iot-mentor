@@ -2,6 +2,16 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.0 - 2026-07-31
+
+Added the viewing layer — the hop from a working device to a person actually looking at the reading, which the first release left to chance.
+
+- New `references/data-and-dashboards.md`: routes from device to viewer (own web page, BLE and a phone app, Home Assistant, MQTT plus Node-RED, InfluxDB and Grafana, hosted dashboards, LoRaWAN network servers, SD-card logging, a custom app) with what each needs, what it costs to run, and the effort it takes.
+- New recommendation step, *Where the data is seen*, and a matching row in the output format, so a plan says where readings land instead of stopping at the firmware.
+- Clarifying question about who looks at the data and from where, because "see it on my phone" at home and from elsewhere are different builds.
+- Reject-bar entry for hosted services whose free tier cannot hold the project's update rate, retention, or node count, or that cannot export the data back out.
+- Traps named explicitly: port forwarding a hobby device, free-tier boundaries, retention, an always-on box as a single point of failure, buffering through outages, and whose clock timestamps a reading.
+
 ## 1.0.0 - 2026-07-31
 
 First release.

@@ -31,6 +31,9 @@ bestäms sist, inte först. Hela samtalet finns i
   du ska installera utan att blanda ihop dem.
 - **Kollar om du behöver skriva firmware alls.** Om ESPHome, Meshtastic eller Tasmota redan
   gör jobbet är det svaret — att skriva kod är en kostnad, inte en leverans.
+- **Tar mätvärdet hela vägen fram till en människa** — Home Assistant, en sida som enheten
+  själv visar, en färdig molntjänst, eller bara ett larm. ”I mobilen” hemma i köket och ”i
+  mobilen” från jobbet är två olika byggen, och det säger den innan du väljer.
 - **Gissar tid och kostnad** som intervall, och pekar ut vad som faktiskt driver upp dem —
   bland annat vad saken kostar att *ha igång*, när det väl är sex noder som äter batterier
   ute på en åker.
@@ -138,7 +141,7 @@ projektdata som skillen aldrig läser.
 | Sökväg | Vad det är |
 |---|---|
 | `embedded-iot-mentor/SKILL.md` | Instruktionerna Claude följer. De flesta ändringar hör hemma här. |
-| `embedded-iot-mentor/references/` | Detaljer som läses först när något drar igång dem: val av MCU, uppkoppling, kostnadsuppskattning, PCB-checklista, ström och batteri, fältinstallation, OTA, EMC, säkerhetsgräns, lärresurser. |
+| `embedded-iot-mentor/references/` | Detaljer som läses först när något drar igång dem: val av MCU, uppkoppling, var datan visas, kostnadsuppskattning, PCB-checklista, ström och batteri, fältinstallation, OTA, EMC, säkerhetsgräns, lärresurser. |
 | `embedded-iot-mentor/scripts/` | Små hjälpprogram som ger samma svar varje gång, och som körs bara när ett konkret tal efterfrågas. |
 | `embedded-iot-mentor/examples/` | Färdiga scenarier som visar vilken *form* ett svar ska ha när en förfrågan inte passar mallen. |
 | `embedded-iot-mentor.skill` | **Genererad.** En zip av mappen ovan — redigera den inte för hand. |

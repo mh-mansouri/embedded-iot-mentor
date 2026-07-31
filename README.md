@@ -31,6 +31,9 @@ thing decided, not the first. The full transcript is
   install without conflating them.
 - **Checks whether you need to write firmware at all.** If ESPHome, Meshtastic or Tasmota
   already does the job, that's the answer — writing code is a cost, not a deliverable.
+- **Takes the reading all the way to a person** — Home Assistant, a page the device serves
+  itself, a hosted dashboard, or just an alert. "On my phone" in the kitchen and "on my
+  phone" from work are two different builds, and it says so before you pick one.
 - **Estimates time and cost** as ranges, and flags what actually drives them — including
   what the thing costs to *run*, once it's six nodes eating batteries in a field.
 - **Says what a sensor really measures.** Cheap "NPK" probes read conductivity and guess;
@@ -134,7 +137,7 @@ packaging and project metadata that the skill never reads.
 | Path | What it is |
 |---|---|
 | `embedded-iot-mentor/SKILL.md` | The instructions Claude follows. Most changes go here. |
-| `embedded-iot-mentor/references/` | Detail read on a trigger: MCU selection, connectivity, cost estimation, PCB checklist, power/battery, field deployment, OTA, EMC, safety boundary, learning resources. |
+| `embedded-iot-mentor/references/` | Detail read on a trigger: MCU selection, connectivity, where the data is seen, cost estimation, PCB checklist, power/battery, field deployment, OTA, EMC, safety boundary, learning resources. |
 | `embedded-iot-mentor/scripts/` | Small deterministic helpers, run only when a concrete number is asked for. |
 | `embedded-iot-mentor/examples/` | Worked scenarios showing the *shape* a reply should take when a request doesn't fit the standard mould. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
