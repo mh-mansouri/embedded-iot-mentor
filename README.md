@@ -15,12 +15,8 @@ actually built before, then answers at that level.
 
 ![A farmer asks for soil moisture and nitrogen across a meadow; the skill declines the nitrogen half, asks two questions, and returns a six-node LoRa plan with no code in it](./embedded-iot-mentor-demo.gif)
 
-A sheep farmer in Devon, no code, six sensing points, the furthest 400 m from the house.
-Worth watching for what the skill *doesn't* do: it opens by refusing half the request —
-no cheap probe measures soil nitrogen honestly — then lets three constraints do the
-choosing. 400 metres picks radio over Wi-Fi, "I don't write code" picks ready-made
-firmware over a toolchain, and a wet meadow picks the enclosure. The board is the last
-thing decided, not the first. The full transcript is
+A sheep farmer in Devon, with no coding experience, requests six sensing points, and the furthest sensing point is around 400 m away from the house. All of those are below the minimum cost for such a project.
+Worth watching for what the skill *doesn't* suggest: It opens by refusing half the request - no cheap probe measures soil nitrogen honestly - then lets three constraints do the choosing. The 400 meters away from home picks radio over Wi-Fi, "I don't write code" picks ready-made firmware over a toolchain, and a wet meadow picks the enclosure. The board is the last thing decided, not the first. The full transcript is
 [Scenario D](./embedded-iot-mentor/examples/worked-examples.md#scenario-d--when-half-the-brief-cannot-be-built).
 
 ## What it does
