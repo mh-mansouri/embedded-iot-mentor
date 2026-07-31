@@ -9,13 +9,30 @@ Most embedded advice fails in one of two directions — a parts list with no pla
 production roadmap for someone who hasn't blinked an LED yet. This skill asks what you've
 actually built before, then answers at that level.
 
+## Demo
+
+![A farmer asks for soil moisture and nitrogen across a meadow; the skill declines the nitrogen half, asks two questions, and returns a six-node LoRa plan with no code in it](./embedded-iot-mentor-demo.gif)
+
+A sheep farmer in Devon, no code, six sensing points, the furthest 400 m from the house.
+Worth watching for what the skill *doesn't* do: it opens by refusing half the request —
+no cheap probe measures soil nitrogen honestly — then lets three constraints do the
+choosing. 400 metres picks radio over Wi-Fi, "I don't write code" picks ready-made
+firmware over a toolchain, and a wet meadow picks the enclosure. The board is the last
+thing decided, not the first. The full transcript is
+[Scenario D](./embedded-iot-mentor/examples/worked-examples.md#scenario-d--when-half-the-brief-cannot-be-built).
+
 ## What it does
 
 - **Picks a platform** — ESP32, Pico, STM32, nRF52 — and says plainly why that one, plus one
   or two alternatives and when each would win instead.
 - **Separates the hardware path from the firmware path**, so you know what to buy and what to
   install without conflating them.
-- **Estimates time and cost** as ranges, and flags what actually drives them.
+- **Checks whether you need to write firmware at all.** If ESPHome, Meshtastic or Tasmota
+  already does the job, that's the answer — writing code is a cost, not a deliverable.
+- **Estimates time and cost** as ranges, and flags what actually drives them — including
+  what the thing costs to *run*, once it's six nodes eating batteries in a field.
+- **Says what a sensor really measures.** Cheap "NPK" probes read conductivity and guess;
+  you get told that before you buy six of them, not after.
 - **Plans to MVP and stops there.** Engineering prototype, pre-production, and production
   phases exist, but you only get them when you ask.
 - **Names the risks** — power budget, part availability, no debug path, certification, the
@@ -34,6 +51,8 @@ The failure modes it's built to catch:
   sleep current.
 - **A first PCB ordered with 0402 passives and a QFN**, hand-assembled with a soldering iron,
   and dead on arrival with no test points to find out why.
+- **Six sensors deployed in a field in indoor boxes**, sealed with tape instead of cable
+  glands, condensing on their own PCBs by the second week.
 
 ## Install
 
@@ -85,9 +104,15 @@ or
 
 > I have an ESP32 and a BME280 sitting in a drawer. What's worth building with them?
 
-It will ask a couple of short questions if the goal, experience level, power source, or
-timeline are still unclear — then answer in tables rather than essays. A whole project
-plan is meant to fit on one screen; if you want the reasoning behind a pick, ask for it.
+or, the one in the demo above:
+
+> I am a farmer and want to measure soil moisture and nitrogen in different parts of my
+> meadow to make sure my sheep are well fed.
+
+It will ask a couple of short questions if the goal, experience level, power source,
+environment, or timeline are still unclear — then answer in tables rather than essays. A
+whole project plan is meant to fit on one screen; if you want the reasoning behind a pick,
+ask for it.
 
 ## Good to know
 
@@ -107,11 +132,12 @@ packaging and project metadata that the skill never reads.
 | Path | What it is |
 |---|---|
 | `embedded-iot-mentor/SKILL.md` | The instructions Claude follows. Most changes go here. |
-| `embedded-iot-mentor/references/` | Detail read on a trigger: MCU selection, cost estimation, PCB checklist, power/battery notes, learning resources. |
+| `embedded-iot-mentor/references/` | Detail read on a trigger: MCU selection, connectivity, cost estimation, PCB checklist, power/battery, field deployment, OTA, EMC, safety boundary, learning resources. |
 | `embedded-iot-mentor/scripts/` | Small deterministic helpers, run only when a concrete number is asked for. |
 | `embedded-iot-mentor/examples/` | Worked scenarios showing the *shape* a reply should take when a request doesn't fit the standard mould. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
+| `embedded-iot-mentor-demo.gif` | The recording shown at the top. Not bundled — the packer only takes the skill folder. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
 folder name, so building it straight from the repository root would break the moment someone

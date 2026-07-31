@@ -21,6 +21,29 @@ Use ranges. Always separate parts, tools, PCB, and certification.
 - Assembly (hand vs pick-and-place)
 - Shipping and tariffs
 
+## Cost to run (quote this whenever the device gets left somewhere)
+
+Build cost is a one-off; running cost repeats for as long as the thing is useful. For a
+deployed build — especially several nodes — it is the number that decides the design.
+
+| Line | Ask | Typical shape |
+|---|---|---|
+| Batteries | Cells per node × nodes × replacements per year | Small per node, real at ten nodes |
+| Subscription | SIM or platform fee, per device, per month | The line that dwarfs the BOM over three years |
+| Gateway / receiver | Bought once, or already owned? | Owning it means no recurring fee at all |
+| Cloud / storage | Free tier now, priced tier at what volume? | Check the tier boundary, not today's bill |
+| Replacement | What fraction is lost per year to weather, machinery, animals, theft? | Assume non-zero outdoors |
+
+Two moves worth naming explicitly when the yearly figure looks bad:
+
+- **Solar swaps a recurring cost for a one-off** — a small panel per node usually pays for
+  itself inside two years and removes the visit as well as the cell.
+- **Owning the receiver removes the subscription entirely.** A gateway or mesh you run
+  yourself has no per-device fee; a carrier does, forever.
+
+Present it as its own small table with a per-year column. Do not fold it into the BOM
+total — they are different decisions, and merging them hides both.
+
 ## PCB fab quick reference (prototype)
 
 | Fab | Strength | Typical 5-pc 2-layer |

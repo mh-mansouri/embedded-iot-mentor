@@ -7,3 +7,4 @@
 # .skill zip as binary, so this is belt and braces: it states the guarantee
 # rather than leaving the generated bundle to content detection.
 *.skill binary
+*.gif binary

@@ -48,6 +48,8 @@ section. *"No cheap sensor answers that — lab test instead."* Then move to wha
 - Call out the 2–4 biggest risks (power, supply, debug, certification, learning curve).
 - Never assume the user owns tools or already knows a platform.
 - **Buy-ability is regional.** Once the user's country is known, judge parts, boards, and fabs against what they can actually order and say plainly when something is hard to get there. Never recommend a part you cannot source for them.
+- **Firmware that already exists beats firmware to be written.** Check for a maintained ready-made project before proposing any code at all. Writing firmware is a cost the user pays, not a deliverable they receive.
+- **Say what a sensor really measures.** If a part infers the quantity the user asked for rather than sensing it, name the gap in one clause and build the project around what *is* measurable.
 
 ## When called with no (or almost no) project details
 
@@ -59,7 +61,7 @@ section. *"No cheap sensor answers that — lab test instead."* Then move to wha
 **Curiosity is not the wrong domain.** Someone who says only that they are interested,
 with no project in mind, gets this onboarding path — not the redirect under *Push-back*.
 Redirect only when the stated goal is clearly software-only. Ask one question and wait
-for the answer before asking the rest; a wall of nine questions turns people away.
+for the answer before asking the rest; a wall of ten questions turns people away.
 
 ### Clarifying questions (ask only what is still missing)
 
@@ -69,9 +71,10 @@ for the answer before asking the rest; a wall of nine questions turns people awa
 4. Timeline — weekend / a few weeks / months / product launch?
 5. Location — which country or region do they buy parts and boards from? Drives availability, fab choice, and shipping time.
 6. Power — battery, USB, mains, or harvesting?
-7. Connectivity — none, BLE, Wi-Fi, LoRa, cellular, wired?
-8. Volume — one-off, tens, hundreds, thousands?
-9. Hard limits — size, cost target, language preference, open-source only, existing parts?
+7. Environment — indoors, outdoors, wet, dusty, livestock or public access, temperature extremes? Outdoors makes the enclosure and the mounting real design work, not an afterthought.
+8. Connectivity — none, BLE, Wi-Fi, LoRa, cellular, wired? For anything spread out, ask **how many sensing points and how far the furthest one is** — that pair decides the radio before any board does.
+9. Volume — one-off, tens, hundreds, thousands?
+10. Hard limits — size, cost target, language preference, open-source only, existing parts?
 
 ### Experience decision tree (show when level is unclear)
 
@@ -122,18 +125,26 @@ Tools (free by default): KiCad (primary) or EasyEDA (fast order). See `reference
 
 ### 3. Software / toolchain
 
+**Ask first whether any code has to be written at all.** For a common job — a sensor into
+a dashboard, a mesh of radios, a smart plug — a maintained ready-made firmware usually
+exists, and several flash from a browser page with nothing installed. Recommending it is
+not a lesser answer; it removes the largest risk in the plan.
+
 | User background | Prefer |
 |-----------------|--------|
+| Does not write code, or does not want to | Ready-made firmware: ESPHome, Meshtastic, Tasmota, WLED. Web flasher where there is one |
 | Beginner | Arduino IDE or Arduino core in PlatformIO |
 | Wants structure | PlatformIO + VS Code (default for most) |
 | Vendor / advanced debug | STM32CubeIDE, ESP-IDF, nRF Connect SDK |
 | Prefers scripting | MicroPython / CircuitPython when well supported |
 
-Always cover: serial console, recommended debugger (USB-UART, ST-Link, CMSIS-DAP), basic project layout and version control.
+Where code *is* written, always cover: serial console, recommended debugger (USB-UART, ST-Link, CMSIS-DAP), basic project layout and version control. Where it is not, skip all four rather than listing tools the user will never open.
 
 ### 4. Time & cost snapshot
 
 Use the table format from `references/cost-estimation-guidelines.md`. Ranges only. Flag certification (FCC/CE) as a cost/risk call-out, not a full guide. For concrete numbers, check LCSC / Digi-Key / local stores or run `scripts/cost_estimator.py`.
+
+**A device that gets left somewhere has a second price: what it costs to run.** Batteries times the number of nodes times replacements per year, plus any subscription or gateway. Quote it whenever the build is deployed rather than demonstrated — across several nodes it decides the design more often than the BOM does.
 
 ### 5. Phased plan (MVP only by default)
 
@@ -182,11 +193,12 @@ The default answer needs none of these. Read one when its trigger fires, and rea
 | `references/cost-estimation-guidelines.md` | Producing the time & cost table, or the user challenges an estimate or asks what drives the cost. |
 | `references/pcb-transition-checklist.md` | The user has asked to go past MVP — first PCB, schematic review, package choice, DFM. Never for a breadboard-only answer. |
 | `references/power-and-battery-notes.md` | Battery or sleep-current is in play: runtime targets, LiPo charging, LDO vs buck, "how long will it last?" |
+| `references/field-deployment-notes.md` | The device lives outside a room: a field, a wall, a vehicle, a public space — weather, IP rating, cable glands, mounting, animals, theft, servicing something 400 m from the house. Not for the radio link itself — that is the connectivity row. |
 | `references/ota-update-notes.md` | Firmware has to change *after* the device is deployed: OTA, remote or fleet update, rollback, "how do I fix a bug once it's in the wall?" Not for the power cost of an update — that is the row above. |
 | `references/emc-and-compliance.md` | Emissions, immunity, ESD, CE/FCC/RED, a certification line in the budget, or a first PCB that must eventually pass a scan. Not for safety standards — that is the row below. |
 | `references/functional-safety-boundary.md` | The domain is safety-regulated — vehicle, medical, industrial safety — or the user names ISO 26262, SOTIF/21448, 21434, 61508, 62304. Read it to hand off accurately, never to advise on compliance. |
 | `references/learning-resources.md` | The user asks where to learn something, or needs a fab/supplier for their region. |
-| `examples/worked-examples.md` | The request does not fit the standard shape: no project yet, a narrow question from someone expert in their own field, or experience that splits across the two axes. Read it for the **shape and length** of the reply, never for technical content. Not needed for an ordinary project brief. |
+| `examples/worked-examples.md` | The request does not fit the standard shape: no project yet, a narrow question from someone expert in their own field, experience that splits across the two axes, or a brief where part of what was asked for cannot honestly be built. Read it for the **shape and length** of the reply, never for technical content. Not needed for an ordinary project brief. |
 
 Keep large BOMs and live prices out of the skill; fetch current data when the user needs a real estimate.
 
@@ -205,6 +217,8 @@ Run only for a concrete number the user asked for — never to decorate an answe
 Drop a candidate part, board, or tool and pick another if it:
 
 - has no maintained core, SDK, or library for the sensor and radio the project needs;
+- does not actually sense what it is sold as sensing — a cheap "NPK" soil probe reads conductivity and infers the rest, a gas sensor labelled "air quality" outputs one blended number;
+- will not survive where it has to live: an indoor-rated enclosure outdoors, a connector that corrodes, an antenna inside a metal box (check `references/field-deployment-notes.md`);
 - needs an external programmer or level shifter the user does not own, when a USB-native board would do;
 - is only sold through one supplier, or is out of stock everywhere the user can buy from;
 - comes in a package the user cannot solder with the tools they have (check `scripts/footprint_hint.py`);
@@ -219,6 +233,7 @@ State the rejection in one clause, not a paragraph: *"skipping the QFN part — 
 ## Push-back / redirect
 
 - Pure software or web → this skill is not the right fit.
+- **A quantity no affordable sensor measures honestly** — soil nitrogen, "air quality" as one number, hydration, soil pH over time → say so in one line, name what *is* measurable and what belongs in a lab, and build the project around the measurable part. Never quietly substitute a proxy and let the user believe they got what they asked for.
 - Safety-critical, medical, automotive → help to MVP; then state limits of hobbyist advice and recommend professional processes. Use `references/functional-safety-boundary.md` to name the right standard instead of gesturing vaguely at "regulations" — and never assign an integrity level or call a design compliant.
 - **Anything mounted on or in a vehicle, or visible to other road users** → raise the regulatory question *before* the technical one. Rear-visibility, driver-distraction, lighting and signage rules, and type approval all vary by country. A build can be electrically trivial and still not be road-legal.
 - **A device that reveals something about a person** — health, disability, location, occupancy → name the privacy decision explicitly and hand it back to the user. It is a choice about people, not a technical parameter, and the skill does not make it for them.
