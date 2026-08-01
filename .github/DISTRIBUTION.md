@@ -4,6 +4,10 @@ Everything here needs an account or a login, which is why it is a checklist and 
 workflow. The files each directory expects are already in the repository — the work left is
 the submission itself.
 
+Publish to the official registry first. PulseMCP ingests it, Glama indexes the repository,
+and only Smithery and the Marketplace need doing by hand — so one submission covers most of
+the ground.
+
 ## MCP directories
 
 | Where | What it needs | State |
@@ -11,7 +15,7 @@ the submission itself.
 | [Official MCP registry](https://registry.modelcontextprotocol.io) | [`server.json`](../server.json) at the repository root | **Listed** as `io.github.mh-mansouri/embedded-iot-mentor` |
 | [Smithery](https://smithery.ai/new) | A running HTTPS server — **not** `smithery.yaml` any more | **Listed** at `mh-mansouri/embedded-iot-mentor` |
 | [Glama](https://glama.ai/mcp/servers) | [`glama.json`](../glama.json); indexes public repositories on its own | File written; listing follows automatically |
-| [PulseMCP](https://www.pulsemcp.com/submit) | A form — repository URL and one description | Not yet submitted |
+| [PulseMCP](https://www.pulsemcp.com/submit) | Nothing — it ingests the official registry daily and processes weekly | **Follows automatically** from the registry listing |
 
 **Submit to the official registry** (one time, from a checkout):
 
