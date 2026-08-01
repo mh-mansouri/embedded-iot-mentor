@@ -8,7 +8,7 @@ the submission itself.
 
 | Where | What it needs | State |
 |---|---|---|
-| [Official MCP registry](https://registry.modelcontextprotocol.io) | [`server.json`](../server.json) at the repository root | File written and schema-validated; not yet submitted |
+| [Official MCP registry](https://registry.modelcontextprotocol.io) | [`server.json`](../server.json) at the repository root | **Listed** as `io.github.mh-mansouri/embedded-iot-mentor` |
 | [Smithery](https://smithery.ai/new) | [`smithery.yaml`](../smithery.yaml) at the repository root | File written; not yet submitted |
 | [Glama](https://glama.ai/mcp/servers) | [`glama.json`](../glama.json); indexes public repositories on its own | File written; listing follows automatically |
 | [PulseMCP](https://www.pulsemcp.com/submit) | A form — repository URL and one description | Not yet submitted |
@@ -22,8 +22,17 @@ curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/downlo
 ./mcp-publisher publish             # reads ./server.json
 ```
 
+`mcp-publisher login github -token <PAT>` works too, and skips the browser.
+
 The namespace `io.github.mh-mansouri/*` is owned by whoever can log in as that GitHub
 account, so nobody else can claim the name.
+
+Three rules the schema validates clean and the registry still rejects, all found the hard
+way — an OCI package must carry **neither** `registryBaseUrl` **nor** `version` (the whole
+reference goes in `identifier`, tag included), and the image itself must carry
+`LABEL io.modelcontextprotocol.server.name` matching the name being published. That label is
+in [the Dockerfile](../chatgpt-app/mcp-server/Dockerfile); changing the server name means
+rebuilding the image.
 
 **Keep it current.** `server.json` carries a version, and `test_server.py` fails when it
 drifts from `SKILL.md`. Re-run `mcp-publisher publish` after a release, or the registry
