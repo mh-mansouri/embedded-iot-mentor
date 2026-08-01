@@ -1,9 +1,17 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.mh-mansouri/embedded-iot-mentor",
+  "title": "Embedded / IoT Mentor",
   "description": "Embedded/IoT mentor: picks the board and toolchain, estimates cost and battery life.",
   "version": "1.1.2",
   "websiteUrl": "https://github.com/mh-mansouri/embedded-iot-mentor",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/vscode-extension/icon.png",
+      "mimeType": "image/png",
+      "sizes": ["256x256"]
+    }
+  ],
   "repository": {
     "url": "https://github.com/mh-mansouri/embedded-iot-mentor",
     "source": "github",
