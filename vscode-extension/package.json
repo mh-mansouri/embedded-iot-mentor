@@ -1,0 +1,35 @@
+{
+  "name": "embedded-iot-mentor-vscode",
+  "displayName": "Embedded / IoT Mentor",
+  "description": "Opens the Embedded / IoT Mentor prompt and copies it, ready to paste into GitHub Copilot Chat.",
+  "version": "0.0.1",
+  "publisher": "your-name",
+  "license": "MIT",
+  "categories": [
+    "Other"
+  ],
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "activationEvents": [
+    "onCommand:embeddedIoTMentor.openPrompt"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "embeddedIoTMentor.openPrompt",
+        "title": "Embedded / IoT Mentor: Open Copilot Prompt"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.6.0"
+  }
+}

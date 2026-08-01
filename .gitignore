@@ -2,5 +2,10 @@
 __pycache__/
 *.pyc
 
+# Build output and dependencies of the VS Code extension scaffold.
+node_modules/
+vscode-extension/dist/
+*.vsix
+
 # embedded-iot-mentor.skill lives at the repo root and is committed on purpose,
 # so it can be downloaded and installed directly. Rebuild: python package_skill.py

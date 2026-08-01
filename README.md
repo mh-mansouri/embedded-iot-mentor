@@ -115,6 +115,20 @@ environment, or timeline are still unclear — then answer in tables rather than
 whole project plan is meant to fit on one screen; if you want the reasoning behind a pick,
 ask for it.
 
+## In VS Code, with Copilot
+
+The mentor is judgement written down, not a Claude feature, so it ports. Two routes:
+
+| Route | What you do | Worth it when |
+|---|---|---|
+| [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here — nothing to install |
+| [`vscode-extension/`](./vscode-extension/) | Build a small extension whose single command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
+
+The port keeps the behaviour that matters: MVP first, hardware and firmware kept apart,
+ready-made firmware ahead of code to be written, the reject bar, and the hand-off on
+safety-critical, vehicle, and privacy questions. It does not carry the reference files or
+the helper scripts — a real battery runtime or a BOM total is still the skill's job.
+
 ## Good to know
 
 - **Prices and stock go stale.** Estimates are ranges, not quotes. Check LCSC, Digi-Key, or
@@ -139,6 +153,8 @@ packaging and project metadata that the skill never reads.
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
 | `embedded-iot-mentor-demo.gif` | The recording shown at the top. Not bundled — the packer only takes the skill folder. |
+| `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
+| `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
 folder name, so building it straight from the repository root would break the moment someone

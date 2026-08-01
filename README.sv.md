@@ -123,6 +123,21 @@ ställer den ett par korta frågor först — och svarar sedan i tabeller i stä
 utläggningar. En hel projektplan ska få plats på en skärm; vill du ha resonemanget bakom ett
 val får du fråga efter det.
 
+## I VS Code, med Copilot
+
+Mentorn är omdöme nedskrivet, inte en funktion i Claude, så den går att flytta. Två vägar:
+
+| Väg | Vad du gör | Värt det när |
+|---|---|---|
+| [`vscode-copilot/`](./vscode-copilot/) | Kopiera en fil till `.github/copilot-instructions.md`, eller klistra in den i Copilot Chat | Börja alltid här — inget att installera |
+| [`vscode-extension/`](./vscode-extension/) | Bygg ett litet tillägg vars enda kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
+
+Porten behåller det som betyder något: MVP först, hårdvara och firmware hållna isär, färdig
+firmware före kod som ska skrivas, ribban som sågar förslag, och att den lämnar över när det
+handlar om säkerhetskritiskt, fordon eller integritet. Den tar inte med referensfilerna
+eller hjälpprogrammen — en riktig drifttid på batteri eller en summa för komponentlistan är
+fortfarande skillens jobb.
+
 ## Bra att veta
 
 - **Priser och lagersaldon blir snabbt gamla.** Uppskattningarna är intervall, inte
@@ -147,6 +162,8 @@ projektdata som skillen aldrig läser.
 | `embedded-iot-mentor.skill` | **Genererad.** En zip av mappen ovan — redigera den inte för hand. |
 | `package_skill.py` | Bygger, kollar och installerar paketet. |
 | `embedded-iot-mentor-demo.gif` | Inspelningen som visas högst upp. Ingår inte i paketet — packaren tar bara skill-mappen. |
+| `vscode-copilot/` | Porten till Copilot — prompten du klistrar in, och exempelfrågor. |
+| `vscode-extension/` | Ett enkelt VS Code-tillägg som öppnar den prompten. `node_modules/` och `dist/` checkas inte in. |
 
 Att skillen ligger i en egen mapp spelar roll: specifikationen kräver att en skills `name`
 är samma som mappnamnet, så att bygga direkt från repots rot skulle gå sönder i samma stund
