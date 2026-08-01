@@ -2,6 +2,40 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.2 - 2026-08-01
+
+The connector stops being taken on trust, and the ports become findable.
+
+### The connector
+
+- `search` now resolves three vocabulary gaps between how the library writes and how people
+  ask: *microcontroller* reaches the MCU cheatsheet, *wifi* reaches the connectivity notes.
+  Before this, "which microcontroller should I pick" returned `worked-examples` instead of
+  the file written to answer it.
+- The server reported a version hardcoded at build time, which went stale one release later.
+  It reads `SKILL.md` now.
+- New `chatgpt-app/mcp-server/test_server.py`, run by CI on every push: ranking asserted
+  against eleven real questions, every document round-tripped through `fetch`, the
+  calculators checked on their numbers — including the README's own claim that 15 µA against
+  8 mA of sleep current turns 3.8 years into 8.3 days — and a check that a part description
+  containing a semicolon stays text instead of being run.
+
+### Distribution
+
+- New `server.json`, `smithery.yaml` and `glama.json`: listing metadata for the MCP
+  directories. `server.json` is validated against the published registry schema, and the
+  connector's tests fail when its version drifts from the skill's.
+- New `publish-image.yml`: the connector is published to `ghcr.io` on every tag, so it can be
+  run with one `docker run` and the registry listing points at a package that resolves. The
+  job starts the image and waits for `/healthz` before it will leave it behind.
+- New `publish-extension.yml`: publishes to the VS Code Marketplace once a `VSCE_PAT` secret
+  exists, and skips itself until then rather than failing a tagged release.
+- The extension gets an icon, keywords, and a README written as a Marketplace page.
+- CI, release and licence badges; a 1280×640 social preview card, with the HTML that
+  generated it kept beside it.
+- New `.github/DISTRIBUTION.md`: what is listed where, and what each remaining submission
+  needs. All of it needs a login, so none of it can be a workflow.
+
 ## 1.1.1 - 2026-08-01
 
 Distribution only — the mentor itself is unchanged from 1.1.0. Every route now starts from

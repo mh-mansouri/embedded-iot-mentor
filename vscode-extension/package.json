@@ -2,7 +2,7 @@
   "name": "embedded-iot-mentor-vscode",
   "displayName": "Embedded / IoT Mentor",
   "description": "Opens the Embedded / IoT Mentor prompt and copies it, ready to paste into GitHub Copilot Chat.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "publisher": "mh-mansouri",
   "license": "MIT",
   "repository": {
