@@ -5,8 +5,11 @@ file-tree hunt away. It adds a single command, **Embedded / IoT Mentor: Open Cop
 Prompt**, which finds `vscode-copilot/copilot-custom-instruction.md` in the open workspace,
 opens it, and copies it to the clipboard so it can go straight into Copilot Chat.
 
-You do not need this extension to use the prompt — see [`../vscode-copilot/`](../vscode-copilot/)
-for the paste-it-yourself route, which is the one most people should take.
+You do not need this extension to use the prompt — see
+[`vscode-copilot/`](https://github.com/mh-mansouri/embedded-iot-mentor/tree/main/vscode-copilot)
+for the paste-it-yourself route, which is the one most people should take. That link is
+absolute on purpose: this README ships inside the `.vsix`, where a relative path out of the
+extension folder resolves to nothing.
 
 ## What is here
 
@@ -16,6 +19,7 @@ for the paste-it-yourself route, which is the one most people should take.
 | `tsconfig.json` | TypeScript settings — compiles `src/` to `dist/`. |
 | `src/extension.ts` | Activation, the command, and the fallback panel shown when no prompt file is in the workspace. |
 | `.vscode/` | `Run Extension` launch profile and the build tasks it depends on. |
+| `LICENSE` | A copy of the repository's MIT licence, so it ships inside the `.vsix` too. |
 
 ## Run it
 

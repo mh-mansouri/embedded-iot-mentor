@@ -5,15 +5,21 @@
   "version": "0.0.1",
   "publisher": "your-name",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mh-mansouri/embedded-iot-mentor.git",
+    "directory": "vscode-extension"
+  },
+  "bugs": {
+    "url": "https://github.com/mh-mansouri/embedded-iot-mentor/issues"
+  },
+  "homepage": "https://github.com/mh-mansouri/embedded-iot-mentor#readme",
   "categories": [
     "Other"
   ],
   "engines": {
     "vscode": "^1.80.0"
   },
-  "activationEvents": [
-    "onCommand:embeddedIoTMentor.openPrompt"
-  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [

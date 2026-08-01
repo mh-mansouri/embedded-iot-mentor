@@ -7,7 +7,7 @@ All notable changes to this skill are documented here. Versions follow the `meta
 Ports of the mentor to VS Code. No change to the skill itself, so `metadata.version` stays at 1.1.0.
 
 - New `vscode-copilot/`: the mentor as a GitHub Copilot custom instruction, installable repository-wide as `.github/copilot-instructions.md` or pasted into a single chat. Carries the MVP-first framing, the split between hardware and firmware paths, the preference for ready-made firmware, the two-axis experience question, regional buy-ability, the reject bar, and the hand-off on safety-critical, vehicle, and privacy questions. It does not carry the reference files or the helper scripts.
-- New `vscode-extension/`: a scaffold VS Code extension whose one command finds the prompt in the open workspace, opens it, and copies it to the clipboard. Ships the `Run Extension` launch profile and build tasks it needs.
+- New `vscode-extension/`: a scaffold VS Code extension whose one command finds the prompt in the open workspace, opens it, and copies it to the clipboard. Ships the `Run Extension` launch profile and build tasks it needs, and carries the repository metadata and licence copy that `vsce package` requires, so it builds and packages warning-free on a clean checkout.
 - `node_modules/`, `vscode-extension/dist/`, and `*.vsix` added to `.gitignore`.
 
 ## 1.1.0 - 2026-07-31
