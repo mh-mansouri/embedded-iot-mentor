@@ -9,7 +9,7 @@ the submission itself.
 | Where | What it needs | State |
 |---|---|---|
 | [Official MCP registry](https://registry.modelcontextprotocol.io) | [`server.json`](../server.json) at the repository root | **Listed** as `io.github.mh-mansouri/embedded-iot-mentor` |
-| [Smithery](https://smithery.ai/new) | [`smithery.yaml`](../smithery.yaml) at the repository root | File written; not yet submitted |
+| [Smithery](https://smithery.ai/new) | A running HTTPS server — **not** `smithery.yaml` any more | **Listed** at `mh-mansouri/embedded-iot-mentor` |
 | [Glama](https://glama.ai/mcp/servers) | [`glama.json`](../glama.json); indexes public repositories on its own | File written; listing follows automatically |
 | [PulseMCP](https://www.pulsemcp.com/submit) | A form — repository URL and one description | Not yet submitted |
 
@@ -37,6 +37,23 @@ rebuilding the image.
 **Keep it current.** `server.json` carries a version, and `test_server.py` fails when it
 drifts from `SKILL.md`. Re-run `mcp-publisher publish` after a release, or the registry
 advertises an image tag that is one version behind.
+
+## The hosted connector
+
+One instance runs on Render's free plan, deployed from [`render.yaml`](../render.yaml):
+
+| | |
+|---|---|
+| Service | `https://embedded-iot-mentor-mcp.onrender.com` — `/mcp` for clients, `/healthz` to ping |
+| Through Smithery | `embedded-iot-mentor--mh-mansouri.run.tools` |
+
+It idles after about fifteen minutes without traffic and the next request pays the cold
+start, so treat it as a demo instance rather than something to depend on. Anyone wanting
+their own runs `docker run -p 8000:8000 ghcr.io/mh-mansouri/embedded-iot-mentor-mcp:latest`.
+
+Smithery no longer builds from a repository — it proxies a URL you host — so
+[`smithery.yaml`](../smithery.yaml) configures a path that no longer exists and can be
+deleted whenever you like.
 
 ## VS Code Marketplace
 
