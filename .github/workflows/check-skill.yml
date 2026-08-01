@@ -20,3 +20,9 @@ jobs:
           python-version: "3.x"
       - name: Validate the skill and the committed bundle
         run: python package_skill.py --check
+
+      # The ChatGPT port has limits the skill does not: 8000 characters of
+      # instructions and 20 knowledge files. Growing the skill can push the port
+      # past them, and ChatGPT only complains at paste time.
+      - name: Validate the ChatGPT bundle
+        run: python chatgpt-app/build_chatgpt_bundle.py --check

@@ -1,0 +1,2 @@
+# The official MCP Python SDK. Needs Python 3.10+.
+mcp>=1.9.0

@@ -4,7 +4,13 @@ All notable changes to this skill are documented here. Versions follow the `meta
 
 ## Unreleased
 
-Ports of the mentor to VS Code. No change to the skill itself, so `metadata.version` stays at 1.1.0.
+Ports of the mentor to VS Code and ChatGPT. No change to the skill itself, so `metadata.version` stays at 1.1.0.
+
+- New `chatgpt-app/`: the mentor for ChatGPT, in two routes that share one instruction file. `custom-gpt/instructions.md` is the skill compressed to ChatGPT's 8000-character limit, with the reference files and helper scripts uploaded as GPT knowledge and run in Code Interpreter; `mcp-server/server.py` is an MCP server for use as a ChatGPT custom connector, exposing `mentor_guidance`, `search`, `fetch`, `estimate_bom_cost`, `hand_solder_hint` and `battery_runtime`.
+- The connector reimplements nothing: it reads `references/` and `examples/` from the skill folder and shells out to the skill's own `scripts/`, so a battery runtime quoted through ChatGPT is the number the skill would have quoted, and a fix to the skill needs no re-upload.
+- `search` and `fetch` keep the names and response shapes ChatGPT expects, so the connector works in deep research as well as ordinary chat. Ranking weights a term by its share across the library and divides by document length, so `worked-examples.md` stops answering every query.
+- New `chatgpt-app/build_chatgpt_bundle.py`: assembles the upload set and fails on ChatGPT's limits — instructions over 8000 characters, more than 20 knowledge files, or an instruction naming a knowledge file that is not in the bundle. Added to the `check-skill` CI workflow, because growing the skill is what trips it.
+- `chatgpt-app/dist/` and `.venv/` added to `.gitignore`.
 
 - New `vscode-copilot/`: the mentor as a GitHub Copilot custom instruction, installable repository-wide as `.github/copilot-instructions.md` or pasted into a single chat. Carries the MVP-first framing, the split between hardware and firmware paths, the preference for ready-made firmware, the two-axis experience question, regional buy-ability, the reject bar, and the hand-off on safety-critical, vehicle, and privacy questions. It does not carry the reference files or the helper scripts.
 - New `vscode-extension/`: a scaffold VS Code extension whose one command finds the prompt in the open workspace, opens it, and copies it to the clipboard. Ships the `Run Extension` launch profile and build tasks it needs, and carries the repository metadata and licence copy that `vsce package` requires, so it builds and packages warning-free on a clean checkout.

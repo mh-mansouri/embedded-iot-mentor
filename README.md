@@ -115,19 +115,25 @@ environment, or timeline are still unclear — then answer in tables rather than
 whole project plan is meant to fit on one screen; if you want the reasoning behind a pick,
 ask for it.
 
-## In VS Code, with Copilot
+## Elsewhere: VS Code and ChatGPT
 
-The mentor is judgement written down, not a Claude feature, so it ports. Two routes:
+The mentor is judgement written down, not a Claude feature, so it ports. Every port keeps
+the behaviour that matters — MVP first, hardware and firmware kept apart, ready-made
+firmware ahead of code to be written, the reject bar, and the hand-off on safety-critical,
+vehicle, and privacy questions.
 
 | Route | What you do | Worth it when |
 |---|---|---|
-| [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here — nothing to install |
+| [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here in VS Code — nothing to install |
 | [`vscode-extension/`](./vscode-extension/) | Build a small extension whose single command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
+| [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Build a GPT: paste one instruction file, upload the knowledge files | Always start here in ChatGPT — 10 minutes in the browser |
+| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Run a small MCP server and add it as a custom connector | You want the calculators to actually run and the references to stay in sync |
 
-The port keeps the behaviour that matters: MVP first, hardware and firmware kept apart,
-ready-made firmware ahead of code to be written, the reject bar, and the hand-off on
-safety-critical, vehicle, and privacy questions. It does not carry the reference files or
-the helper scripts — a real battery runtime or a BOM total is still the skill's job.
+What the ports carry differs. The Copilot one is judgement only — no reference files, no
+scripts, so a real battery runtime or a BOM total is still the skill's job. The ChatGPT GPT
+uploads the reference files and the three scripts as knowledge, and runs them in Code
+Interpreter. The MCP connector goes further and reads both straight out of the skill folder,
+so it cannot fall behind a change made here.
 
 ## Good to know
 
@@ -155,6 +161,7 @@ packaging and project metadata that the skill never reads.
 | `embedded-iot-mentor-demo.gif` | The recording shown at the top. Not bundled — the packer only takes the skill folder. |
 | `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
+| `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
 folder name, so building it straight from the repository root would break the moment someone
@@ -181,6 +188,16 @@ the bundle is byte-identical whoever builds it.
 
 That last one matters because the bundle is committed: edit the skill, forget to rebuild, and
 the download would ship a different version than the source folder.
+
+CI runs a second gate for the ChatGPT port:
+
+```bash
+python chatgpt-app/build_chatgpt_bundle.py --check
+```
+
+It fails when the ported instructions outgrow ChatGPT's 8000-character limit, when the
+knowledge set outgrows the 20 files a GPT accepts, or when the instructions name a knowledge
+file that isn't in the bundle. Growing the skill is what usually trips it.
 
 ## Scripts
 

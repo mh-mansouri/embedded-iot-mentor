@@ -25,6 +25,7 @@ bench experience is the most valuable thing here.
 | `embedded-iot-mentor/examples/` | Worked scenarios. A new one earns its place by showing a *reply shape* the existing three don't. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
+| `vscode-copilot/`, `vscode-extension/`, `chatgpt-app/` | Ports to other assistants. A behaviour change to `SKILL.md` usually belongs in `vscode-copilot/copilot-custom-instruction.md` and `chatgpt-app/custom-gpt/instructions.md` too — say in the pull request if you deliberately left one behind. |
 
 `SKILL.md` points Claude at the reference files and scripts by relative path, so if you rename
 or move one, update `SKILL.md` too — `--check` fails if you forget.
@@ -39,13 +40,16 @@ or move one, update `SKILL.md` too — `--check` fails if you forget.
    ```
    Commit the regenerated `embedded-iot-mentor.skill` alongside your edit — otherwise the
    one-file download and the source folder ship different versions of the skill.
-4. Confirm the gate passes:
+4. Confirm both gates pass:
    ```bash
    python package_skill.py --check
+   python chatgpt-app/build_chatgpt_bundle.py --check
    ```
-   This is exactly what CI runs. It checks the frontmatter against the
+   This is exactly what CI runs. The first checks the frontmatter against the
    [Agent Skills spec](https://agentskills.io/specification), confirms every file `SKILL.md`
-   references exists, and confirms the committed bundle matches the source folder.
+   references exists, and confirms the committed bundle matches the source folder. The second
+   confirms the ChatGPT port still fits ChatGPT's limits: 8000 characters of instructions and
+   20 knowledge files.
 5. Open a pull request with a short note on what you changed and why.
 
 If you changed the skill's behaviour, please try it on a couple of real project briefs first
