@@ -61,16 +61,21 @@ deleted whenever you like.
 
 ## VS Code Marketplace
 
-One-time setup, then [`publish-extension.yml`](./workflows/publish-extension.yml) does it on
-every tag:
+**Published**:
+[`mh-mansouri.embedded-iot-mentor-vscode`](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode).
+[`publish-extension.yml`](./workflows/publish-extension.yml) pushes every tag from here on;
+until the `VSCE_PAT` secret existed it skipped itself rather than failing the release.
 
-1. Create a publisher at <https://marketplace.visualstudio.com/manage>. The id **must** equal
-   `publisher` in `vscode-extension/package.json` — currently `mh-mansouri`.
-2. Make an Azure DevOps personal access token: scope **Marketplace → Manage**, organisation
-   **All accessible organisations**.
-3. Add it as the repository secret `VSCE_PAT`.
+The setup, recorded because it is worse than the docs suggest: the publisher id **must**
+equal `publisher` in `vscode-extension/package.json`, and the token is an Azure DevOps PAT
+scoped **Marketplace → Manage**. Creating that PAT needs an Azure DevOps *organisation*,
+which now refuses to be created without a linked Azure *subscription* — so the chain is
+Microsoft account → Azure subscription (card required, nothing charged) → DevOps org → PAT.
+Budget an hour, not the ten minutes the docs imply.
 
-Until that secret exists the workflow skips itself rather than failing the release.
+> **`VSCE_PAT` expires 31 August 2026.** Azure's default is 30 days and its date picker is
+> read-only, so it was left alone. When a `publish-extension` run fails on authentication,
+> this is why: make a new PAT with the same scope and replace the secret.
 
 ## Repository presentation
 

@@ -26,7 +26,7 @@
 |---|---|
 | **Claude** | [فایل `embedded-iot-mentor.skill` را بگیرید](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) و در Claude بازش کنید |
 | **ChatGPT** | [GPT را بسازید](./chatgpt-app/custom-gpt/) — یک فایل را بچسبانید، فایل‌های دانش را بارگذاری کنید، ده دقیقه |
-| **VS Code** | [فایل `.vsix` را بگیرید](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) ← بخش Extensions ← `⋯` ← *Install from VSIX* |
+| **VS Code** | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
 | **connector برای ChatGPT** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) و بعد آدرس به‌همراه `/mcp` را در Settings ← Connectors اضافه کنید |
 
 هرچه پایین‌تر می‌آید راه بلندترش است: خودتان بسازید، تغییرش دهید، یا بخوانید چرا این‌طور
@@ -166,7 +166,7 @@ Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.clau
 | راه | چه کار می‌کنید | کِی می‌ارزد |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | یک فایل را در `.github/copilot-instructions.md` کپی کنید، یا در Copilot Chat بچسبانید | در VS Code همیشه از همین‌جا شروع کنید — چیزی نصب نمی‌شود |
-| [`vscode-extension/`](./vscode-extension/) | فایل `.vsix` را از [آخرین انتشار](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) نصب کنید، یا خودتان بسازیدش — یک فرمان همان پرامپت را باز و کپی می‌کند | آن‌قدر سراغ پرامپت می‌روید که گشتن دنبال فایل آزارتان می‌دهد |
+| [`vscode-extension/`](./vscode-extension/) | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — یک فرمان همان پرامپت را باز و کپی می‌کند | آن‌قدر سراغ پرامپت می‌روید که گشتن دنبال فایل آزارتان می‌دهد |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | یک GPT بسازید: یک فایل دستورالعمل را بچسبانید و فایل‌های دانش را بارگذاری کنید | در ChatGPT همیشه از همین‌جا شروع کنید — ده دقیقه کار در مرورگر |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | یک سرور کوچک MCP را مستقر کنید — [با یک کلیک روی Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — و آدرسش را به‌عنوان connector اضافه کنید | می‌خواهید محاسبه‌گرها واقعاً اجرا شوند و مرجع‌ها هیچ‌وقت عقب نمانند |
 
