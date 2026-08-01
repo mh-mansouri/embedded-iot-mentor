@@ -46,9 +46,9 @@ Until that secret exists the workflow skips itself rather than failing the relea
 
 Settings the API cannot set for you:
 
-- **Topics** (Settings → the gear beside About):
-  `claude-skill` `agent-skills` `mcp` `mcp-server` `chatgpt` `embedded` `iot`
-  `microcontroller` `esp32` `vscode-extension`
+- **Topics** — done, set through the API:
+  `agent-skills` `arduino` `chatgpt` `claude` `claude-code` `claude-skill` `embedded`
+  `esp32` `iot` `mcp` `mcp-server` `microcontroller` `vscode-extension`
 - **Social preview** (Settings → General → Social preview → Upload):
   [`social-preview.png`](./social-preview.png), 1280×640. Rebuild it by opening
   [`social-preview.html`](./social-preview.html) and screenshotting at that size.
