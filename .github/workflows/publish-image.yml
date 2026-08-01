@@ -1,0 +1,83 @@
+name: publish-image
+
+# Publishes the connector as a container image to GitHub's own registry.
+#
+# Two reasons this exists. Running the connector becomes one command with
+# nothing to clone, and the MCP registry entry in server.json needs a package
+# that actually resolves — a registry listing pointing at a Dockerfile in a
+# repository is not installable.
+#
+# No secret to configure: GITHUB_TOKEN can write to ghcr.io for its own
+# repository. The package inherits the repository's visibility on first push.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Lowercase because ghcr.io rejects capitals in a repository name and the
+      # owner is only lowercase by luck.
+      - name: Work out the image name
+        id: image
+        run: echo "name=ghcr.io/$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')/embedded-iot-mentor-mcp" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Embedded / IoT Mentor MCP connector
+            org.opencontainers.image.description=Reference library and calculators from the Embedded / IoT Mentor skill, over MCP.
+            org.opencontainers.image.licenses=MIT
+
+      # The image has to carry the skill folder, so the build context is the
+      # repository root rather than the server's own directory.
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: chatgpt-app/mcp-server/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # A pushed image that cannot answer is worse than no image: the registry
+      # listing would send people to something broken.
+      - name: Check the image serves /healthz
+        run: |
+          image=$(echo '${{ steps.meta.outputs.tags }}' | head -n1)
+          docker run -d --name mentor -p 8000:8000 "$image"
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/healthz | grep -q ok; then
+              echo "healthz ok"
+              docker rm -f mentor
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "connector never became healthy" >&2
+          docker logs mentor >&2
+          exit 1

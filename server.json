@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.mh-mansouri/embedded-iot-mentor",
+  "description": "Embedded/IoT mentor: picks the board and toolchain, estimates cost and battery life.",
+  "version": "1.1.1",
+  "websiteUrl": "https://github.com/mh-mansouri/embedded-iot-mentor",
+  "repository": {
+    "url": "https://github.com/mh-mansouri/embedded-iot-mentor",
+    "source": "github",
+    "subfolder": "chatgpt-app/mcp-server"
+  },
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://ghcr.io",
+      "identifier": "ghcr.io/mh-mansouri/embedded-iot-mentor-mcp",
+      "version": "1.1.1",
+      "transport": {
+        "type": "streamable-http",
+        "url": "http://localhost:8000/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "HOST",
+          "description": "Interface to bind. The image sets 0.0.0.0; the bare server defaults to loopback only.",
+          "default": "0.0.0.0",
+          "isRequired": false
+        },
+        {
+          "name": "PORT",
+          "description": "Port to serve on. Hosts that assign a port set this.",
+          "default": "8000",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}

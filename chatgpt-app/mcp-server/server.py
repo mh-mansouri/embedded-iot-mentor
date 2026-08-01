@@ -54,6 +54,21 @@ REPO_URL = os.environ.get(
 
 SCRIPT_TIMEOUT_S = 20
 
+
+def _skill_version() -> str:
+    """The skill's own version, so the connector cannot report a stale one.
+
+    A hardcoded string here drifts the moment the skill is released, and the
+    version a client sees is the only clue it has about which mentor it is
+    talking to.
+    """
+    try:
+        text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    except OSError:
+        return "0.0.0"
+    match = re.search(r'^\s+version:\s*"([^"]+)"', text, re.M)
+    return match.group(1) if match else "0.0.0"
+
 # Question words carry no topic, and every reference file is full of them.
 STOPWORDS = {
     "and", "are", "but", "can", "does", "for", "from", "has", "have", "how", "into",
@@ -63,10 +78,21 @@ STOPWORDS = {
     "would", "you", "your",
 }
 
+# The library writes like a datasheet; people ask like people. Without these,
+# "which microcontroller should I pick" misses mcu-selection-cheatsheet — the
+# one file written to answer it — because the file says MCU throughout. Keep
+# this to genuine vocabulary gaps, not topic guesses: an alias is a claim that
+# two words mean the same thing, and a wrong one quietly buries a document.
+ALIASES = {
+    "microcontroller": "mcu",
+    "microcontrollers": "mcu",
+    "wifi": "wi-fi",
+}
+
 mcp = MCPServer(
     "embedded-iot-mentor",
     title="Embedded / IoT Mentor",
-    version="1.1.0",
+    version=_skill_version(),
     instructions=(
         "Mentor for embedded and IoT projects. Call mentor_guidance first in any "
         "conversation about hardware, firmware, sensors or IoT dashboards, and follow "
@@ -146,6 +172,7 @@ def search(query: str) -> dict:
     docs = _docs()
     bodies = {doc_id: path.read_text(encoding="utf-8").lower() for doc_id, path in docs.items()}
     terms = {t for t in re.split(r"\W+", query.lower()) if len(t) > 2 and t not in STOPWORDS}
+    terms |= {ALIASES[t] for t in list(terms) if t in ALIASES}
     mean_length = sum(len(b) for b in bodies.values()) / len(bodies)
 
     hits = []

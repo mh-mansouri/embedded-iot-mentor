@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 640px; }
+  body {
+    background: #0d1117;
+    background-image:
+      radial-gradient(1100px 520px at 88% -10%, rgba(56,139,253,.16), transparent 60%),
+      radial-gradient(760px 420px at -8% 108%, rgba(63,185,80,.11), transparent 60%);
+    color: #e6edf3;
+    font-family: "Segoe UI", -apple-system, system-ui, sans-serif;
+    display: flex; flex-direction: column;
+    padding: 74px 86px 66px;
+    position: relative; overflow: hidden;
+  }
+  /* A faint board trace, so the card reads as hardware before it reads as text. */
+  .traces { position: absolute; inset: 0; opacity: .5; }
+  .eyebrow {
+    font-size: 23px; font-weight: 600; letter-spacing: .19em; text-transform: uppercase;
+    color: #7d8590; margin-bottom: 26px;
+  }
+  h1 {
+    font-size: 88px; font-weight: 700; letter-spacing: -.025em; line-height: 1.02;
+    color: #f0f6fc;
+  }
+  h1 .slash { color: #58a6ff; font-weight: 400; padding: 0 6px; }
+  .rule { width: 96px; height: 5px; background: #58a6ff; border-radius: 3px; margin: 32px 0 30px; }
+  p.tag {
+    font-size: 31px; line-height: 1.44; color: #adbac7; max-width: 900px; font-weight: 400;
+  }
+  p.tag b { color: #e6edf3; font-weight: 600; }
+  .routes { margin-top: auto; display: flex; align-items: center; gap: 13px; flex-wrap: nowrap; }
+  .pill {
+    font-size: 22px; font-weight: 600; color: #cdd9e5;
+    border: 1.5px solid #30363d; background: rgba(110,118,129,.13);
+    border-radius: 999px; padding: 11px 23px; white-space: nowrap;
+  }
+  .pill.lead { border-color: rgba(88,166,255,.55); background: rgba(56,139,253,.17); color: #cae4ff; }
+  .repo {
+    margin-left: auto; font-size: 22px; color: #7d8590;
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+  <svg class="traces" viewBox="0 0 1280 640" fill="none">
+    <g stroke="#2f81f7" stroke-opacity=".30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1050 96 h96 a16 16 0 0 1 16 16 v104"/>
+      <path d="M1104 300 v78 a16 16 0 0 0 16 16 h72"/>
+      <path d="M1162 470 h-118 a16 16 0 0 0-16 16 v66"/>
+    </g>
+    <g fill="#2f81f7" fill-opacity=".55">
+      <circle cx="1050" cy="96" r="6.5"/><circle cx="1162" cy="216" r="6.5"/>
+      <circle cx="1104" cy="300" r="6.5"/><circle cx="1192" cy="394" r="6.5"/>
+      <circle cx="1162" cy="470" r="6.5"/><circle cx="1028" cy="552" r="6.5"/>
+    </g>
+  </svg>
+
+  <div class="eyebrow">Agent Skill · MIT</div>
+  <h1>Embedded<span class="slash">/</span>IoT Mentor</h1>
+  <div class="rule"></div>
+  <p class="tag">
+    Picks the board, the toolchain and where the reading lands.
+    Estimates cost and time, then stops at a <b>working breadboard</b> —
+    not a production line you didn't ask for.
+  </p>
+
+  <div class="routes">
+    <span class="pill lead">Claude Skill</span>
+    <span class="pill">VS&nbsp;Code</span>
+    <span class="pill">ChatGPT GPT</span>
+    <span class="pill">MCP connector</span>
+    <span class="repo">mh-mansouri/embedded-iot-mentor</span>
+  </div>
+</body>
+</html>

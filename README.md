@@ -2,6 +2,10 @@
 
 **English** · [Svenska](./README.sv.md) · [فارسی](./README.fa.md)
 
+[![check-skill](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml)
+[![latest release](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 A skill for [Claude](https://claude.ai) that acts as an experienced embedded-systems mentor:
 it picks the microcontroller, board, and toolchain for your project, estimates what it will
 cost and how long it will take, and hands you a build plan that stops at a **working
@@ -180,6 +184,8 @@ packaging and project metadata that the skill never reads.
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 | `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
 | `render.yaml` | Blueprint behind the one-click deploy of that server. Has to sit at the root for Render to find it. |
+| `server.json`, `smithery.yaml`, `glama.json` | Listing metadata for the MCP directories. Each one has to sit at the root for its directory to find it. |
+| `.github/DISTRIBUTION.md` | Where the project is listed and how to list it — the steps that need a login rather than a workflow. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
 folder name, so building it straight from the repository root would break the moment someone

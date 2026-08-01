@@ -26,3 +26,12 @@ jobs:
       # past them, and ChatGPT only complains at paste time.
       - name: Validate the ChatGPT bundle
         run: python chatgpt-app/build_chatgpt_bundle.py --check
+
+      # The connector is the port with moving parts. Renaming a reference file
+      # or rewording a heading can quietly send every query to the same
+      # document, and nobody would notice until someone asked it something.
+      - name: Install the connector's dependencies
+        run: pip install -r chatgpt-app/mcp-server/requirements.txt
+
+      - name: Test the connector
+        run: python chatgpt-app/mcp-server/test_server.py

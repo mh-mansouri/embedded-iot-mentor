@@ -2,6 +2,10 @@
 
 [English](./README.md) · [Svenska](./README.sv.md) · **فارسی**
 
+[![check-skill](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml)
+[![آخرین انتشار](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
+[![مجوز: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 <div dir="rtl" align="right">
 
 یک Skill برای [Claude](https://claude.ai) که مثل یک مربی کارکشتهٔ سیستم‌های نهفته عمل
@@ -203,6 +207,8 @@ GPT، فایل‌های مرجع و هر سه اسکریپت به‌عنوان �
 | `vscode-extension/` | افزونهٔ سادهٔ VS Code که همان پرامپت را باز می‌کند. `node_modules/` و `dist/` کامیت نمی‌شوند. |
 | `chatgpt-app/` | نسخهٔ ChatGPT — دستورالعمل و بسته‌ساز یک GPT اختصاصی، و یک سرور MCP برای وصل شدن به‌عنوان connector. |
 | `render.yaml` | نقشهٔ استقرار یک‌کلیکی همان سرور. برای اینکه Render پیدایش کند باید در ریشهٔ مخزن بماند. |
+| `server.json`، `smithery.yaml`، `glama.json` | فراداده برای فهرست‌های MCP. هرکدام باید در ریشهٔ مخزن بماند تا فهرست مربوطه پیدایش کند. |
+| `.github/DISTRIBUTION.md` | اینکه پروژه کجا فهرست شده و چطور فهرستش کنیم — قدم‌هایی که به‌جای یک workflow نیاز به ورود به حساب دارند. |
 
 نگه داشتن Skill در پوشهٔ اختصاصی خودش مهم است: مشخصات فنی الزام می‌کند که `name` یک Skill با
 نام پوشه‌اش یکی باشد، پس ساختن آن مستقیماً از ریشهٔ مخزن همان لحظه‌ای خراب می‌شد که کسی

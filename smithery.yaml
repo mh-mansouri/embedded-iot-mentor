@@ -1,0 +1,17 @@
+# Smithery build config for the connector.
+#
+# The server is Python and has to carry the skill folder with it, so this is a
+# container build from the repository root rather than one of Smithery's
+# language runtimes. Same Dockerfile the GHCR image and the Render blueprint
+# use — one build definition, three places that consume it.
+runtime: container
+
+build:
+  dockerfile: chatgpt-app/mcp-server/Dockerfile
+  dockerBuildPath: .
+
+startCommand:
+  type: http
+
+# Nothing to configure: the reference library ships inside the image and none
+# of the tools reach a third-party service, so there is no API key to collect.

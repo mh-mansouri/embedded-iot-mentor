@@ -14,8 +14,21 @@
     "url": "https://github.com/mh-mansouri/embedded-iot-mentor/issues"
   },
   "homepage": "https://github.com/mh-mansouri/embedded-iot-mentor#readme",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#0d1117",
+    "theme": "dark"
+  },
   "categories": [
-    "Other"
+    "Other",
+    "Education"
+  ],
+  "keywords": [
+    "embedded",
+    "iot",
+    "microcontroller",
+    "esp32",
+    "copilot"
   ],
   "engines": {
     "vscode": "^1.80.0"

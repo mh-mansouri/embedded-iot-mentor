@@ -1,9 +1,18 @@
-# Embedded / IoT Mentor — VS Code extension scaffold
+# Embedded / IoT Mentor — VS Code extension
 
-A minimal VS Code extension that puts the mentor prompt one command away instead of one
-file-tree hunt away. It adds a single command, **Embedded / IoT Mentor: Open Copilot
-Prompt**, which finds `vscode-copilot/copilot-custom-instruction.md` in the open workspace,
-opens it, and copies it to the clipboard so it can go straight into Copilot Chat.
+Turns Copilot Chat into an embedded-systems mentor: one command copies a prompt that picks
+the microcontroller, board and toolchain for your project, estimates cost and time, and
+stops at a **working breadboard** rather than a production line you didn't ask for.
+
+It adds a single command, **Embedded / IoT Mentor: Open Copilot Prompt**, which finds
+`vscode-copilot/copilot-custom-instruction.md` in the open workspace, opens it, and copies
+it to the clipboard so it can go straight into Copilot Chat.
+
+## Install
+
+From the Marketplace, or from a `.vsix` on the
+[latest release](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest):
+Extensions view → `⋯` → **Install from VSIX…**
 
 You do not need this extension to use the prompt — see
 [`vscode-copilot/`](https://github.com/mh-mansouri/embedded-iot-mentor/tree/main/vscode-copilot)
@@ -33,6 +42,7 @@ extension folder resolves to nothing.
 
 ## Scope
 
-This is a scaffold. It does not call the Copilot API or register a chat participant; it
-only shortens the path to the prompt. `publisher` is a placeholder, so change it before
-packaging with `vsce`.
+It does not call the Copilot API or register a chat participant; it only shortens the path
+to the prompt. The judgement lives in the prompt file, and the fullest version of it is the
+[Claude skill](https://github.com/mh-mansouri/embedded-iot-mentor) this repository is built
+around.
