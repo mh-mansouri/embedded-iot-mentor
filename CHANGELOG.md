@@ -2,6 +2,26 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.1 - 2026-08-01
+
+Distribution only — the mentor itself is unchanged from 1.1.0. Every route now starts from
+something you download or click rather than something you build.
+
+- The release workflow builds and attaches the VS Code extension as a `.vsix`. Until it is on
+  the Marketplace, *Install from VSIX* is the only way to run the extension, and a `.vsix`
+  built on a laptop is whatever that laptop had installed.
+- The extension carries a real `publisher` and follows the repository's version, which the
+  release workflow now checks the way it already checked `metadata.version`. The version lives
+  in the `.vsix` filename and nowhere else, so a stale one ships a mislabelled download.
+- The release workflow is idempotent: run it again from the Actions tab against a tag that
+  already has a release and it refreshes the notes and re-uploads the assets, instead of
+  failing the way `gh release create` does.
+- New **Try it** table at the top of all three READMEs — a direct download for the skill, the
+  `.vsix`, the GPT, and the Render button — because the install instructions came after four
+  screens of what the skill does.
+- The connector's README names Render's free-plan idle timeout. The cold start after it is
+  long enough for ChatGPT to give up on the first call and look broken.
+
 ## 1.1.0 - 2026-08-01
 
 Added the viewing layer — the hop from a working device to a person actually looking at the reading, which the first release left to chance — and ported the mentor to VS Code and ChatGPT.

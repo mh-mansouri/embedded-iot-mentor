@@ -11,6 +11,21 @@ Most embedded advice fails in one of two directions — a parts list with no pla
 production roadmap for someone who hasn't blinked an LED yet. This skill asks what you've
 actually built before, then answers at that level.
 
+## Try it
+
+<!-- When the GPT is published, put its https://chatgpt.com/g/… share link in the ChatGPT
+     row below, and in chatgpt-app/README.md. Same edit in README.sv.md and README.fa.md. -->
+
+| Where | One click |
+|---|---|
+| **Claude** | [Download `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) and open it |
+| **ChatGPT** | [Build the GPT](./chatgpt-app/custom-gpt/) — paste one file, upload the knowledge, 10 minutes |
+| **VS Code** | [Get the `.vsix`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) → Extensions view → `⋯` → *Install from VSIX* |
+| **ChatGPT connector** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then add the URL + `/mcp` under Settings → Connectors |
+
+Everything below is the longer way round: build it yourself, change it, or read why it
+answers the way it does.
+
 ## Demo
 
 ![A farmer asks for soil moisture and nitrogen across a meadow; the skill declines the nitrogen half, asks two questions, and returns a six-node LoRa plan with no code in it](./embedded-iot-mentor-demo.gif)
@@ -127,7 +142,7 @@ vehicle, and privacy questions.
 | Route | What you do | Worth it when |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here in VS Code — nothing to install |
-| [`vscode-extension/`](./vscode-extension/) | Build a small extension whose single command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
+| [`vscode-extension/`](./vscode-extension/) | Install the `.vsix` from the [latest release](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest), or build it — one command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Build a GPT: paste one instruction file, upload the knowledge files | Always start here in ChatGPT — 10 minutes in the browser |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Deploy a small MCP server — [one click on Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — and add its URL as a custom connector | You want the calculators to actually run and the references to stay in sync |
 

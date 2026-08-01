@@ -11,6 +11,21 @@ De flesta råd om inbyggda system går fel åt ett av två håll: en komponentli
 eller en produktionsplan till någon som ännu inte fått en lysdiod att blinka. Den här
 skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivån.
 
+## Prova den
+
+<!-- När GPT:n är publicerad: lägg dess https://chatgpt.com/g/…-länk i ChatGPT-raden nedan,
+     och i chatgpt-app/README.md. Samma ändring i README.md och README.fa.md. -->
+
+| Var | Ett klick |
+|---|---|
+| **Claude** | [Ladda ner `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) och öppna den |
+| **ChatGPT** | [Bygg GPT:n](./chatgpt-app/custom-gpt/) — klistra in en fil, ladda upp kunskapsfilerna, 10 minuter |
+| **VS Code** | [Hämta `.vsix`-filen](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) → vyn Extensions → `⋯` → *Install from VSIX* |
+| **ChatGPT-koppling** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och lägg sedan in adressen plus `/mcp` under Inställningar → Kopplingar |
+
+Allt nedanför är den längre vägen: bygg den själv, ändra den, eller läs varför den svarar
+som den gör.
+
 ## Demo
 
 ![En bonde vill mäta markfuktighet och kväve över en äng; skillen avvisar kvävedelen, ställer två frågor och levererar en LoRa-plan med sex noder utan en rad kod](./embedded-iot-mentor-demo.gif)
@@ -134,7 +149,7 @@ handlar om säkerhetskritiskt, fordon eller integritet.
 | Väg | Vad du gör | Värt det när |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | Kopiera en fil till `.github/copilot-instructions.md`, eller klistra in den i Copilot Chat | Börja alltid här i VS Code — inget att installera |
-| [`vscode-extension/`](./vscode-extension/) | Bygg ett litet tillägg vars enda kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
+| [`vscode-extension/`](./vscode-extension/) | Installera `.vsix`-filen från [senaste utgåvan](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest), eller bygg den — ett kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Bygg en GPT: klistra in en instruktionsfil och ladda upp kunskapsfilerna | Börja alltid här i ChatGPT — tio minuter i webbläsaren |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Driftsätt en liten MCP-server — [ett klick på Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — och lägg till adressen som en egen connector | Du vill att räknehjälpen faktiskt körs och att referenserna aldrig hamnar på efterkälken |
 

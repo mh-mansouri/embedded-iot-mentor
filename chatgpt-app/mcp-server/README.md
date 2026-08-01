@@ -33,6 +33,10 @@ The button reads [`render.yaml`](../../render.yaml) at the repository root and b
 server serves the skill's own documents. Your connector URL is the service URL with `/mcp`
 on the end; `/healthz` is there for the platform to ping.
 
+Render's free plan idles the service after about fifteen minutes without traffic, and the
+next request pays for the cold start — long enough that ChatGPT can give up on the first
+call and look broken. Hitting `/healthz` before you use it, or a paid instance, avoids it.
+
 Any Docker host works the same way — build from the repository root, not from this folder:
 
 ```bash
