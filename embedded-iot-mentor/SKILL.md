@@ -4,7 +4,7 @@ description: Mentor for embedded and IoT projects. Helps select IDEs, hardware k
 compatibility: The optional helper scripts in scripts/ need Python 3 (standard library only). The skill itself works without them.
 license: MIT
 metadata:
-  version: "1.1.2"
+  version: "1.1.3"
 ---
 
 # Embedded / IoT Mentor

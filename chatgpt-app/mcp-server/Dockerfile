@@ -6,6 +6,11 @@
 # the whole point of the connector — the docs it serves are the skill's own.
 FROM python:3.12-slim
 
+# The MCP registry refuses to list an image that does not claim the server name
+# it is published under. This label is what proves the two belong together, and
+# it has to be baked into the image rather than added at publish time.
+LABEL io.modelcontextprotocol.server.name="io.github.mh-mansouri/embedded-iot-mentor"
+
 WORKDIR /app
 
 # Requirements first: the layer only rebuilds when the dependency changes,

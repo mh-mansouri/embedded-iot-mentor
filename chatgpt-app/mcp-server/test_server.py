@@ -212,9 +212,12 @@ def test_registry_metadata_matches_the_skill() -> None:
     # A registry listing that advertises a version nobody can pull is worse
     # than no listing, and the image tag comes from the same tag as the skill.
     check("version follows the skill", entry["version"] == version, entry["version"])
-    check("package version follows the skill",
-          all(p["version"] == version for p in entry["packages"]),
-          str([p["version"] for p in entry["packages"]]))
+    # OCI packages carry the version in the image reference and are rejected if
+    # they also carry a `version` field, so the tag is the thing to check.
+    tags = [p["identifier"].rsplit(":", 1)[-1] for p in entry["packages"]]
+    check("image tag follows the skill", all(t == version for t in tags), str(tags))
+    check("no package repeats the version outside its tag",
+          all("version" not in p for p in entry["packages"]))
     # The registry rejects anything longer, and only at submission time.
     check("description within the registry's 100 characters",
           len(entry["description"]) <= 100, f"{len(entry['description'])} chars")

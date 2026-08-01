@@ -2,6 +2,20 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.3 - 2026-08-01
+
+Listed in the official MCP registry, which took three corrections the schema alone does not
+catch.
+
+- The connector image carries `io.modelcontextprotocol.server.name`. The registry refuses to
+  list an image that does not claim the server name it is published under, and the label has
+  to be baked in rather than added at publish time.
+- `server.json` moves to the `2025-12-11` schema — the publisher tool calls the previous one
+  deprecated — and gains `title` and `icons`, so the listing shows a name written for people
+  and the chip mark instead of a bare reverse-DNS id.
+- The OCI package entry drops `registryBaseUrl` and `version`; the registry wants the whole
+  reference in `identifier`, tag included. The connector's tests check the tag instead.
+
 ## 1.1.2 - 2026-08-01
 
 The connector stops being taken on trust, and the ports become findable.
