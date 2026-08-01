@@ -24,6 +24,10 @@ a fix to the skill lands in ChatGPT without re-uploading anything.
 python build_chatgpt_bundle.py     # -> dist/embedded-iot-mentor-gpt.zip
 ```
 
+Or download `embedded-iot-mentor-gpt.zip` from the
+[latest release](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) and skip
+the build.
+
 Unzip it, then in ChatGPT: **Explore GPTs → Create**, open the **Configure** tab, and
 
 1. paste `instructions.md` into **Instructions**;
@@ -34,6 +38,15 @@ Unzip it, then in ChatGPT: **Explore GPTs → Create**, open the **Configure** t
 4. copy the name, description and conversation starters from `gpt-config.json`.
 
 Then try a prompt from [`examples/examples.md`](./examples/examples.md).
+
+### Share it
+
+A GPT is private until you publish it. **Save → Share → Anyone with the link** gives you a
+`https://chatgpt.com/g/…` URL; publishing to the GPT Store instead needs a verified builder
+name (**Settings → Builder profile**) and puts it in ChatGPT's own search.
+
+Once you have the link, put it at the top of this file and in the root README's port table,
+so nobody has to build their own copy to try it.
 
 Nothing here is imported automatically — ChatGPT has no import format for a GPT, so the
 build script's job is to assemble the upload set and check it fits: instructions under
@@ -46,15 +59,29 @@ python build_chatgpt_bundle.py --check    # what CI runs
 
 ## Run the connector (route B)
 
-See [`mcp-server/README.md`](./mcp-server/README.md). Short version:
+ChatGPT only reaches a connector over HTTPS, so the quickest working setup is a deploy
+rather than a local run:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor)
+
+That reads [`render.yaml`](../render.yaml) and needs no configuration; the URL it gives you
+is the connector's, with `/mcp` on the end. Any Docker host works the same way:
+
+```bash
+docker build -f chatgpt-app/mcp-server/Dockerfile -t embedded-iot-mentor-mcp .
+docker run -p 8000:8000 embedded-iot-mentor-mcp
+```
+
+Locally, without Docker:
 
 ```bash
 pip install -r mcp-server/requirements.txt
 python mcp-server/server.py          # http://127.0.0.1:8000/mcp
 ```
 
-ChatGPT reaches a connector over HTTPS, so a local run needs a tunnel; then add the URL
-under **Settings → Connectors**. Custom connectors need developer mode on a paid plan.
+Then add the URL under **Settings → Connectors** in ChatGPT — a local run needs a tunnel
+first. Custom connectors need developer mode on a paid plan. Details, environment variables
+and the health check are in [`mcp-server/README.md`](./mcp-server/README.md).
 
 ## Layout
 
@@ -63,6 +90,7 @@ under **Settings → Connectors**. Custom connectors need developer mode on a pa
 | `custom-gpt/instructions.md` | The ported mentor, trimmed to ChatGPT's 8000-character instruction limit. Both routes use it. |
 | `custom-gpt/gpt-config.json` | Name, description, conversation starters and capability switches to copy into the builder. |
 | `mcp-server/server.py` | The connector: six tools over MCP, no logic of its own. |
+| `mcp-server/Dockerfile` | Builds the connector image, skill folder included. Build from the repository root. |
 | `build_chatgpt_bundle.py` | Assembles and validates the upload set. |
 | `examples/examples.md` | Prompts that exercise the behaviours the port is supposed to keep. |
 | `dist/` | **Generated.** Not committed. |

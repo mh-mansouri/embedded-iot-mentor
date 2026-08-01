@@ -24,6 +24,22 @@ Claude skill would have quoted.
 `search` and `fetch` keep the names and shapes ChatGPT expects, so the connector also works
 in deep research, not just ordinary chat.
 
+## Deploy it (the short way)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor)
+
+The button reads [`render.yaml`](../../render.yaml) at the repository root and builds
+[`Dockerfile`](./Dockerfile), which carries the skill folder into the image because the
+server serves the skill's own documents. Your connector URL is the service URL with `/mcp`
+on the end; `/healthz` is there for the platform to ping.
+
+Any Docker host works the same way — build from the repository root, not from this folder:
+
+```bash
+docker build -f chatgpt-app/mcp-server/Dockerfile -t embedded-iot-mentor-mcp .
+docker run -p 8000:8000 embedded-iot-mentor-mcp
+```
+
 ## Run it
 
 ```bash
@@ -69,7 +85,7 @@ Any host that runs Python and terminates TLS will do. Two things matter:
 
 | Variable | Default | Why |
 |---|---|---|
-| `HOST` | `127.0.0.1` | Set to `0.0.0.0` behind a proxy or in a container |
+| `HOST` | `127.0.0.1` | Set to `0.0.0.0` behind a proxy or in a container — the image and `render.yaml` already do |
 | `PORT` | `8000` | Most hosts assign one |
 | `EIM_SKILL_DIR` | `../../embedded-iot-mentor` | Where the references and scripts live |
 | `EIM_INSTRUCTIONS` | `../custom-gpt/instructions.md` | The rules `mentor_guidance` returns |

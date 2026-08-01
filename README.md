@@ -57,8 +57,10 @@ The failure modes it's built to catch:
 
 ## Install
 
-**Option A — one file.** Download [`embedded-iot-mentor.skill`](./embedded-iot-mentor.skill)
-and open it in Claude. (Skill saving must be enabled for your account or organization.)
+**Option A — one file.** Download `embedded-iot-mentor.skill` from the
+[latest release](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) (or
+[straight from the repository](./embedded-iot-mentor.skill)) and open it in Claude. (Skill
+saving must be enabled for your account or organization.)
 
 **Option B — Claude Code.** Unpack it into your skills directory:
 
@@ -127,7 +129,7 @@ vehicle, and privacy questions.
 | [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here in VS Code — nothing to install |
 | [`vscode-extension/`](./vscode-extension/) | Build a small extension whose single command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Build a GPT: paste one instruction file, upload the knowledge files | Always start here in ChatGPT — 10 minutes in the browser |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Run a small MCP server and add it as a custom connector | You want the calculators to actually run and the references to stay in sync |
+| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Deploy a small MCP server — [one click on Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — and add its URL as a custom connector | You want the calculators to actually run and the references to stay in sync |
 
 What the ports carry differs. The Copilot one is judgement only — no reference files, no
 scripts, so a real battery runtime or a BOM total is still the skill's job. The ChatGPT GPT
@@ -162,6 +164,7 @@ packaging and project metadata that the skill never reads.
 | `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 | `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
+| `render.yaml` | Blueprint behind the one-click deploy of that server. Has to sit at the root for Render to find it. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
 folder name, so building it straight from the repository root would break the moment someone

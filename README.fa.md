@@ -65,8 +65,10 @@
 
 ## نصب
 
-**گزینهٔ الف — یک فایل.** فایل [`embedded-iot-mentor.skill`](./embedded-iot-mentor.skill)
-را دانلود کنید و در Claude بازش کنید. (ذخیرهٔ Skill باید برای حساب یا سازمانتان فعال باشد.)
+**گزینهٔ الف — یک فایل.** فایل `embedded-iot-mentor.skill` را از
+[آخرین نسخهٔ منتشرشده](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
+(یا [مستقیم از خود مخزن](./embedded-iot-mentor.skill)) دانلود کنید و در Claude بازش کنید.
+(ذخیرهٔ Skill باید برای حساب یا سازمانتان فعال باشد.)
 
 **گزینهٔ ب — Claude Code.** آن را در پوشهٔ skills خودتان باز کنید:
 
@@ -147,7 +149,7 @@ Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.clau
 | [`vscode-copilot/`](./vscode-copilot/) | یک فایل را در `.github/copilot-instructions.md` کپی کنید، یا در Copilot Chat بچسبانید | در VS Code همیشه از همین‌جا شروع کنید — چیزی نصب نمی‌شود |
 | [`vscode-extension/`](./vscode-extension/) | افزونهٔ کوچکی بسازید که تنها فرمانش همان پرامپت را باز و کپی می‌کند | آن‌قدر سراغ پرامپت می‌روید که گشتن دنبال فایل آزارتان می‌دهد |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | یک GPT بسازید: یک فایل دستورالعمل را بچسبانید و فایل‌های دانش را بارگذاری کنید | در ChatGPT همیشه از همین‌جا شروع کنید — ده دقیقه کار در مرورگر |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | یک سرور کوچک MCP را اجرا کنید و به‌عنوان connector اضافه‌اش کنید | می‌خواهید محاسبه‌گرها واقعاً اجرا شوند و مرجع‌ها هیچ‌وقت عقب نمانند |
+| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | یک سرور کوچک MCP را مستقر کنید — [با یک کلیک روی Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — و آدرسش را به‌عنوان connector اضافه کنید | می‌خواهید محاسبه‌گرها واقعاً اجرا شوند و مرجع‌ها هیچ‌وقت عقب نمانند |
 
 آنچه هر نسخه با خود می‌برد فرق دارد. نسخهٔ Copilot فقط قضاوت است — نه فایل مرجعی دارد نه
 اسکریپتی، پس برای عمر واقعی باتری یا جمع هزینهٔ قطعات هنوز باید سراغ خودِ Skill بروید. در
@@ -185,6 +187,7 @@ GPT، فایل‌های مرجع و هر سه اسکریپت به‌عنوان �
 | `vscode-copilot/` | نسخهٔ Copilot — پرامپتی که کپی می‌کنید و چند نمونه پرسش. |
 | `vscode-extension/` | افزونهٔ سادهٔ VS Code که همان پرامپت را باز می‌کند. `node_modules/` و `dist/` کامیت نمی‌شوند. |
 | `chatgpt-app/` | نسخهٔ ChatGPT — دستورالعمل و بسته‌ساز یک GPT اختصاصی، و یک سرور MCP برای وصل شدن به‌عنوان connector. |
+| `render.yaml` | نقشهٔ استقرار یک‌کلیکی همان سرور. برای اینکه Render پیدایش کند باید در ریشهٔ مخزن بماند. |
 
 نگه داشتن Skill در پوشهٔ اختصاصی خودش مهم است: مشخصات فنی الزام می‌کند که `name` یک Skill با
 نام پوشه‌اش یکی باشد، پس ساختن آن مستقیماً از ریشهٔ مخزن همان لحظه‌ای خراب می‌شد که کسی

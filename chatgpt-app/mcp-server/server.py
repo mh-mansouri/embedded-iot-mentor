@@ -30,6 +30,7 @@ import sys
 from pathlib import Path
 
 from mcp.server import MCPServer
+from starlette.responses import PlainTextResponse
 
 HERE = Path(__file__).resolve().parent
 
@@ -73,6 +74,17 @@ mcp = MCPServer(
         "calculators instead of estimating a battery runtime or a BOM total in prose."
     ),
 )
+
+
+@mcp.custom_route("/healthz", methods=["GET"])
+async def healthz(request):
+    """Something for a host to ping.
+
+    /mcp answers a POST inside a session, so a platform health check pointed at
+    it reads as a failure and takes the service down.
+    """
+    ready = SKILL_DIR.is_dir() and INSTRUCTIONS.is_file()
+    return PlainTextResponse("ok\n" if ready else "skill folder missing\n", 200 if ready else 503)
 
 
 def _docs() -> dict[str, Path]:

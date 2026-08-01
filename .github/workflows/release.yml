@@ -1,0 +1,79 @@
+name: release
+
+# Push a tag, get a release with the downloadable bundles attached:
+#
+#   git tag -a v1.1.0 -m "..." && git push origin v1.1.0
+#
+# Attaching them by hand is the step that gets skipped, and a release whose
+# assets are missing sends people back to cloning the repository.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build the release from"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Work out the version
+        id: version
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "number=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      # The changelog says versions follow metadata.version, so a tag that
+      # disagrees with the skill is a mislabelled download.
+      - name: Check the tag matches the skill version
+        run: |
+          skill_version=$(grep -Po '^\s+version:\s*"\K[^"]+' embedded-iot-mentor/SKILL.md)
+          if [ "$skill_version" != "${{ steps.version.outputs.number }}" ]; then
+            echo "tag ${{ steps.version.outputs.tag }} does not match SKILL.md version $skill_version" >&2
+            exit 1
+          fi
+
+      - name: Validate and build the bundles
+        run: |
+          python package_skill.py --check
+          python chatgpt-app/build_chatgpt_bundle.py
+
+      - name: Take the release notes from the changelog
+        run: |
+          python - <<'PY' > notes.md
+          import pathlib, re
+          version = "${{ steps.version.outputs.number }}"
+          text = pathlib.Path("CHANGELOG.md").read_text(encoding="utf-8")
+          match = re.search(rf"^## {re.escape(version)}\b.*?$(.*?)(?=^## |\Z)", text, re.S | re.M)
+          print((match.group(1).strip() if match else "See CHANGELOG.md.") + "\n")
+          print("**Downloads**")
+          print("- `embedded-iot-mentor.skill` — open in Claude, or unzip into `~/.claude/skills/`.")
+          print("- `embedded-iot-mentor-gpt.zip` — instructions and knowledge files for a Custom GPT.")
+          PY
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            embedded-iot-mentor.skill \
+            chatgpt-app/dist/embedded-iot-mentor-gpt.zip \
+            --title "Embedded / IoT Mentor ${{ steps.version.outputs.tag }}" \
+            --notes-file notes.md \
+            --verify-tag

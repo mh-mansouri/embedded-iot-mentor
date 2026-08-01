@@ -64,9 +64,10 @@ Misstagen den är byggd för att fånga:
 
 ## Installation
 
-**Alternativ A — en fil.** Ladda ner
-[`embedded-iot-mentor.skill`](./embedded-iot-mentor.skill) och öppna den i Claude. (Ditt
-konto eller din organisation måste ha påslaget att skills får sparas.)
+**Alternativ A — en fil.** Ladda ner `embedded-iot-mentor.skill` från
+[senaste släppet](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) (eller
+[direkt ur repot](./embedded-iot-mentor.skill)) och öppna den i Claude. (Ditt konto eller din
+organisation måste ha påslaget att skills får sparas.)
 
 **Alternativ B — Claude Code.** Packa upp den i din skills-katalog:
 
@@ -135,7 +136,7 @@ handlar om säkerhetskritiskt, fordon eller integritet.
 | [`vscode-copilot/`](./vscode-copilot/) | Kopiera en fil till `.github/copilot-instructions.md`, eller klistra in den i Copilot Chat | Börja alltid här i VS Code — inget att installera |
 | [`vscode-extension/`](./vscode-extension/) | Bygg ett litet tillägg vars enda kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Bygg en GPT: klistra in en instruktionsfil och ladda upp kunskapsfilerna | Börja alltid här i ChatGPT — tio minuter i webbläsaren |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Kör en liten MCP-server och lägg till den som en egen connector | Du vill att räknehjälpen faktiskt körs och att referenserna aldrig hamnar på efterkälken |
+| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Driftsätt en liten MCP-server — [ett klick på Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — och lägg till adressen som en egen connector | Du vill att räknehjälpen faktiskt körs och att referenserna aldrig hamnar på efterkälken |
 
 Vad portarna får med sig skiljer sig. Copilot-porten är bara omdöme — inga referensfiler,
 inga skript, så en riktig drifttid på batteri eller en summa för komponentlistan är
@@ -170,6 +171,7 @@ projektdata som skillen aldrig läser.
 | `vscode-copilot/` | Porten till Copilot — prompten du klistrar in, och exempelfrågor. |
 | `vscode-extension/` | Ett enkelt VS Code-tillägg som öppnar den prompten. `node_modules/` och `dist/` checkas inte in. |
 | `chatgpt-app/` | Porten till ChatGPT — instruktionerna och paketeraren för en egen GPT, och en MCP-server att koppla in som connector. |
+| `render.yaml` | Ritningen bakom ett-klicks-driftsättningen av den servern. Måste ligga i roten för att Render ska hitta den. |
 
 Att skillen ligger i en egen mapp spelar roll: specifikationen kräver att en skills `name`
 är samma som mappnamnet, så att bygga direkt från repots rot skulle gå sönder i samma stund

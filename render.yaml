@@ -1,0 +1,17 @@
+# Blueprint for the ChatGPT connector, so "Deploy to Render" in the README needs
+# no configuration. Render has to find this file at the repository root.
+#
+# ChatGPT only talks to a connector over HTTPS, which is the step that stops most
+# people running the server locally. A host that terminates TLS removes it.
+services:
+  - type: web
+    name: embedded-iot-mentor-mcp
+    runtime: docker
+    plan: free
+    dockerfilePath: ./chatgpt-app/mcp-server/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    envVars:
+      # PORT is assigned by Render; the server reads it.
+      - key: HOST
+        value: 0.0.0.0
