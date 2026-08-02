@@ -1,0 +1,35 @@
+# Build from the repository root, not from this folder:
+#   docker build -f api/Dockerfile -t embedded-iot-mentor-api .
+#
+# The API reads the reference files and runs the helper scripts out of
+# embedded-iot-mentor/, so the image has to carry the skill folder too. An
+# answer from this image is the answer the skill would give.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Requirements first: the layer only rebuilds when a dependency changes, not on
+# every edit to the mentor.
+COPY api/requirements.txt api/
+RUN pip install --no-cache-dir -r api/requirements.txt
+
+COPY api/ api/
+COPY embedded-iot-mentor/ embedded-iot-mentor/
+# /instructions serves the same rules as the ChatGPT ports, so no route drifts.
+COPY chatgpt-app/custom-gpt/instructions.md chatgpt-app/custom-gpt/
+
+# The scripts are run, never written to, so the server needs no write access
+# anywhere in the image.
+RUN useradd --create-home --uid 10001 mentor
+USER mentor
+
+# 0.0.0.0 because the default loopback bind serves nothing outside the
+# container. Hosts that assign a port override PORT.
+ENV HOST=0.0.0.0 \
+    PORT=8000 \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+# Shell form so $PORT is expanded at run time by the host that assigns it.
+CMD ["sh", "-c", "uvicorn api.main:app --host $HOST --port $PORT"]
