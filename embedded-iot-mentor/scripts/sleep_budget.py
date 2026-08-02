@@ -48,8 +48,17 @@ def main() -> int:
                    help=f"usable fraction of rated capacity (default {DEFAULT_DERATE})")
     args = p.parse_args()
 
-    if args.interval_s <= 0 or args.capacity <= 0:
-        print("error: --capacity and --interval-s must be greater than zero", file=sys.stderr)
+    for flag, value in (("--capacity", args.capacity), ("--active-ma", args.active_ma),
+                        ("--active-ms", args.active_ms), ("--interval-s", args.interval_s)):
+        if value <= 0:
+            print(f"error: {flag} must be greater than zero", file=sys.stderr)
+            return 1
+    if args.sleep_ua < 0:
+        print("error: --sleep-ua cannot be negative", file=sys.stderr)
+        return 1
+    if not 0 < args.derate <= 1:
+        print("error: --derate is a fraction of rated capacity, so 0 < derate <= 1",
+              file=sys.stderr)
         return 1
 
     active_s = args.active_ms / 1000
@@ -63,6 +72,7 @@ def main() -> int:
     sleep_avg_ma = (args.sleep_ua / 1000) * (1 - duty)
     avg_ma = active_avg_ma + sleep_avg_ma
 
+    # Unreachable given the checks above; kept as a cheap guard
     if avg_ma <= 0:
         print("error: average current came out at zero", file=sys.stderr)
         return 1

@@ -10,7 +10,6 @@ vscode-extension/dist/
 # The ChatGPT upload set is assembled from the skill folder on demand.
 # Rebuild: python chatgpt-app/build_chatgpt_bundle.py
 chatgpt-app/dist/
-.venv/
 
 # Browser-automation debris. The page snapshots capture whatever was signed in
 # at the time, so this is a privacy leak waiting to be committed, not clutter.
@@ -18,3 +17,6 @@ chatgpt-app/dist/
 
 # embedded-iot-mentor.skill lives at the repo root and is committed on purpose,
 # so it can be downloaded and installed directly. Rebuild: python package_skill.py
+
+# Local virtual environment for the REST API. Never committed.
+.venv/

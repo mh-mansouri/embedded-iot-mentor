@@ -2,6 +2,18 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.4 - 2026-08-02
+
+Harden the three helper scripts, so a wrapper can trust their input handling and exit codes.
+
+- `cost_estimator.py` accepts a comma-separated line form (`"1,4.50,ESP32 DevKit"`). The
+  spaced form guessed a description by "not a number", which silently ate `"2024"` as the
+  next quantity. Both forms still work and can be mixed.
+- `sleep_budget.py` validates every input, not just capacity and interval. `--derate 0`
+  returned zero runtime and `--derate 5` claimed five times the rated cell.
+- `footprint_hint.py` answers `--help`, exits 1 on no arguments instead of 0, marks a miss
+  with a `note:` prefix, and accepts `QFN 32` as well as `QFN-32`.
+
 ## 1.1.3 - 2026-08-01
 
 Listed in the official MCP registry, which took three corrections the schema alone does not
