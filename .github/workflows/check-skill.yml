@@ -35,3 +35,11 @@ jobs:
 
       - name: Test the connector
         run: python chatgpt-app/mcp-server/test_server.py
+
+      # The REST port shells out to the same scripts, so a renamed flag breaks
+      # it in a way that reads to the caller like their own bad request.
+      - name: Install the API's dependencies
+        run: pip install -r api/requirements.txt
+
+      - name: Test the API
+        run: python api/test_api.py
