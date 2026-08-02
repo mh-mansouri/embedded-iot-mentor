@@ -102,6 +102,59 @@ check("reports a miss as a miss", miss["matched"] is False, str(miss))
 check("miss still advises", "0805" in miss["hint"])
 rejects("flag-like package rejected", lambda: main.FootprintRequest(package="--help"))
 
+
+section("guardrails")
+check("open by default", main.API_KEY == "")
+check("no CORS origins by default", main.CORS_ORIGINS == [])
+check("health check needs no key", "/healthz" in main.OPEN_PATHS)
+
+
+class _FakeRequest:
+    """Only the two attributes _client_ip touches."""
+
+    def __init__(self, headers: dict, peer: str | None = "10.0.0.1"):
+        self.headers = headers
+        self.client = type("C", (), {"host": peer})() if peer else None
+
+
+check("client ip from the socket",
+      main._client_ip(_FakeRequest({})) == "10.0.0.1")
+# Behind a proxy every caller shares one socket peer, so the header wins.
+check("proxy header wins",
+      main._client_ip(_FakeRequest({"x-forwarded-for": "203.0.113.7, 10.0.0.1"})) == "203.0.113.7")
+check("blank header ignored",
+      main._client_ip(_FakeRequest({"x-forwarded-for": "  "})) == "10.0.0.1")
+
+original_limit = main.RATE_LIMIT_PER_MIN
+main.RATE_LIMIT_PER_MIN = 3
+try:
+    ip = "198.51.100.9"  # documentation range, so no real bucket is disturbed
+    allowed = [main._within_rate_limit(ip) for _ in range(5)]
+    check("allows up to the limit", allowed[:3] == [True, True, True], str(allowed))
+    check("blocks past the limit", allowed[3:] == [False, False], str(allowed))
+    check("a different caller is unaffected", main._within_rate_limit("198.51.100.10"))
+finally:
+    main.RATE_LIMIT_PER_MIN = original_limit
+    main._hits.clear()
+
+original_timeout = main.SCRIPT_TIMEOUT_S
+main.SCRIPT_TIMEOUT_S = 0.2  # the wait for a free slot; keeps the test quick
+held = [main._script_slots.acquire() for _ in range(main.MAX_CONCURRENT_SCRIPTS)]
+try:
+    check("all slots can be taken", all(held))
+    try:
+        main.run_script("footprint", ["0805"])
+        check("refuses when full", False, "ran anyway")
+    except HTTPException as exc:
+        check("refuses when full", exc.status_code == 503, str(exc.status_code))
+finally:
+    for _ in held:
+        main._script_slots.release()
+    main.SCRIPT_TIMEOUT_S = original_timeout
+
+check("slots are given back", main.run_script("footprint", ["0805"]).startswith("0805"))
+
+
 print()
 if FAILURES:
     print(f"{len(FAILURES)} failed: {', '.join(FAILURES)}")

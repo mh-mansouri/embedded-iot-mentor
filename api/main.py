@@ -16,11 +16,15 @@ import os
 import re
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import PlainTextResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field, field_validator
+
 
 HERE = Path(__file__).resolve().parent
 
@@ -37,6 +41,20 @@ INSTRUCTIONS = Path(
 ).resolve()
 
 SCRIPT_TIMEOUT_S = 20
+
+# Unset means open, which is what a local run wants. Set it in any deployment.
+API_KEY = os.environ.get("EIM_API_KEY", "")
+
+# Browsers only, and empty by default: a server nobody has pointed a web page at
+# needs no cross-origin permission, and "*" is hard to take back once published.
+CORS_ORIGINS = [o.strip() for o in os.environ.get("EIM_CORS_ORIGINS", "").split(",") if o.strip()]
+
+MAX_BODY_BYTES = 64 * 1024
+RATE_LIMIT_PER_MIN = int(os.environ.get("EIM_RATE_LIMIT_PER_MIN", "60"))
+MAX_CONCURRENT_SCRIPTS = int(os.environ.get("EIM_MAX_CONCURRENT_SCRIPTS", "4"))
+
+# A platform health check should not need the secret.
+OPEN_PATHS = {"/healthz"}
 
 
 def skill_version() -> str:
@@ -55,6 +73,11 @@ SCRIPTS = {
 }
 
 
+# Every calculator call is a Python process. Routes are sync, so FastAPI runs
+# them in its threadpool, and without a cap a burst forks until the box gives up.
+_script_slots = threading.BoundedSemaphore(MAX_CONCURRENT_SCRIPTS)
+
+
 def run_script(key: str, args: list[str]) -> str:
     """Run one helper script and return its stdout.
 
@@ -62,6 +85,10 @@ def run_script(key: str, args: list[str]) -> str:
     exit is the caller's mistake (400), not a server fault.
     """
     script = SCRIPTS_DIR / SCRIPTS[key]
+    # Take a slot before spawning; the timeout means a queued caller waits rather
+    # than being refused the instant the box is busy.
+    if not _script_slots.acquire(timeout=SCRIPT_TIMEOUT_S):
+        raise HTTPException(503, "busy: too many calculations in flight")
     try:
         proc = subprocess.run(
             [sys.executable, str(script), *args],
@@ -74,6 +101,9 @@ def run_script(key: str, args: list[str]) -> str:
         raise HTTPException(500, f"script missing: {script}")
     except subprocess.TimeoutExpired:
         raise HTTPException(504, f"{SCRIPTS[key]} took longer than {SCRIPT_TIMEOUT_S}s")
+    finally:
+        # Runs on the raising paths too, or a timeout would burn a slot forever.
+        _script_slots.release()
 
     if proc.returncode != 0:
         detail = proc.stderr.strip() or proc.stdout.strip() or "script failed"
@@ -131,6 +161,38 @@ class FootprintRequest(BaseModel):
         return [self.package]
 
 
+_hits: dict[str, list[float]] = {}
+_hits_lock = threading.Lock()
+
+
+def _client_ip(request: Request) -> str:
+    # Render and most hosts terminate TLS in front, so the socket peer is the
+    # proxy and every caller would share one bucket. The first hop in
+    # X-Forwarded-For is the real client.
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded.strip():
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _within_rate_limit(ip: str) -> bool:
+    """Fixed one-minute window, per process. Good enough for one small instance;
+    a second instance would need shared state, which is not worth a Redis."""
+    now = time.monotonic()
+    with _hits_lock:
+        recent = [t for t in _hits.get(ip, ()) if now - t < 60]
+        if len(recent) >= RATE_LIMIT_PER_MIN:
+            _hits[ip] = recent
+            return False
+        recent.append(now)
+        _hits[ip] = recent
+        if len(_hits) > 10_000:
+            # A spray of forged IPs would otherwise grow this map forever.
+            for stale in [k for k, v in _hits.items() if not v or now - v[-1] > 60]:
+                _hits.pop(stale, None)
+        return True
+
+
 app = FastAPI(
     title="Embedded / IoT Mentor API",
     version=skill_version(),
@@ -144,6 +206,31 @@ app = FastAPI(
         "- `/instructions` — the mentor's rules, for your own model\n"
     ),
 )
+
+
+if CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=CORS_ORIGINS,
+        allow_methods=["GET", "POST"],
+        allow_headers=["content-type", "x-api-key"],
+    )
+
+
+@app.middleware("http")
+async def guardrails(request: Request, call_next):
+    if request.url.path in OPEN_PATHS:
+        return await call_next(request)
+    if API_KEY and request.headers.get("x-api-key") != API_KEY:
+        return JSONResponse({"detail": "missing or wrong X-API-Key"}, status_code=401)
+    declared = request.headers.get("content-length")
+    if declared and declared.isdigit() and int(declared) > MAX_BODY_BYTES:
+        return JSONResponse({"detail": f"body over {MAX_BODY_BYTES} bytes"}, status_code=413)
+    if not _within_rate_limit(_client_ip(request)):
+        return JSONResponse(
+            {"detail": "rate limit exceeded"}, status_code=429, headers={"Retry-After": "60"}
+        )
+    return await call_next(request)
 
 
 def _reference_files() -> dict[str, Path]:
