@@ -21,7 +21,7 @@ services:
     name: embedded-iot-mentor-api
     runtime: docker
     plan: free
-    dockerfilePath: ./api/Dockerfile
+    dockerfilePath: ./api/dockerfile
     dockerContext: .
     healthCheckPath: /healthz
     envVars:

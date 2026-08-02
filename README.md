@@ -25,7 +25,8 @@ actually built before, then answers at that level.
 | **Claude** | [Download `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) and open it |
 | **ChatGPT** | [Build the GPT](./chatgpt-app/custom-gpt/) — paste one file, upload the knowledge, 10 minutes |
 | **VS Code** | [Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **ChatGPT connector** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then add the URL + `/mcp` under Settings → Connectors |
+| **ChatGPT connector** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then add the URL + `/mcp` under Settings → Connectors. The same click also deploys the REST API |
+| **Your own code** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then call the REST API — [routes](./api/) |
 
 Everything below is the longer way round: build it yourself, change it, or read why it
 answers the way it does.
@@ -149,12 +150,13 @@ vehicle, and privacy questions.
 | [`vscode-extension/`](./vscode-extension/) | [Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — one command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Build a GPT: paste one instruction file, upload the knowledge files | Always start here in ChatGPT — 10 minutes in the browser |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Deploy a small MCP server — [one click on Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — and add its URL as a custom connector | You want the calculators to actually run and the references to stay in sync |
+| [`api/`](./api/) | Deploy the REST API — the same one click on Render — and call it from your own code | The caller is a script or a service, not a person in a chat window |
 
 What the ports carry differs. The Copilot one is judgement only — no reference files, no
 scripts, so a real battery runtime or a BOM total is still the skill's job. The ChatGPT GPT
 uploads the reference files and the three scripts as knowledge, and runs them in Code
-Interpreter. The MCP connector goes further and reads both straight out of the skill folder,
-so it cannot fall behind a change made here.
+Interpreter. The MCP connector and the REST API go further and read both straight
+out of the skill folder, so neither can fall behind a change made here.
 
 ## Good to know
 
