@@ -25,7 +25,8 @@ skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivå
 | **Claude** | [Ladda ner `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) och öppna den |
 | **ChatGPT** | [Bygg GPT:n](./chatgpt-app/custom-gpt/) — klistra in en fil, ladda upp kunskapsfilerna, 10 minuter |
 | **VS Code** | [Installera från Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **ChatGPT-koppling** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och lägg sedan in adressen plus `/mcp` under Inställningar → Kopplingar |
+| **ChatGPT-koppling** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och lägg sedan in adressen plus `/mcp` under Inställningar → Kopplingar. Samma klick driftsätter även REST-API:et |
+| **Din egen kod** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och anropa sedan REST-API:et från din egen kod — [rutter](./api/) |
 
 Allt nedanför är den längre vägen: bygg den själv, ändra den, eller läs varför den svarar
 som den gör.
@@ -156,12 +157,13 @@ handlar om säkerhetskritiskt, fordon eller integritet.
 | [`vscode-extension/`](./vscode-extension/) | [Installera från Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — ett kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Bygg en GPT: klistra in en instruktionsfil och ladda upp kunskapsfilerna | Börja alltid här i ChatGPT — tio minuter i webbläsaren |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Driftsätt en liten MCP-server — [ett klick på Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — och lägg till adressen som en egen connector | Du vill att räknehjälpen faktiskt körs och att referenserna aldrig hamnar på efterkälken |
+| [`api/`](./api/) | Driftsätt REST-API:et — samma klick på Render — och anropa det från din egen kod | Callern är ett skript eller en tjänst, inte en människa i ett chattfönster |
 
 Vad portarna får med sig skiljer sig. Copilot-porten är bara omdöme — inga referensfiler,
 inga skript, så en riktig drifttid på batteri eller en summa för komponentlistan är
 fortfarande skillens jobb. ChatGPT-GPT:n laddar upp referensfilerna och de tre skripten som
-kunskap och kör dem i Code Interpreter. MCP-connectorn går längre och läser båda direkt ur
-skill-mappen, så den kan inte hamna efter en ändring som görs här.
+kunskap och kör dem i Code Interpreter. MCP-connectorn och REST-API:et går längre och läser
+båda direkt ur skill-mappen, så ingen av dem kan hamna efter en ändring som görs här.
 
 ## Bra att veta
 

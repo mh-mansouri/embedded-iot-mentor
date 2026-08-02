@@ -27,10 +27,11 @@
 | **Claude** | [فایل `embedded-iot-mentor.skill` را بگیرید](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) و در Claude بازش کنید |
 | **ChatGPT** | [GPT را بسازید](./chatgpt-app/custom-gpt/) — یک فایل را بچسبانید، فایل‌های دانش را بارگذاری کنید، ده دقیقه |
 | **VS Code** | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **connector برای ChatGPT** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) و بعد آدرس به‌همراه `/mcp` را در Settings ← Connectors اضافه کنید |
+| **connector برای ChatGPT** | آدرس را به‌همراه `/mcp` در Settings ← Connectors اضافه کنید. همین یک کلیک، REST API را هم مستقر می‌کند — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
+| **کد خودتان** | REST API را از کد خودتان صدا بزنید — [مسیرها](./api/) — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
 
-هرچه پایین‌تر می‌آید راه بلندترش است: خودتان بسازید، تغییرش دهید، یا بخوانید چرا این‌طور
-جواب می‌دهد.
+جدول بالا مسیر سریع تری است؛ هر چیزی که بعد از این جدول قرار دارد، مسیری کندتراست که
+توسط خودتان قابل انجام است.
 
 ## نمونهٔ اجرا
 
@@ -169,12 +170,13 @@ Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.clau
 | [`vscode-extension/`](./vscode-extension/) | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — یک فرمان همان پرامپت را باز و کپی می‌کند | آن‌قدر سراغ پرامپت می‌روید که گشتن دنبال فایل آزارتان می‌دهد |
 | [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | یک GPT بسازید: یک فایل دستورالعمل را بچسبانید و فایل‌های دانش را بارگذاری کنید | در ChatGPT همیشه از همین‌جا شروع کنید — ده دقیقه کار در مرورگر |
 | [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | یک سرور کوچک MCP را مستقر کنید — [با یک کلیک روی Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — و آدرسش را به‌عنوان connector اضافه کنید | می‌خواهید محاسبه‌گرها واقعاً اجرا شوند و مرجع‌ها هیچ‌وقت عقب نمانند |
+| [`api/`](./api/) | REST API را مستقر کنید — همان یک کلیک روی Render — و از کد خودتان صدایش بزنید | تماس‌گیرنده یک اسکریپت یا سرویس است، نه آدمی پشت پنجرهٔ گفت‌وگو |
 
 آنچه هر نسخه با خود می‌برد فرق دارد. نسخهٔ Copilot فقط قضاوت است — نه فایل مرجعی دارد نه
 اسکریپتی، پس برای عمر واقعی باتری یا جمع هزینهٔ قطعات هنوز باید سراغ خودِ Skill بروید. در
 GPT، فایل‌های مرجع و هر سه اسکریپت به‌عنوان دانش بارگذاری می‌شوند و در Code Interpreter
-اجرا می‌شوند. connector از این هم جلوتر می‌رود و هر دو را مستقیم از پوشهٔ Skill می‌خواند،
-پس از تغییری که اینجا داده شود عقب نمی‌ماند.
+اجرا می‌شوند. connector و REST API از این هم جلوتر می‌روند و هر دو را مستقیم از پوشهٔ
+Skill می‌خوانند، پس هیچ‌کدام از تغییری که اینجا داده شود عقب نمی‌مانند.
 
 ## خوب است بدانید
 

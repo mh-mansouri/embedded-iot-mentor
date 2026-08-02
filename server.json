@@ -3,7 +3,7 @@
   "name": "io.github.mh-mansouri/embedded-iot-mentor",
   "title": "Embedded / IoT Mentor",
   "description": "Embedded/IoT mentor: picks the board and toolchain, estimates cost and battery life.",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "websiteUrl": "https://github.com/mh-mansouri/embedded-iot-mentor",
   "icons": [
     {
@@ -20,7 +20,7 @@
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "ghcr.io/mh-mansouri/embedded-iot-mentor-mcp:1.1.4",
+      "identifier": "ghcr.io/mh-mansouri/embedded-iot-mentor-mcp:1.1.5",
       "transport": {
         "type": "streamable-http",
         "url": "http://localhost:8000/mcp"

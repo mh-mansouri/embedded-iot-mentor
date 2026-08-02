@@ -2,6 +2,25 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.5 - 2026-08-02
+
+Serve the mentor over HTTP, for callers that are code rather than a person in a chat
+window — a build script that wants a BOM total, a dashboard that wants a battery
+estimate, or a model that wants the mentor's rules as its system prompt.
+
+- [`api/`](./api/) is a FastAPI port: the reference library, a substring search, the three
+  calculators, and `/instructions`. Nothing is reimplemented — the docs are read from the
+  skill folder and the calculators shell out to its scripts, so it cannot drift from the
+  skill the way a copy would.
+- Bad input fails twice over. The request models reject what they can judge before a
+  process starts (422); the scripts reject what only they can judge, and their own message
+  is what the caller sees (400).
+- Guardrails, all off by default so a local run stays frictionless: an optional API key,
+  a CORS allow-list, a body cap, a per-IP rate limit, and a ceiling on how many
+  calculations run at once. `/healthz` stays open so a platform health check needs no key.
+- The Render blueprint now carries two services, so the one-click deploy brings up the
+  connector and the API together.
+
 ## 1.1.4 - 2026-08-02
 
 Harden the three helper scripts, so a wrapper can trust their input handling and exit codes.
