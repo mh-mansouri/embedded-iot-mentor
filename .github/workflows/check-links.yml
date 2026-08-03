@@ -1,0 +1,26 @@
+name: check-links
+
+# The README badges, the release download, the Marketplace listing, and the
+# one-click Render deploy are the links a reader actually clicks. A renamed
+# listing or a moved release asset breaks silently otherwise, and nobody
+# notices until someone reports a dead "Install" button. The weekly schedule
+# catches rot on a repository that otherwise goes weeks without a push.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Check every README / distribution link still resolves
+        run: python scripts/check_links.py

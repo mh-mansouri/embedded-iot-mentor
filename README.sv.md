@@ -3,6 +3,7 @@
 [English](./README.md) · **Svenska** · [فارسی](./README.fa.md)
 
 [![check-skill](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml)
+[![check-links](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml)
 [![senaste utgåvan](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
 [![Licens: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -27,6 +28,12 @@ skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivå
 | **VS Code** | [Installera från Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
 | **ChatGPT-koppling** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och lägg sedan in adressen plus `/mcp` under Inställningar → Kopplingar. Samma klick driftsätter även REST-API:et |
 | **Din egen kod** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och anropa sedan REST-API:et från din egen kod — [rutter](./api/) |
+| **Vilken annan AI-chatt som helst** | Klistra in [`universal-prompt.md`](./universal-prompt.md) som första meddelande — ingen installation, funkar i ChatGPT, Gemini, Copilot och andra |
+
+Föredrar du en sida framför en chatt? [`docs/index.html`](./docs/index.html) är en statisk
+översikt med samma "Prova den"-länkar och demo — live på
+https://mh-mansouri.github.io/embedded-iot-mentor/ när GitHub Pages är aktiverat för det här
+repot, eller öppna filen lokalt, ingen server behövs.
 
 Allt nedanför är den längre vägen: bygg den själv, ändra den, eller läs varför den svarar
 som den gör.
@@ -189,6 +196,10 @@ projektdata som skillen aldrig läser.
 | `embedded-iot-mentor.skill` | **Genererad.** En zip av mappen ovan — redigera den inte för hand. |
 | `package_skill.py` | Bygger, kollar och installerar paketet. |
 | `embedded-iot-mentor-demo.gif` | Inspelningen som visas högst upp. Ingår inte i paketet — packaren tar bara skill-mappen. |
+| `universal-prompt.md` | Samma mentor som en kopieringsbar prompt, för vilken AI-chatt som helst som inte är Claude. |
+| `docs/index.html` | Statisk landningssida för GitHub Pages — "Prova den"-länkarna och demot, ingen chatt behövs. |
+| `create_skill_demo_gif.py` | Genererar en illustrerad demo-GIF (`assets/skill-demo-mockup.gif`) från ett skriptat scenario, för när en riktig inspelning saknas. |
+| `scripts/check_links.py` | Kollar att varje länk i README och distributionsfilerna fortfarande fungerar. Körs av `check-links.yml` vid push, PR och varje vecka. |
 | `vscode-copilot/` | Porten till Copilot — prompten du klistrar in, och exempelfrågor. |
 | `vscode-extension/` | Ett enkelt VS Code-tillägg som öppnar den prompten. `node_modules/` och `dist/` checkas inte in. |
 | `chatgpt-app/` | Porten till ChatGPT — instruktionerna och paketeraren för en egen GPT, och en MCP-server att koppla in som connector. |

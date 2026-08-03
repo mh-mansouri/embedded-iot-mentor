@@ -3,6 +3,7 @@
 **English** · [Svenska](./README.sv.md) · [فارسی](./README.fa.md)
 
 [![check-skill](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml)
+[![check-links](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml)
 [![latest release](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -27,6 +28,11 @@ actually built before, then answers at that level.
 | **VS Code** | [Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
 | **ChatGPT connector** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then add the URL + `/mcp` under Settings → Connectors. The same click also deploys the REST API |
 | **Your own code** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then call the REST API — [routes](./api/) |
+| **Any other AI chat** | Copy [`universal-prompt.md`](./universal-prompt.md) into the first message — no install, works in ChatGPT, Gemini, Copilot, and others |
+
+Prefer a page over a chat? [`docs/index.html`](./docs/index.html) is a static overview with the
+same "Try it" links and demo — live at https://mh-mansouri.github.io/embedded-iot-mentor/ once
+GitHub Pages is enabled for this repository, or open the file locally, no server needed.
 
 Everything below is the longer way round: build it yourself, change it, or read why it
 answers the way it does.
@@ -182,6 +188,10 @@ packaging and project metadata that the skill never reads.
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
 | `embedded-iot-mentor-demo.gif` | The recording shown at the top. Not bundled — the packer only takes the skill folder. |
+| `universal-prompt.md` | The same mentor as a copy-paste prompt, for any AI chat that isn't Claude. |
+| `docs/index.html` | Static landing page for GitHub Pages — the "Try it" links and the demo, no chat needed. |
+| `create_skill_demo_gif.py` | Generates a mock-up demo GIF (`assets/skill-demo-mockup.gif`) from a scripted scenario, for when a real recording isn't available. |
+| `scripts/check_links.py` | Checks that every README / distribution link still resolves. Run by `check-links.yml` on push, PR, and weekly. |
 | `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 | `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |

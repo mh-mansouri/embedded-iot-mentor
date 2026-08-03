@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embedded / IoT Mentor — a Claude Skill</title>
+<meta name="description" content="Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mh-mansouri.github.io/embedded-iot-mentor/">
+<meta property="og:image" content="https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/embedded-iot-mentor-demo.gif">
+<meta property="og:title" id="ogTitle" content="Embedded / IoT Mentor — a Claude Skill">
+<meta property="og:description" id="ogDescription" content="Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.">
+<meta property="og:locale" id="ogLocale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/embedded-iot-mentor-demo.gif">
+<meta name="twitter:title" id="twitterTitle" content="Embedded / IoT Mentor — a Claude Skill">
+<meta name="twitter:description" id="twitterDescription" content="Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #16181d;
+    --muted: #5a5a5a;
+    --border: #d8d8d8;
+    --card-bg: #f7f7f7;
+    --accent: #16803c;
+    --accent-fg: #ffffff;
+    --code-bg: #f0f2f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0d10;
+      --fg: #eaeaea;
+      --muted: #a3a3a3;
+      --border: #2c2f36;
+      --card-bg: #14161a;
+      --accent: #22c55e;
+      --accent-fg: #07111f;
+      --code-bg: #1a1d23;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, Segoe UI, Roboto, Tahoma, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .lang-switch {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .lang-switch button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .lang-switch button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-fg);
+  }
+  h1 {
+    font-size: 1.7rem;
+    margin-bottom: 0.35rem;
+  }
+  p.lead {
+    color: var(--muted);
+    margin-top: 0;
+    font-size: 1.05rem;
+  }
+  .demo {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+  h2 {
+    font-size: 1.1rem;
+    margin-top: 2.25rem;
+  }
+  table.try-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+  }
+  table.try-table th, table.try-table td {
+    text-align: start;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 0.92rem;
+  }
+  table.try-table th {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  table.try-table a { color: var(--accent); }
+  .badge-row img { vertical-align: middle; }
+  ul.what {
+    padding-inline-start: 1.2rem;
+  }
+  ul.what li {
+    margin-bottom: 0.5rem;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  footer {
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <div class="lang-switch" role="group" aria-label="Language / Svenska / فارسی">
+    <button type="button" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
+    <button type="button" data-lang="fa" aria-pressed="false">فارسی</button>
+  </div>
+
+  <h1 id="h1">Embedded / IoT Mentor</h1>
+  <p class="lead" id="lead">A skill for Claude that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.</p>
+
+  <p class="badge-row">
+    <a href="https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml"><img alt="check-skill" src="https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg"></a>
+    <a href="https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest"><img alt="latest release" src="https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release"></a>
+    <a href="../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  </p>
+
+  <img class="demo" alt="A farmer asks for soil moisture and nitrogen across a meadow; the skill declines the nitrogen half, asks two questions, and returns a six-node LoRa plan with no code in it" src="https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/embedded-iot-mentor-demo.gif">
+
+  <h2 id="tryH2">Try it</h2>
+  <table class="try-table">
+    <tbody id="tryBody"></tbody>
+  </table>
+
+  <h2 id="whatH2">What it does</h2>
+  <ul class="what" id="whatList"></ul>
+
+  <footer id="footer"></footer>
+</main>
+
+<script>
+const REPO = "https://github.com/mh-mansouri/embedded-iot-mentor";
+
+const I18N = {
+  en: {
+    dir: "ltr",
+    ogLocale: "en_US",
+    pageTitle: "Embedded / IoT Mentor — a Claude Skill",
+    metaDescription: "Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.",
+    h1: "Embedded / IoT Mentor",
+    lead: "A skill for Claude that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP — not a production line you didn't ask for.",
+    tryH2: "Try it",
+    tryRows: [
+      ["Claude", 'Download <code>embedded-iot-mentor.skill</code> from the <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">latest release</a> and open it'],
+      ["ChatGPT", 'Build a GPT — paste one file, upload the knowledge — see <a href="' + REPO + '/tree/main/chatgpt-app" target="_blank" rel="noopener">chatgpt-app/</a>'],
+      ["VS Code", 'Install from the <a href="https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode" target="_blank" rel="noopener">Marketplace</a>'],
+      ["Your own code", 'Deploy the REST API — <a href="https://render.com/deploy?repo=' + REPO + '" target="_blank" rel="noopener">one click on Render</a> — and call it from your own code'],
+      ["Universal prompt", 'Works in any AI chat, no install — see <a href="' + REPO + '/blob/main/universal-prompt.md" target="_blank" rel="noopener">universal-prompt.md</a>'],
+    ],
+    whatH2: "What it does",
+    what: [
+      "Picks a platform — ESP32, Pico, STM32, nRF52 — and says plainly why, plus alternatives.",
+      "Separates the hardware path from the firmware path.",
+      "Checks whether you need to write firmware at all before recommending any code.",
+      "Takes the reading all the way to a person — dashboard, phone, or alert.",
+      "Estimates time and cost as ranges, including what the thing costs to run.",
+      "Plans to MVP and stops there — later stages only on request.",
+    ],
+    footerPre: "Read the full ",
+    footerRepoLink: "README on GitHub",
+    footerPost: " for install options, the reference library, and how the ChatGPT and VS Code ports work.",
+  },
+  sv: {
+    dir: "ltr",
+    ogLocale: "sv_SE",
+    pageTitle: "Embedded / IoT Mentor — en Claude Skill",
+    metaDescription: "Väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och stannar vid ett fungerande kopplingsdäck.",
+    h1: "Embedded / IoT Mentor",
+    lead: "En skill för Claude som väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och ger en byggplan som slutar vid ett kopplingsdäck som funkar — inte en produktionslinje du aldrig bad om.",
+    tryH2: "Prova den",
+    tryRows: [
+      ["Claude", 'Ladda ner <code>embedded-iot-mentor.skill</code> från <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">senaste utgåvan</a> och öppna den'],
+      ["ChatGPT", 'Bygg en GPT — klistra in en fil, ladda upp kunskapsfilerna — se <a href="' + REPO + '/tree/main/chatgpt-app" target="_blank" rel="noopener">chatgpt-app/</a>'],
+      ["VS Code", 'Installera från <a href="https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode" target="_blank" rel="noopener">Marketplace</a>'],
+      ["Din egen kod", 'Driftsätt REST-API:et — <a href="https://render.com/deploy?repo=' + REPO + '" target="_blank" rel="noopener">ett klick på Render</a> — och anropa det från din egen kod'],
+      ["Universell prompt", 'Fungerar i vilken AI-chatt som helst, ingen installation — se <a href="' + REPO + '/blob/main/universal-prompt.md" target="_blank" rel="noopener">universal-prompt.md</a>'],
+    ],
+    whatH2: "Vad den gör",
+    what: [
+      "Väljer en plattform — ESP32, Pico, STM32, nRF52 — och säger tydligt varför, plus alternativ.",
+      "Skiljer hårdvaruspåret från firmwarespåret.",
+      "Kollar om du behöver skriva firmware alls innan den föreslår någon kod.",
+      "Tar mätvärdet hela vägen till en person — dashboard, telefon eller larm.",
+      "Uppskattar tid och kostnad som intervall, inklusive vad det kostar att driva.",
+      "Planerar till MVP och stannar där — senare steg endast på begäran.",
+    ],
+    footerPre: "Läs hela ",
+    footerRepoLink: "README:n på GitHub",
+    footerPost: " för installationsalternativ, referensbiblioteket, och hur ChatGPT- och VS Code-portarna fungerar.",
+  },
+  fa: {
+    dir: "rtl",
+    ogLocale: "fa_IR",
+    pageTitle: "Embedded / IoT Mentor — یک Skill برای Claude",
+    metaDescription: "میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان را تخمین می‌زند، و روی یک بردبورد کارکننده تمام می‌شود.",
+    h1: "Embedded / IoT Mentor",
+    lead: "یک Skill برای Claude که میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان لازم را تخمین می‌زند، و نقشهٔ ساختی می‌دهد که روی یک بردبورد کارکننده تمام می‌شود — نه خط تولیدی که سراغش را نگرفته‌اید.",
+    tryH2: "امتحانش کنید",
+    tryRows: [
+      ["Claude", 'فایل <code>embedded-iot-mentor.skill</code> را از <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">آخرین انتشار</a> بگیرید و بازش کنید'],
+      ["ChatGPT", 'یک GPT بسازید — یک فایل را بچسبانید، فایل‌های دانش را بارگذاری کنید — به <a href="' + REPO + '/tree/main/chatgpt-app" target="_blank" rel="noopener">chatgpt-app/</a> مراجعه کنید'],
+      ["VS Code", 'از <a href="https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode" target="_blank" rel="noopener">Marketplace</a> نصب کنید'],
+      ["کد خودتان", 'REST API را مستقر کنید — <a href="https://render.com/deploy?repo=' + REPO + '" target="_blank" rel="noopener">یک کلیک روی Render</a> — و از کد خودتان صدایش بزنید'],
+      ["پرامپت همگانی", 'در هر چت هوش مصنوعی کار می‌کند، بدون نصب — <a href="' + REPO + '/blob/main/universal-prompt.md" target="_blank" rel="noopener">universal-prompt.md</a> را ببینید'],
+    ],
+    whatH2: "چه کاری انجام می‌دهد",
+    what: [
+      "پلتفرمی را انتخاب می‌کند — ESP32، Pico، STM32، nRF52 — و به‌روشنی می‌گوید چرا، به‌همراه گزینه‌های جایگزین.",
+      "مسیر سخت‌افزار را از مسیر فریمور جدا می‌کند.",
+      "پیش از پیشنهاد هر کدی، بررسی می‌کند که اصلاً نیاز به نوشتن فریمور هست یا نه.",
+      "داده را تا رسیدن به یک شخص می‌برد — داشبورد، گوشی یا هشدار.",
+      "زمان و هزینه را به‌صورت بازه تخمین می‌زند، از جمله هزینهٔ نگه‌داری.",
+      "تا مرحلهٔ MVP برنامه‌ریزی می‌کند و همان‌جا می‌ایستد — مراحل بعدی فقط با درخواست.",
+    ],
+    footerPre: "برای گزینه‌های نصب، کتابخانهٔ مرجع، و نحوهٔ کار پورت‌های ChatGPT و VS Code، ",
+    footerRepoLink: "README کامل را در GitHub",
+    footerPost: " بخوانید.",
+  },
+};
+
+const langButtons = document.querySelectorAll(".lang-switch button");
+const h1El = document.getElementById("h1");
+const leadEl = document.getElementById("lead");
+const tryH2El = document.getElementById("tryH2");
+const tryBodyEl = document.getElementById("tryBody");
+const whatH2El = document.getElementById("whatH2");
+const whatListEl = document.getElementById("whatList");
+const footerEl = document.getElementById("footer");
+
+const LANG_KEY = "eim_lang";
+
+function buildTryTable(lang) {
+  tryBodyEl.textContent = "";
+  for (const [where, html] of I18N[lang].tryRows) {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.textContent = where;
+    const td = document.createElement("td");
+    td.innerHTML = html;
+    tr.appendChild(th);
+    tr.appendChild(td);
+    tryBodyEl.appendChild(tr);
+  }
+}
+
+function buildWhatList(lang) {
+  whatListEl.textContent = "";
+  for (const item of I18N[lang].what) {
+    const li = document.createElement("li");
+    li.textContent = item;
+    whatListEl.appendChild(li);
+  }
+}
+
+function buildFooter(lang) {
+  const t = I18N[lang];
+  footerEl.textContent = "";
+  footerEl.appendChild(document.createTextNode(t.footerPre));
+  const link = document.createElement("a");
+  link.href = REPO;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = t.footerRepoLink;
+  footerEl.appendChild(link);
+  footerEl.appendChild(document.createTextNode(t.footerPost));
+}
+
+function applyLanguage(lang) {
+  const t = I18N[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = t.dir;
+  document.title = t.pageTitle;
+  document.querySelector('meta[name="description"]').setAttribute("content", t.metaDescription);
+  document.getElementById("ogTitle").setAttribute("content", t.pageTitle);
+  document.getElementById("ogDescription").setAttribute("content", t.metaDescription);
+  document.getElementById("ogLocale").setAttribute("content", t.ogLocale);
+  document.getElementById("twitterTitle").setAttribute("content", t.pageTitle);
+  document.getElementById("twitterDescription").setAttribute("content", t.metaDescription);
+
+  h1El.textContent = t.h1;
+  leadEl.textContent = t.lead;
+  tryH2El.textContent = t.tryH2;
+  buildTryTable(lang);
+  whatH2El.textContent = t.whatH2;
+  buildWhatList(lang);
+  buildFooter(lang);
+
+  langButtons.forEach((btn) => {
+    btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
+  });
+}
+
+langButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    localStorage.setItem(LANG_KEY, btn.dataset.lang);
+    applyLanguage(btn.dataset.lang);
+  });
+});
+
+function detectBrowserLang() {
+  const candidates = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language];
+  for (const raw of candidates) {
+    if (!raw) continue;
+    const code = raw.slice(0, 2).toLowerCase();
+    if (I18N[code]) return code;
+  }
+  return "en";
+}
+
+const savedLang = localStorage.getItem(LANG_KEY);
+applyLanguage(savedLang && I18N[savedLang] ? savedLang : detectBrowserLang());
+</script>
+</body>
+</html>

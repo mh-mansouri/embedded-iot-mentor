@@ -3,6 +3,7 @@
 [English](./README.md) · [Svenska](./README.sv.md) · **فارسی**
 
 [![check-skill](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml)
+[![check-links](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml)
 [![آخرین انتشار](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
 [![مجوز: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -29,6 +30,12 @@
 | **VS Code** | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
 | **connector برای ChatGPT** | آدرس را به‌همراه `/mcp` در Settings ← Connectors اضافه کنید. همین یک کلیک، REST API را هم مستقر می‌کند — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
 | **کد خودتان** | REST API را از کد خودتان صدا بزنید — [مسیرها](./api/) — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
+| **هر چت هوش مصنوعی دیگر** | متن [`universal-prompt.md`](./universal-prompt.md) را به‌عنوان اولین پیام کپی کنید — بدون نصب، در ChatGPT، Gemini، Copilot و بقیه هم کار می‌کند |
+
+صفحه را به چت ترجیح می‌دهید؟ [`docs/index.html`](./docs/index.html) یک صفحهٔ ثابت با همان
+لینک‌های «امتحانش کنید» و دمو است — پس از فعال‌سازی GitHub Pages برای این مخزن، در آدرس
+https://mh-mansouri.github.io/embedded-iot-mentor/ در دسترس خواهد بود، یا همین فایل را
+مستقیماً دانلود و در مرورگر باز کنید، بدون نیاز به سرور.
 
 جدول بالا مسیر سریع تری است؛ هر چیزی که بعد از این جدول قرار دارد، مسیری کندتراست که
 توسط خودتان قابل انجام است.
@@ -205,6 +212,10 @@ Skill می‌خوانند، پس هیچ‌کدام از تغییری که این
 | `embedded-iot-mentor.skill` | **تولیدشده.** یک zip از پوشهٔ بالا — دستی ویرایشش نکنید. |
 | `package_skill.py` | بسته را می‌سازد، بررسی و نصب می‌کند. |
 | `embedded-iot-mentor-demo.gif` | همان ضبطی که در بالا نشان داده شده. در بسته نیست — بسته‌ساز فقط پوشهٔ Skill را برمی‌دارد. |
+| `universal-prompt.md` | همان مربی به‌شکل یک پرامپت کپی-پیست، برای هر چت هوش مصنوعی‌ای که Claude نیست. |
+| `docs/index.html` | صفحهٔ فرود ثابت برای GitHub Pages — همان لینک‌های «امتحانش کنید» و دمو، بدون نیاز به چت. |
+| `create_skill_demo_gif.py` | یک GIF نمایشی (`assets/skill-demo-mockup.gif`) از یک سناریوی نوشته‌شده می‌سازد، برای وقتی ضبط واقعی در دسترس نیست. |
+| `scripts/check_links.py` | بررسی می‌کند که همهٔ لینک‌های README و فایل‌های توزیع هنوز کار می‌کنند. با `check-links.yml` در push، PR و هر هفته اجرا می‌شود. |
 | `vscode-copilot/` | نسخهٔ Copilot — پرامپتی که کپی می‌کنید و چند نمونه پرسش. |
 | `vscode-extension/` | افزونهٔ سادهٔ VS Code که همان پرامپت را باز می‌کند. `node_modules/` و `dist/` کامیت نمی‌شوند. |
 | `chatgpt-app/` | نسخهٔ ChatGPT — دستورالعمل و بسته‌ساز یک GPT اختصاصی، و یک سرور MCP برای وصل شدن به‌عنوان connector. |
