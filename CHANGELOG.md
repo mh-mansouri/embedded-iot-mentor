@@ -2,6 +2,19 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 1.1.6 - 2026-08-03
+
+Repository tooling and reach, no change to the mentor's behaviour.
+
+- [`universal-prompt.md`](./universal-prompt.md): the same mentor as a copy-paste prompt for
+  any AI chat that isn't Claude.
+- [`docs/index.html`](./docs/index.html): a static landing page (English, Swedish, Persian)
+  for GitHub Pages, with the same "Try it" links and the demo.
+- [`scripts/check_links.py`](./scripts/check_links.py) and `check-links.yml`: verify every
+  README / distribution link still resolves, on push, PR, and weekly.
+- [`create_skill_demo_gif.py`](./create_skill_demo_gif.py): generates a mock-up demo GIF from
+  a scripted scenario, for when a real recording isn't available.
+
 ## 1.1.5 - 2026-08-02
 
 Serve the mentor over HTTP, for callers that are code rather than a person in a chat
