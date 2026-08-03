@@ -85,8 +85,21 @@ The failure modes it's built to catch:
 
 **Option A — one file.** Download `embedded-iot-mentor.skill` from the
 [latest release](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) (or
-[straight from the repository](./embedded-iot-mentor.skill)) and open it in Claude. (Skill
-saving must be enabled for your account or organization.)
+[straight from the repository](./embedded-iot-mentor.skill)), then in [claude.ai](https://claude.ai):
+
+1. Click your name in the bottom-left corner, choose **Settings**, then open the **Skills** page under Customize:
+
+   ![Settings menu with Skills highlighted under Customize](assets/install-steps/1-settings-skills.png)
+
+2. Click **Add**, then **Upload a skill**:
+
+   ![Add skill menu showing Create with Claude, Write skill instructions, and Upload a skill](assets/install-steps/2-add-skill-menu.png)
+
+3. Drag the downloaded `embedded-iot-mentor.skill` file onto the upload box (or click it to browse):
+
+   ![Upload skill dialog with a drag-and-drop area](assets/install-steps/3-upload-dialog.png)
+
+(Skill saving must be enabled for your account or organization.)
 
 **Option B — Claude Code.** Unpack it into your skills directory:
 
@@ -189,6 +202,7 @@ packaging and project metadata that the skill never reads.
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
 | `embedded-iot-mentor-demo.gif` | The recording shown at the top. Not bundled — the packer only takes the skill folder. |
 | `universal-prompt.md` | The same mentor as a copy-paste prompt, for any AI chat that isn't Claude. |
+| `assets/install-steps/` | Screenshots for the Claude Skill upload walkthrough in Install, above. |
 | `docs/index.html` | Static landing page for GitHub Pages — the "Try it" links and the demo, no chat needed. |
 | `create_skill_demo_gif.py` | Generates a mock-up demo GIF (`assets/skill-demo-mockup.gif`) from a scripted scenario, for when a real recording isn't available. |
 | `scripts/check_links.py` | Checks that every README / distribution link still resolves. Run by `check-links.yml` on push, PR, and weekly. |

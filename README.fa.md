@@ -94,7 +94,20 @@ https://mh-mansouri.github.io/embedded-iot-mentor/ در دسترس خواهد ب
 
 **گزینهٔ الف — یک فایل.** فایل `embedded-iot-mentor.skill` را از
 [آخرین نسخهٔ منتشرشده](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
-(یا [مستقیم از خود مخزن](./embedded-iot-mentor.skill)) دانلود کنید و در Claude بازش کنید.
+(یا [مستقیم از خود مخزن](./embedded-iot-mentor.skill)) دانلود کنید، سپس در [claude.ai](https://claude.ai):
+
+1. روی نامتان در گوشهٔ پایین-چپ کلیک کنید، **Settings** را انتخاب کنید، و صفحهٔ **Skills** را زیر Customize باز کنید:
+
+   ![منوی تنظیمات با Skills برجسته‌شده زیر Customize](assets/install-steps/1-settings-skills.png)
+
+2. روی **Add** کلیک کنید، سپس **Upload a skill**:
+
+   ![منوی Add skill که Create with Claude، Write skill instructions و Upload a skill را نشان می‌دهد](assets/install-steps/2-add-skill-menu.png)
+
+3. فایل دانلودشدهٔ `embedded-iot-mentor.skill` را روی کادر آپلود بکشید (یا برای انتخاب کلیک کنید):
+
+   ![دیالوگ Upload skill با یک ناحیهٔ کشیدن و رها کردن](assets/install-steps/3-upload-dialog.png)
+
 (ذخیرهٔ Skill باید برای حساب یا سازمانتان فعال باشد.)
 
 **گزینهٔ ب — Claude Code.** آن را در پوشهٔ skills خودتان باز کنید:
@@ -213,6 +226,7 @@ Skill می‌خوانند، پس هیچ‌کدام از تغییری که این
 | `package_skill.py` | بسته را می‌سازد، بررسی و نصب می‌کند. |
 | `embedded-iot-mentor-demo.gif` | همان ضبطی که در بالا نشان داده شده. در بسته نیست — بسته‌ساز فقط پوشهٔ Skill را برمی‌دارد. |
 | `universal-prompt.md` | همان مربی به‌شکل یک پرامپت کپی-پیست، برای هر چت هوش مصنوعی‌ای که Claude نیست. |
+| `assets/install-steps/` | اسکرین‌شات‌های راهنمای آپلود Claude Skill، در بخش نصب بالا. |
 | `docs/index.html` | صفحهٔ فرود ثابت برای GitHub Pages — همان لینک‌های «امتحانش کنید» و دمو، بدون نیاز به چت. |
 | `create_skill_demo_gif.py` | یک GIF نمایشی (`assets/skill-demo-mockup.gif`) از یک سناریوی نوشته‌شده می‌سازد، برای وقتی ضبط واقعی در دسترس نیست. |
 | `scripts/check_links.py` | بررسی می‌کند که همهٔ لینک‌های README و فایل‌های توزیع هنوز کار می‌کنند. با `check-links.yml` در push، PR و هر هفته اجرا می‌شود. |

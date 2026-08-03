@@ -93,8 +93,21 @@ Misstagen den är byggd för att fånga:
 
 **Alternativ A — en fil.** Ladda ner `embedded-iot-mentor.skill` från
 [senaste släppet](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest) (eller
-[direkt ur repot](./embedded-iot-mentor.skill)) och öppna den i Claude. (Ditt konto eller din
-organisation måste ha påslaget att skills får sparas.)
+[direkt ur repot](./embedded-iot-mentor.skill)), och sedan i [claude.ai](https://claude.ai):
+
+1. Klicka på ditt namn längst ner till vänster, välj **Settings**, och öppna sedan **Skills**-sidan under Customize:
+
+   ![Inställningsmeny med Skills markerat under Customize](assets/install-steps/1-settings-skills.png)
+
+2. Klicka på **Add**, sedan **Upload a skill**:
+
+   ![Add skill-meny som visar Create with Claude, Write skill instructions och Upload a skill](assets/install-steps/2-add-skill-menu.png)
+
+3. Dra den nedladdade filen `embedded-iot-mentor.skill` till uppladdningsrutan (eller klicka för att bläddra):
+
+   ![Upload skill-dialog med en dra-och-släpp-yta](assets/install-steps/3-upload-dialog.png)
+
+(Ditt konto eller din organisation måste ha påslaget att skills får sparas.)
 
 **Alternativ B — Claude Code.** Packa upp den i din skills-katalog:
 
@@ -197,6 +210,7 @@ projektdata som skillen aldrig läser.
 | `package_skill.py` | Bygger, kollar och installerar paketet. |
 | `embedded-iot-mentor-demo.gif` | Inspelningen som visas högst upp. Ingår inte i paketet — packaren tar bara skill-mappen. |
 | `universal-prompt.md` | Samma mentor som en kopieringsbar prompt, för vilken AI-chatt som helst som inte är Claude. |
+| `assets/install-steps/` | Skärmdumpar för uppladdningsguiden till Claude Skill, ovan under Installation. |
 | `docs/index.html` | Statisk landningssida för GitHub Pages — "Prova den"-länkarna och demot, ingen chatt behövs. |
 | `create_skill_demo_gif.py` | Genererar en illustrerad demo-GIF (`assets/skill-demo-mockup.gif`) från ett skriptat scenario, för när en riktig inspelning saknas. |
 | `scripts/check_links.py` | Kollar att varje länk i README och distributionsfilerna fortfarande fungerar. Körs av `check-links.yml` vid push, PR och varje vecka. |
