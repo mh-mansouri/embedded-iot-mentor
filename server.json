@@ -4,7 +4,7 @@
   "title": "Embedded / IoT Mentor",
   "description": "Embedded/IoT mentor: picks the board and toolchain, estimates cost and battery life.",
   "version": "1.1.6",
-  "websiteUrl": "https://github.com/mh-mansouri/embedded-iot-mentor",
+  "websiteUrl": "https://iotmentor.dev",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/vscode-extension/icon.png",

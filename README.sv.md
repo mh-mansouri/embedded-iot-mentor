@@ -31,9 +31,8 @@ skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivå
 | **Vilken annan AI-chatt som helst** | Klistra in [`universal-prompt.md`](./universal-prompt.md) som första meddelande — ingen installation, funkar i ChatGPT, Gemini, Copilot och andra |
 
 Föredrar du en sida framför en chatt? [`docs/index.html`](./docs/index.html) är en statisk
-översikt med samma "Prova den"-länkar och demo — live på
-https://mh-mansouri.github.io/embedded-iot-mentor/ när GitHub Pages är aktiverat för det här
-repot, eller öppna filen lokalt, ingen server behövs.
+översikt med samma "Prova den"-länkar och demo — live på https://iotmentor.dev, eller öppna
+filen lokalt, ingen server behövs.
 
 Allt nedanför är den längre vägen: bygg den själv, ändra den, eller läs varför den svarar
 som den gör.
