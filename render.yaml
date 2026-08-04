@@ -37,7 +37,9 @@ services:
       - key: EIM_CORS_ORIGINS
         value: https://mh-mansouri.github.io
       # sync: false means Render prompts for this at deploy time and never
-      # stores the value in this repo. Paste your Anthropic API key there —
-      # never into a committed file. /chat stays off (501) until it's set.
-      - key: ANTHROPIC_API_KEY
+      # stores the value in this repo. Paste your OpenRouter API key there
+      # (openrouter.ai/keys) — never into a committed file. /chat calls Claude
+      # through OpenRouter, so this is an OpenRouter key, not an Anthropic
+      # one; the two are not interchangeable. /chat stays off (501) until set.
+      - key: OPENROUTER_API_KEY
         sync: false

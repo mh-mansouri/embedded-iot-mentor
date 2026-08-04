@@ -156,8 +156,10 @@ check("slots are given back", main.run_script("footprint", ["0805"]).startswith(
 
 
 section("chat")
-check("off by default", main.ANTHROPIC_API_KEY == "")
-rejects("no key means 501", lambda: main._claude())
+check("off by default", main.OPENROUTER_API_KEY == "")
+check("model slug is an OpenRouter slug, not a bare Anthropic one",
+      main.CHAT_MODEL == "anthropic/claude-sonnet-5", main.CHAT_MODEL)
+rejects("no key means 501", lambda: main._chat_client_or_501())
 
 # _run_chat_tool goes through the same models/scripts as the REST routes —
 # no network call, so this runs without a key.

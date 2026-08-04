@@ -32,7 +32,7 @@ this folder, or `api.main` will not import.
 | `POST /cost` | BOM total. `{"items": [{"qty": 1, "unit_price": 4.5, "description": "ESP32"}]}` |
 | `POST /sleep-budget` | Battery runtime and what dominates the drain |
 | `POST /footprint` | Whether a package is hand-solderable |
-| `POST /chat` | The mentor talking for itself, via Claude — off until `ANTHROPIC_API_KEY` is set |
+| `POST /chat` | The mentor talking for itself, via Claude through OpenRouter — off until `OPENROUTER_API_KEY` is set |
 
 Bad input fails twice over: the request models reject it before a process starts,
 and the scripts reject what only they can judge — an awake time longer than the
@@ -50,14 +50,21 @@ first request per deployment pays full price for it. Claude gets the three
 calculators above as tools, so "what would 12 of these cost" gets a real
 answer, not a guess.
 
-Nothing calls Claude until `ANTHROPIC_API_KEY` is set — a key-less deployment
-serves every other route normally and returns `501` on this one alone. Get a
-key and add credit at [console.anthropic.com](https://console.anthropic.com).
+Routed through [OpenRouter](https://openrouter.ai), not Anthropic directly —
+`openai.OpenAI(base_url="https://openrouter.ai/api/v1")` against the model
+slug `anthropic/claude-sonnet-5`. Same per-token price as calling Anthropic
+directly (OpenRouter doesn't mark up its own models); the reason to route
+through it is reusing credit already bought there. Nothing calls the model
+until `OPENROUTER_API_KEY` is set — a key-less deployment serves every other
+route normally and returns `501` on this one alone. Get a key and add credit
+at [openrouter.ai/keys](https://openrouter.ai/keys). This is **not** the same
+as an Anthropic Console key — Anthropic's own API 401s outright on an
+OpenRouter key, and vice versa.
 
 ## Settings
 
 All optional. The defaults suit a local run; a deployment should at least think
-about the first two, and about `ANTHROPIC_API_KEY` if `/chat` matters to you.
+about the first two, and about `OPENROUTER_API_KEY` if `/chat` matters to you.
 
 | Variable | Default | Does |
 |---|---|---|
@@ -66,8 +73,8 @@ about the first two, and about `ANTHROPIC_API_KEY` if `/chat` matters to you.
 | `EIM_RATE_LIMIT_PER_MIN` | `60` | Requests per IP per minute, counted per instance |
 | `EIM_MAX_CONCURRENT_SCRIPTS` | `4` | Calculations running at once; the rest queue |
 | `EIM_SKILL_DIR` | the sibling folder | Where the skill lives, if it was copied elsewhere |
-| `ANTHROPIC_API_KEY` | unset (`/chat` returns 501) | Enables `POST /chat` |
-| `EIM_CHAT_MODEL` | `claude-sonnet-5` | Model `/chat` calls |
+| `OPENROUTER_API_KEY` | unset (`/chat` returns 501) | Enables `POST /chat` — an OpenRouter key, not an Anthropic one |
+| `EIM_CHAT_MODEL` | `anthropic/claude-sonnet-5` | OpenRouter model slug `/chat` calls |
 | `EIM_CHAT_MAX_TOKENS` | `2000` | Max output tokens per chat reply |
 | `EIM_CHAT_RATE_LIMIT_PER_MIN` | `6` | Chat turns per IP per minute — its own bucket, tighter than `EIM_RATE_LIMIT_PER_MIN`, because a chat turn is a billed model call and the calculators aren't |
 

@@ -12,6 +12,7 @@ Run it:
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
@@ -21,7 +22,7 @@ import time
 from pathlib import Path
 from typing import Literal
 
-import anthropic
+import openai
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -56,8 +57,12 @@ RATE_LIMIT_PER_MIN = int(os.environ.get("EIM_RATE_LIMIT_PER_MIN", "60"))
 MAX_CONCURRENT_SCRIPTS = int(os.environ.get("EIM_MAX_CONCURRENT_SCRIPTS", "4"))
 
 # POST /chat is off until this is set — no key means no accidental spend.
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-CHAT_MODEL = os.environ.get("EIM_CHAT_MODEL", "claude-sonnet-5")
+# Routed through OpenRouter rather than Anthropic directly, so this is an
+# OpenRouter key (openrouter.ai/keys), not an Anthropic one — the two are not
+# interchangeable and Anthropic's API 401s outright on an OpenRouter key.
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+CHAT_MODEL = os.environ.get("EIM_CHAT_MODEL", "anthropic/claude-sonnet-5")
 CHAT_MAX_TOKENS = int(os.environ.get("EIM_CHAT_MAX_TOKENS", "2000"))
 CHAT_MAX_TOOL_ROUNDS = 4
 # Separate from RATE_LIMIT_PER_MIN and much stricter: the calculators are free
@@ -218,80 +223,101 @@ def _within_chat_rate_limit(ip: str) -> bool:
     return _check_rate_limit(_chat_hits, _chat_hits_lock, CHAT_RATE_LIMIT_PER_MIN, ip)
 
 
-_claude_client: anthropic.Anthropic | None = None
+_chat_client: openai.OpenAI | None = None
 
 
-def _claude() -> anthropic.Anthropic:
-    """Lazy singleton so a key-less deployment never touches the SDK."""
-    global _claude_client
-    if not ANTHROPIC_API_KEY:
-        raise HTTPException(501, "chat is not configured on this server: set ANTHROPIC_API_KEY")
-    if _claude_client is None:
-        _claude_client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    return _claude_client
+def _chat_client_or_501() -> openai.OpenAI:
+    """Lazy singleton so a key-less deployment never touches the SDK.
+    OpenRouter speaks the OpenAI Chat Completions shape, so this is an
+    openai.OpenAI client pointed at OpenRouter's base URL, not Anthropic's."""
+    global _chat_client
+    if not OPENROUTER_API_KEY:
+        raise HTTPException(501, "chat is not configured on this server: set OPENROUTER_API_KEY")
+    if _chat_client is None:
+        _chat_client = openai.OpenAI(
+            api_key=OPENROUTER_API_KEY,
+            base_url=OPENROUTER_BASE_URL,
+            # Optional per OpenRouter's own convention; identifies the caller
+            # on their leaderboards, no effect on behavior if wrong or absent.
+            default_headers={
+                "HTTP-Referer": "https://github.com/mh-mansouri/embedded-iot-mentor",
+                "X-Title": "Embedded / IoT Mentor",
+            },
+        )
+    return _chat_client
 
 
 # Same three calculators the routes below expose, offered as tools so the
-# model can call them instead of doing the arithmetic itself.
+# model can call them instead of doing the arithmetic itself. OpenAI-shaped
+# (type/function/parameters), since that's what OpenRouter's endpoint expects.
 CHAT_TOOLS = [
     {
-        "name": "cost_estimate",
-        "description": (
-            "Estimate total BOM cost from a parts list. Call this when the user "
-            "gives quantities and unit prices and wants a total — do not add up "
-            "the numbers yourself."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "minItems": 1,
+        "type": "function",
+        "function": {
+            "name": "cost_estimate",
+            "description": (
+                "Estimate total BOM cost from a parts list. Call this when the user "
+                "gives quantities and unit prices and wants a total — do not add up "
+                "the numbers yourself."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
                     "items": {
-                        "type": "object",
-                        "properties": {
-                            "qty": {"type": "number", "exclusiveMinimum": 0},
-                            "unit_price": {"type": "number", "minimum": 0},
-                            "description": {"type": "string"},
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "qty": {"type": "number", "exclusiveMinimum": 0},
+                                "unit_price": {"type": "number", "minimum": 0},
+                                "description": {"type": "string"},
+                            },
+                            "required": ["qty", "unit_price"],
                         },
-                        "required": ["qty", "unit_price"],
                     },
                 },
+                "required": ["items"],
             },
-            "required": ["items"],
         },
     },
     {
-        "name": "sleep_budget",
-        "description": (
-            "Estimate battery runtime from active/sleep current draw and duty "
-            "cycle. Call this when the user gives current draw and a wake "
-            "interval and wants a runtime estimate."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "capacity_mah": {"type": "number", "exclusiveMinimum": 0, "description": "battery capacity in mAh"},
-                "active_ma": {"type": "number", "exclusiveMinimum": 0, "description": "current while awake, in mA"},
-                "active_ms": {"type": "number", "exclusiveMinimum": 0, "description": "awake time per cycle, in ms"},
-                "sleep_ua": {"type": "number", "minimum": 0, "description": "sleep current in uA, regulator included"},
-                "interval_s": {"type": "number", "exclusiveMinimum": 0, "description": "seconds between wake-ups"},
-                "derate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1, "description": "usable fraction of rated capacity, default 0.8"},
+        "type": "function",
+        "function": {
+            "name": "sleep_budget",
+            "description": (
+                "Estimate battery runtime from active/sleep current draw and duty "
+                "cycle. Call this when the user gives current draw and a wake "
+                "interval and wants a runtime estimate."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "capacity_mah": {"type": "number", "exclusiveMinimum": 0, "description": "battery capacity in mAh"},
+                    "active_ma": {"type": "number", "exclusiveMinimum": 0, "description": "current while awake, in mA"},
+                    "active_ms": {"type": "number", "exclusiveMinimum": 0, "description": "awake time per cycle, in ms"},
+                    "sleep_ua": {"type": "number", "minimum": 0, "description": "sleep current in uA, regulator included"},
+                    "interval_s": {"type": "number", "exclusiveMinimum": 0, "description": "seconds between wake-ups"},
+                    "derate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1, "description": "usable fraction of rated capacity, default 0.8"},
+                },
+                "required": ["capacity_mah", "active_ma", "active_ms", "sleep_ua", "interval_s"],
             },
-            "required": ["capacity_mah", "active_ma", "active_ms", "sleep_ua", "interval_s"],
         },
     },
     {
-        "name": "footprint_hint",
-        "description": (
-            "Look up a common footprint/package hint, e.g. '0603' or 'QFN-32'. "
-            "Call this when the user names a part package and wants a quick "
-            "sanity check."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {"package": {"type": "string", "minLength": 1}},
-            "required": ["package"],
+        "type": "function",
+        "function": {
+            "name": "footprint_hint",
+            "description": (
+                "Look up a common footprint/package hint, e.g. '0603' or 'QFN-32'. "
+                "Call this when the user names a part package and wants a quick "
+                "sanity check."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {"package": {"type": "string", "minLength": 1}},
+                "required": ["package"],
+            },
         },
     },
 ]
@@ -346,8 +372,8 @@ app = FastAPI(
         "- `/references`, `/search` — the reference library\n"
         "- `/cost`, `/sleep-budget`, `/footprint` — the calculators\n"
         "- `/instructions` — the mentor's rules, for your own model\n"
-        "- `/chat` — the mentor talking for itself, via Claude — only when "
-        "ANTHROPIC_API_KEY is set\n"
+        "- `/chat` — the mentor talking for itself, via Claude through "
+        "OpenRouter — only when OPENROUTER_API_KEY is set\n"
     ),
 )
 
@@ -449,64 +475,65 @@ def footprint(req: FootprintRequest) -> dict:
 @app.post("/chat", tags=["chat"])
 def chat(req: ChatRequest, request: Request) -> ChatResponse:
     """The mentor as a conversation: same instructions, same calculators, but
-    Claude does the talking instead of a human copy-pasting into a chat app."""
+    Claude — via OpenRouter — does the talking instead of a human
+    copy-pasting into a chat app."""
     if not _within_chat_rate_limit(_client_ip(request)):
         raise HTTPException(429, "chat rate limit exceeded — try again in a minute",
                              headers={"Retry-After": "60"})
     if not INSTRUCTIONS.is_file():
         raise HTTPException(500, f"instructions missing: {INSTRUCTIONS}")
 
-    client = _claude()
-    system = [{
-        "type": "text",
-        "text": INSTRUCTIONS.read_text(encoding="utf-8"),
-        # The instructions never change within a deployment's lifetime, so
-        # every caller after the first reads this from cache.
-        "cache_control": {"type": "ephemeral"},
+    client = _chat_client_or_501()
+    messages: list[dict] = [{
+        "role": "system",
+        "content": [{
+            "type": "text",
+            "text": INSTRUCTIONS.read_text(encoding="utf-8"),
+            # The instructions never change within a deployment's lifetime,
+            # so every caller after the first reads this from cache.
+            "cache_control": {"type": "ephemeral"},
+        }],
     }]
-    messages: list[dict] = [{"role": m.role, "content": m.content} for m in req.history]
+    messages.extend({"role": m.role, "content": m.content} for m in req.history)
     messages.append({"role": "user", "content": req.message})
 
-    response = None
+    choice = None
     try:
         for _ in range(CHAT_MAX_TOOL_ROUNDS):
-            response = client.messages.create(
+            response = client.chat.completions.create(
                 model=CHAT_MODEL,
                 max_tokens=CHAT_MAX_TOKENS,
-                system=system,
-                tools=CHAT_TOOLS,
                 messages=messages,
+                tools=CHAT_TOOLS,
             )
-            if response.stop_reason != "tool_use":
+            choice = response.choices[0]
+            if choice.finish_reason != "tool_calls" or not choice.message.tool_calls:
                 break
-            messages.append({"role": "assistant", "content": response.content})
-            tool_results = []
-            for block in response.content:
-                if block.type == "tool_use":
-                    content, is_error = _run_chat_tool(block.name, block.input)
-                    tool_results.append({
-                        "type": "tool_result",
-                        "tool_use_id": block.id,
-                        "content": content,
-                        "is_error": is_error,
-                    })
-            messages.append({"role": "user", "content": tool_results})
+            messages.append(choice.message.model_dump(exclude_none=True))
+            for call in choice.message.tool_calls:
+                try:
+                    args = json.loads(call.function.arguments or "{}")
+                except json.JSONDecodeError:
+                    content = f"error: malformed arguments — {call.function.arguments!r}"
+                else:
+                    content, _is_error = _run_chat_tool(call.function.name, args)
+                messages.append({"role": "tool", "tool_call_id": call.id, "content": content})
         else:
             raise HTTPException(504, "chat: too many tool calls in one turn")
-    except anthropic.AuthenticationError as exc:
-        raise HTTPException(500, "chat: ANTHROPIC_API_KEY was rejected — check it's set correctly") from exc
-    except anthropic.NotFoundError as exc:
-        raise HTTPException(500, f"chat: model '{CHAT_MODEL}' not found — check EIM_CHAT_MODEL") from exc
-    except anthropic.RateLimitError as exc:
+    except openai.AuthenticationError as exc:
+        raise HTTPException(500, "chat: OPENROUTER_API_KEY was rejected — check it's set correctly") from exc
+    except openai.NotFoundError as exc:
+        raise HTTPException(500, f"chat: model '{CHAT_MODEL}' not found on OpenRouter — check EIM_CHAT_MODEL") from exc
+    except openai.RateLimitError as exc:
         raise HTTPException(429, "chat: upstream rate limit hit, try again shortly",
                              headers={"Retry-After": "30"}) from exc
-    except anthropic.APIStatusError as exc:
-        raise HTTPException(502, f"chat: Anthropic API error — {exc.message}") from exc
-    except anthropic.APIConnectionError as exc:
-        raise HTTPException(502, "chat: could not reach Anthropic") from exc
+    except openai.APIStatusError as exc:
+        raise HTTPException(502, f"chat: OpenRouter API error — {exc.message}") from exc
+    except openai.APIConnectionError as exc:
+        raise HTTPException(502, "chat: could not reach OpenRouter") from exc
 
-    if response.stop_reason == "refusal":
+    if choice.finish_reason == "content_filter":
         raise HTTPException(422, "the model declined to answer that")
 
-    reply = "".join(b.text for b in response.content if b.type == "text").strip()
+    reply = (choice.message.content or "").strip()
     return ChatResponse(reply=reply or "(no response)")
