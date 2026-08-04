@@ -129,6 +129,81 @@
     color: var(--muted);
   }
   footer a { color: var(--accent); }
+
+  .chat {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card-bg);
+    padding: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  .chat-log {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 340px;
+    overflow-y: auto;
+    margin-bottom: 0.75rem;
+  }
+  .chat-log:empty { margin-bottom: 0; }
+  .msg {
+    max-width: 85%;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+  .msg.assistant {
+    align-self: flex-start;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .msg.error {
+    align-self: flex-start;
+    background: var(--bg);
+    border: 1px solid #c0392b;
+    color: #c0392b;
+  }
+  .msg.pending { color: var(--muted); font-style: italic; }
+  [dir="rtl"] .msg.user { align-self: flex-start; }
+  [dir="rtl"] .msg.assistant, [dir="rtl"] .msg.error { align-self: flex-end; }
+  .chat-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .chat-form input {
+    flex: 1;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 0.95rem;
+  }
+  .chat-form button {
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .chat-form button:disabled, .chat-form input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .chat-note {
+    margin: 0.6rem 0 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
 </style>
 </head>
 <body>
@@ -150,6 +225,16 @@
 
   <img class="demo" alt="A farmer asks for soil moisture and nitrogen across a meadow; the skill declines the nitrogen half, asks two questions, and returns a six-node LoRa plan with no code in it" src="https://raw.githubusercontent.com/mh-mansouri/embedded-iot-mentor/main/embedded-iot-mentor-demo.gif">
 
+  <h2 id="askH2">Ask it something</h2>
+  <div class="chat" id="chat">
+    <div class="chat-log" id="chatLog" role="log" aria-live="polite"></div>
+    <form class="chat-form" id="chatForm">
+      <input type="text" id="chatInput" autocomplete="off" maxlength="4000">
+      <button type="submit" id="chatSend">Send</button>
+    </form>
+    <p class="chat-note" id="chatNote"></p>
+  </div>
+
   <h2 id="tryH2">Try it</h2>
   <table class="try-table">
     <tbody id="tryBody"></tbody>
@@ -163,6 +248,10 @@
 
 <script>
 const REPO = "https://github.com/mh-mansouri/embedded-iot-mentor";
+// Fill this in after you deploy api/ (e.g. via the Render button below) —
+// something like "https://embedded-iot-mentor.onrender.com". Left empty, the
+// chat box shows a note instead of pretending to work.
+const API_BASE = "";
 
 const I18N = {
   en: {
@@ -172,6 +261,13 @@ const I18N = {
     metaDescription: "Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.",
     h1: "Embedded / IoT Mentor",
     lead: "A skill for Claude that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP — not a production line you didn't ask for.",
+    askH2: "Ask it something",
+    chatPlaceholder: "e.g. soil moisture sensor for a greenhouse, battery-powered",
+    chatSend: "Send",
+    chatThinking: "Thinking…",
+    chatNotConfigured: "This page isn't wired up to a live mentor yet — see “Your own code” below to deploy the API, then set API_BASE in this page.",
+    chatRateLimited: "Too many messages at once — wait a minute and try again.",
+    chatError: "Something went wrong reaching the mentor. Try again in a moment.",
     tryH2: "Try it",
     tryRows: [
       ["Claude", 'Download <code>embedded-iot-mentor.skill</code> from the <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">latest release</a> and open it'],
@@ -200,6 +296,13 @@ const I18N = {
     metaDescription: "Väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och stannar vid ett fungerande kopplingsdäck.",
     h1: "Embedded / IoT Mentor",
     lead: "En skill för Claude som väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och ger en byggplan som slutar vid ett kopplingsdäck som funkar — inte en produktionslinje du aldrig bad om.",
+    askH2: "Fråga den något",
+    chatPlaceholder: "t.ex. jordfuktighetssensor för ett växthus, batteridriven",
+    chatSend: "Skicka",
+    chatThinking: "Tänker…",
+    chatNotConfigured: "Den här sidan är inte kopplad till en levande mentor än — se ”Din egen kod” nedan för att driftsätta API:et, och sätt sedan API_BASE i den här sidan.",
+    chatRateLimited: "För många meddelanden på en gång — vänta en minut och försök igen.",
+    chatError: "Något gick fel när mentorn kontaktades. Försök igen om en stund.",
     tryH2: "Prova den",
     tryRows: [
       ["Claude", 'Ladda ner <code>embedded-iot-mentor.skill</code> från <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">senaste utgåvan</a> och öppna den'],
@@ -228,6 +331,13 @@ const I18N = {
     metaDescription: "میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان را تخمین می‌زند، و روی یک بردبورد کارکننده تمام می‌شود.",
     h1: "Embedded / IoT Mentor",
     lead: "یک Skill برای Claude که میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان لازم را تخمین می‌زند، و نقشهٔ ساختی می‌دهد که روی یک بردبورد کارکننده تمام می‌شود — نه خط تولیدی که سراغش را نگرفته‌اید.",
+    askH2: "چیزی بپرسید",
+    chatPlaceholder: "مثلاً حسگر رطوبت خاک برای یک گلخانه، باتری‌خور",
+    chatSend: "ارسال",
+    chatThinking: "در حال فکر کردن…",
+    chatNotConfigured: "این صفحه هنوز به یک مربی زنده وصل نشده — به «کد خودتان» در پایین مراجعه کنید تا API را مستقر کنید، سپس API_BASE را در این صفحه تنظیم کنید.",
+    chatRateLimited: "پیام‌های زیادی پشت سر هم — یک دقیقه صبر کنید و دوباره امتحان کنید.",
+    chatError: "ارتباط با مربی با خطا مواجه شد. کمی بعد دوباره امتحان کنید.",
     tryH2: "امتحانش کنید",
     tryRows: [
       ["Claude", 'فایل <code>embedded-iot-mentor.skill</code> را از <a href="' + REPO + '/releases/latest" target="_blank" rel="noopener">آخرین انتشار</a> بگیرید و بازش کنید'],
@@ -254,6 +364,12 @@ const I18N = {
 const langButtons = document.querySelectorAll(".lang-switch button");
 const h1El = document.getElementById("h1");
 const leadEl = document.getElementById("lead");
+const askH2El = document.getElementById("askH2");
+const chatLogEl = document.getElementById("chatLog");
+const chatFormEl = document.getElementById("chatForm");
+const chatInputEl = document.getElementById("chatInput");
+const chatSendEl = document.getElementById("chatSend");
+const chatNoteEl = document.getElementById("chatNote");
 const tryH2El = document.getElementById("tryH2");
 const tryBodyEl = document.getElementById("tryBody");
 const whatH2El = document.getElementById("whatH2");
@@ -261,6 +377,9 @@ const whatListEl = document.getElementById("whatList");
 const footerEl = document.getElementById("footer");
 
 const LANG_KEY = "eim_lang";
+let currentLang = "en";
+let chatHistory = []; // {role, content}, oldest first — resent each turn, the API keeps no session state
+let chatBusy = false;
 
 function buildTryTable(lang) {
   tryBodyEl.textContent = "";
@@ -298,8 +417,67 @@ function buildFooter(lang) {
   footerEl.appendChild(document.createTextNode(t.footerPost));
 }
 
+function appendMsg(kind, text) {
+  const div = document.createElement("div");
+  div.className = "msg " + kind;
+  div.textContent = text;
+  chatLogEl.appendChild(div);
+  chatLogEl.scrollTop = chatLogEl.scrollHeight;
+  return div;
+}
+
+async function sendChatMessage(message) {
+  const t = I18N[currentLang];
+  chatBusy = true;
+  chatInputEl.disabled = true;
+  chatSendEl.disabled = true;
+
+  appendMsg("user", message);
+  const pending = appendMsg("assistant pending", t.chatThinking);
+
+  try {
+    const res = await fetch(API_BASE + "/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ message: message, history: chatHistory }),
+    });
+    if (res.status === 429) {
+      pending.className = "msg error";
+      pending.textContent = t.chatRateLimited;
+    } else if (!res.ok) {
+      pending.className = "msg error";
+      pending.textContent = t.chatError;
+    } else {
+      const data = await res.json();
+      pending.className = "msg assistant";
+      pending.textContent = data.reply;
+      chatHistory.push({ role: "user", content: message });
+      chatHistory.push({ role: "assistant", content: data.reply });
+      // Matches the API's own history cap (20 messages).
+      if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+    }
+  } catch (err) {
+    pending.className = "msg error";
+    pending.textContent = t.chatError;
+  } finally {
+    chatBusy = false;
+    chatInputEl.disabled = false;
+    chatSendEl.disabled = false;
+    chatInputEl.focus();
+  }
+}
+
+chatFormEl.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const message = chatInputEl.value.trim();
+  if (!message || chatBusy) return;
+  chatInputEl.value = "";
+  sendChatMessage(message);
+});
+
 function applyLanguage(lang) {
   const t = I18N[lang];
+  currentLang = lang;
   document.documentElement.lang = lang;
   document.documentElement.dir = t.dir;
   document.title = t.pageTitle;
@@ -312,6 +490,10 @@ function applyLanguage(lang) {
 
   h1El.textContent = t.h1;
   leadEl.textContent = t.lead;
+  askH2El.textContent = t.askH2;
+  chatInputEl.placeholder = t.chatPlaceholder;
+  chatSendEl.textContent = t.chatSend;
+  chatNoteEl.textContent = API_BASE ? "" : t.chatNotConfigured;
   tryH2El.textContent = t.tryH2;
   buildTryTable(lang);
   whatH2El.textContent = t.whatH2;
@@ -338,6 +520,11 @@ function detectBrowserLang() {
     if (I18N[code]) return code;
   }
   return "en";
+}
+
+if (!API_BASE) {
+  chatInputEl.disabled = true;
+  chatSendEl.disabled = true;
 }
 
 const savedLang = localStorage.getItem(LANG_KEY);

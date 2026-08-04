@@ -33,3 +33,11 @@ services:
       # and /healthz keeps answering so the health check still passes.
       - key: EIM_RATE_LIMIT_PER_MIN
         value: "60"
+      # The GitHub Pages origin docs/index.html's chat widget calls from.
+      - key: EIM_CORS_ORIGINS
+        value: https://mh-mansouri.github.io
+      # sync: false means Render prompts for this at deploy time and never
+      # stores the value in this repo. Paste your Anthropic API key there —
+      # never into a committed file. /chat stays off (501) until it's set.
+      - key: ANTHROPIC_API_KEY
+        sync: false

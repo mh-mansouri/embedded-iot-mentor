@@ -155,6 +155,34 @@ finally:
 check("slots are given back", main.run_script("footprint", ["0805"]).startswith("0805"))
 
 
+section("chat")
+check("off by default", main.ANTHROPIC_API_KEY == "")
+rejects("no key means 501", lambda: main._claude())
+
+# _run_chat_tool goes through the same models/scripts as the REST routes —
+# no network call, so this runs without a key.
+out, is_error = main._run_chat_tool("cost_estimate", {"items": [{"qty": 2, "unit_price": 1.5}]})
+check("cost tool matches the route", "3.0000" in out and not is_error, out)
+out, is_error = main._run_chat_tool("footprint_hint", {"package": "0805"})
+check("footprint tool matches the route", out.startswith("0805") and not is_error, out)
+out, is_error = main._run_chat_tool("sleep_budget", {**good, "active_ms": 700_000})
+check("tool errors come back as text, not an exception", is_error and "error:" in out, out)
+out, is_error = main._run_chat_tool("not_a_real_tool", {})
+check("unknown tool named in the error", is_error and "not_a_real_tool" in out, out)
+
+original_chat_limit = main.CHAT_RATE_LIMIT_PER_MIN
+main.CHAT_RATE_LIMIT_PER_MIN = 2
+try:
+    ip = "198.51.100.11"  # documentation range, so no real bucket is disturbed
+    allowed = [main._within_chat_rate_limit(ip) for _ in range(4)]
+    check("chat limit is its own bucket", allowed == [True, True, False, False], str(allowed))
+    check("calculator bucket is unaffected", main._within_rate_limit(ip))
+finally:
+    main.CHAT_RATE_LIMIT_PER_MIN = original_chat_limit
+    main._chat_hits.clear()
+    main._hits.clear()
+
+
 print()
 if FAILURES:
     print(f"{len(FAILURES)} failed: {', '.join(FAILURES)}")

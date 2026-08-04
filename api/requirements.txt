@@ -2,3 +2,6 @@
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 pydantic>=2.7.0
+# Only needed for POST /chat. Absent ANTHROPIC_API_KEY disables that route
+# without failing startup, so this stays a hard requirement rather than optional.
+anthropic>=0.40.0
