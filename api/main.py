@@ -468,30 +468,42 @@ def chat(req: ChatRequest, request: Request) -> ChatResponse:
     messages.append({"role": "user", "content": req.message})
 
     response = None
-    for _ in range(CHAT_MAX_TOOL_ROUNDS):
-        response = client.messages.create(
-            model=CHAT_MODEL,
-            max_tokens=CHAT_MAX_TOKENS,
-            system=system,
-            tools=CHAT_TOOLS,
-            messages=messages,
-        )
-        if response.stop_reason != "tool_use":
-            break
-        messages.append({"role": "assistant", "content": response.content})
-        tool_results = []
-        for block in response.content:
-            if block.type == "tool_use":
-                content, is_error = _run_chat_tool(block.name, block.input)
-                tool_results.append({
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": content,
-                    "is_error": is_error,
-                })
-        messages.append({"role": "user", "content": tool_results})
-    else:
-        raise HTTPException(504, "chat: too many tool calls in one turn")
+    try:
+        for _ in range(CHAT_MAX_TOOL_ROUNDS):
+            response = client.messages.create(
+                model=CHAT_MODEL,
+                max_tokens=CHAT_MAX_TOKENS,
+                system=system,
+                tools=CHAT_TOOLS,
+                messages=messages,
+            )
+            if response.stop_reason != "tool_use":
+                break
+            messages.append({"role": "assistant", "content": response.content})
+            tool_results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    content, is_error = _run_chat_tool(block.name, block.input)
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": content,
+                        "is_error": is_error,
+                    })
+            messages.append({"role": "user", "content": tool_results})
+        else:
+            raise HTTPException(504, "chat: too many tool calls in one turn")
+    except anthropic.AuthenticationError as exc:
+        raise HTTPException(500, "chat: ANTHROPIC_API_KEY was rejected — check it's set correctly") from exc
+    except anthropic.NotFoundError as exc:
+        raise HTTPException(500, f"chat: model '{CHAT_MODEL}' not found — check EIM_CHAT_MODEL") from exc
+    except anthropic.RateLimitError as exc:
+        raise HTTPException(429, "chat: upstream rate limit hit, try again shortly",
+                             headers={"Retry-After": "30"}) from exc
+    except anthropic.APIStatusError as exc:
+        raise HTTPException(502, f"chat: Anthropic API error — {exc.message}") from exc
+    except anthropic.APIConnectionError as exc:
+        raise HTTPException(502, "chat: could not reach Anthropic") from exc
 
     if response.stop_reason == "refusal":
         raise HTTPException(422, "the model declined to answer that")
