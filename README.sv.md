@@ -271,6 +271,15 @@ python embedded-iot-mentor/scripts/sleep_budget.py --capacity 2000 --active-ma 8
 medelströmmen är det tal ingen vet i förväg. Samma firmware, samma batteri, viloströmmen
 ändrad från 15 µA till ett utvecklingskorts 8 mA-regulator: **3,8 år blir 8,3 dagar.**
 
+## Fler liknande skills
+
+- **[Project Planning & Journaling](https://github.com/mh-mansouri/Project-Planning-Journaling)** —
+  avgränsar ett projekt innan någon kod skrivs, och för sedan en levande, återupptagbar
+  dokumentationsjournal med en veckovis rutingenomgång.
+- **[Business Name Fit](https://github.com/Elham-Farajnejad/business-name-fit)** —
+  väljer eller kontrollerar ett företags-/varumärkesnamn som är äkta mot ditt ursprung
+  och fungerar bra på de marknader du säljer till.
+
 ## Bidra
 
 Förbättringar är välkomna — särskilt handfast kunskap om komponenter, leverantörer och vad

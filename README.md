@@ -262,6 +262,15 @@ python embedded-iot-mentor/scripts/sleep_budget.py --capacity 2000 --active-ma 8
 average is the number nobody knows up front. Same firmware, same battery, sleep current
 changed from 15 µA to a dev board's 8 mA regulator: **3.8 years becomes 8.3 days.**
 
+## More skills like this
+
+- **[Project Planning & Journaling](https://github.com/mh-mansouri/Project-Planning-Journaling)** —
+  scopes a project before any code is written, then keeps a living, resumable
+  documentation journal with a weekly routine review.
+- **[Business Name Fit](https://github.com/Elham-Farajnejad/business-name-fit)** —
+  picks or checks a business/brand name that's authentic to your origin and lands well
+  in the markets you're selling into.
+
 ## Contributing
 
 Improvements are welcome — especially hands-on knowledge about parts, suppliers, and what
