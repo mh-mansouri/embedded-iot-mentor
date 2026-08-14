@@ -21,22 +21,7 @@ jobs:
       - name: Validate the skill and the committed bundle
         run: python package_skill.py --check
 
-      # The ChatGPT port has limits the skill does not: 8000 characters of
-      # instructions and 20 knowledge files. Growing the skill can push the port
-      # past them, and ChatGPT only complains at paste time.
-      - name: Validate the ChatGPT bundle
-        run: python chatgpt-app/build_chatgpt_bundle.py --check
-
-      # The connector is the port with moving parts. Renaming a reference file
-      # or rewording a heading can quietly send every query to the same
-      # document, and nobody would notice until someone asked it something.
-      - name: Install the connector's dependencies
-        run: pip install -r chatgpt-app/mcp-server/requirements.txt
-
-      - name: Test the connector
-        run: python chatgpt-app/mcp-server/test_server.py
-
-      # The REST port shells out to the same scripts, so a renamed flag breaks
+      # The API shells out to the same scripts, so a renamed flag breaks
       # it in a way that reads to the caller like their own bad request.
       - name: Install the API's dependencies
         run: pip install -r api/requirements.txt

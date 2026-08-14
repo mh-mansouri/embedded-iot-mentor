@@ -18,15 +18,10 @@ actually built before, then answers at that level.
 
 ## Try it
 
-<!-- When the GPT is published, put its https://chatgpt.com/g/… share link in the ChatGPT
-     row below, and in chatgpt-app/README.md. Same edit in README.sv.md and README.fa.md. -->
-
 | Where | One click |
 |---|---|
 | **Claude** | [Download `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) and open it |
-| **ChatGPT** | [Build the GPT](./chatgpt-app/custom-gpt/) — paste one file, upload the knowledge, 10 minutes |
-| **VS Code** | [Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **ChatGPT connector** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then add the URL + `/mcp` under Settings → Connectors. The same click also deploys the REST API |
+| **VS Code (Copilot Chat)** | Copy [`vscode-copilot/`](./vscode-copilot/)'s prompt in — nothing to install |
 | **Your own code** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then call the REST API — [routes](./api/) |
 | **Any other AI chat** | Copy [`universal-prompt.md`](./universal-prompt.md) into the first message — no install, works in ChatGPT, Gemini, Copilot, and others |
 
@@ -156,7 +151,7 @@ environment, or timeline are still unclear — then answer in tables rather than
 whole project plan is meant to fit on one screen; if you want the reasoning behind a pick,
 ask for it.
 
-## Elsewhere: VS Code and ChatGPT
+## Elsewhere: VS Code and the REST API
 
 The mentor is judgement written down, not a Claude feature, so it ports. Every port keeps
 the behaviour that matters — MVP first, hardware and firmware kept apart, ready-made
@@ -166,16 +161,12 @@ vehicle, and privacy questions.
 | Route | What you do | Worth it when |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | Copy one file to `.github/copilot-instructions.md`, or paste it into Copilot Chat | Always start here in VS Code — nothing to install |
-| [`vscode-extension/`](./vscode-extension/) | [Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — one command opens that prompt and copies it | You reach for the prompt often enough that hunting for the file grates |
-| [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Build a GPT: paste one instruction file, upload the knowledge files | Always start here in ChatGPT — 10 minutes in the browser |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Deploy a small MCP server — [one click on Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — and add its URL as a custom connector | You want the calculators to actually run and the references to stay in sync |
-| [`api/`](./api/) | Deploy the REST API — the same one click on Render — and call it from your own code | The caller is a script or a service, not a person in a chat window |
+| [`api/`](./api/) | Deploy the REST API — [one click on Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — and call it from your own code | The caller is a script or a service, not a person in a chat window |
 
-What the ports carry differs. The Copilot one is judgement only — no reference files, no
-scripts, so a real battery runtime or a BOM total is still the skill's job. The ChatGPT GPT
-uploads the reference files and the three scripts as knowledge, and runs them in Code
-Interpreter. The MCP connector and the REST API go further and read both straight
-out of the skill folder, so neither can fall behind a change made here.
+What the two carry differs. The Copilot port is judgement only — no reference files, no
+scripts, so a real battery runtime or a BOM total is still the skill's job. The REST API
+reads both straight out of the skill folder, so it can never fall behind a change made
+here.
 
 ## Good to know
 
@@ -207,10 +198,9 @@ packaging and project metadata that the skill never reads.
 | `create_skill_demo_gif.py` | Generates a mock-up demo GIF (`assets/skill-demo-mockup.gif`) from a scripted scenario, for when a real recording isn't available. |
 | `scripts/check_links.py` | Checks that every README, landing-page, `CONTRIBUTING.md`, and distribution link still resolves. Run by `check-links.yml` on push, PR, and weekly. |
 | `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
-| `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
-| `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
-| `render.yaml` | Blueprint behind the one-click deploy of that server. Has to sit at the root for Render to find it. |
-| `server.json`, `glama.json` | Listing metadata for the MCP directories. Each one has to sit at the root for its directory to find it. |
+| `api/` | The REST API — reads the reference library from the skill folder and shells out to its scripts. |
+| `api/instructions.md` | The mentor's rules condensed to a self-contained prompt, for `POST /chat` and `GET /instructions`. Mirror a behaviour change here if you make one in `SKILL.md`. |
+| `render.yaml` | Blueprint behind the one-click deploy of the API. Has to sit at the root for Render to find it. |
 | `.github/DISTRIBUTION.md` | Where the project is listed and how to list it — the steps that need a login rather than a workflow. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
@@ -238,16 +228,6 @@ the bundle is byte-identical whoever builds it.
 
 That last one matters because the bundle is committed: edit the skill, forget to rebuild, and
 the download would ship a different version than the source folder.
-
-CI runs a second gate for the ChatGPT port:
-
-```bash
-python chatgpt-app/build_chatgpt_bundle.py --check
-```
-
-It fails when the ported instructions outgrow ChatGPT's 8000-character limit, when the
-knowledge set outgrows the 20 files a GPT accepts, or when the instructions name a knowledge
-file that isn't in the bundle. Growing the skill is what usually trips it.
 
 ## Scripts
 

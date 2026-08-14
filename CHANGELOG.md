@@ -2,6 +2,29 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## 2.0.0 - 2026-08-14
+
+Drops two of the four ports to keep the surface to what's actually maintained: the skill
+itself, and the REST API.
+
+- Removed `vscode-extension/` (the Marketplace-published VS Code extension) and
+  `chatgpt-app/` (the Custom GPT bundle and the MCP server used as a ChatGPT connector,
+  Smithery listing, and hosted Render connector). `server.json` and `glama.json`
+  (MCP registry listing metadata) go with them.
+- Removed the matching CI: `publish-extension.yml`, `publish-image.yml`, and the
+  ChatGPT-bundle/connector steps in `check-skill.yml`. `release.yml` now builds and
+  attaches only `embedded-iot-mentor.skill`.
+- `render.yaml` now deploys just the API service, not the MCP connector alongside it.
+- **`api/instructions.md`** (moved from `chatgpt-app/custom-gpt/instructions.md`): the
+  API's `/chat` and `/instructions` routes depended on this file, so it survives the
+  cutover as the API's own condensed system prompt rather than being deleted with the
+  rest of the ChatGPT port.
+- `vscode-copilot/` is unaffected — it's a paste-in prompt with no build step or external
+  listing, so it stays as the no-install VS Code route.
+- Marked breaking because the `.vsix`, the Custom GPT, and the hosted MCP connector are no
+  longer available from this repository. `.github/DISTRIBUTION.md` lists the manual
+  teardown steps for the external listings this leaves behind.
+
 ## 1.1.6 - 2026-08-03
 
 Repository tooling and reach, no change to the mentor's behaviour.

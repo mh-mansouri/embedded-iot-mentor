@@ -20,15 +20,10 @@
 
 ## امتحانش کنید
 
-<!-- وقتی GPT منتشر شد: لینک اشتراک https://chatgpt.com/g/… را در سطر ChatGPT پایین و در
-     chatgpt-app/README.md بگذارید. همین تغییر در README.md و README.sv.md. -->
-
 | کجا | با یک کلیک |
 |---|---|
 | **Claude** | [فایل `embedded-iot-mentor.skill` را بگیرید](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) و در Claude بازش کنید |
-| **ChatGPT** | [GPT را بسازید](./chatgpt-app/custom-gpt/) — یک فایل را بچسبانید، فایل‌های دانش را بارگذاری کنید، ده دقیقه |
-| **VS Code** | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **connector برای ChatGPT** | آدرس را به‌همراه `/mcp` در Settings ← Connectors اضافه کنید. همین یک کلیک، REST API را هم مستقر می‌کند — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
+| **VS Code (Copilot Chat)** | پرامپت [`vscode-copilot/`](./vscode-copilot/) را کپی کنید — چیزی نصب نمی‌شود |
 | **کد خودتان** | REST API را از کد خودتان صدا بزنید — [مسیرها](./api/) — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
 | **هر چت هوش مصنوعی دیگر** | متن [`universal-prompt.md`](./universal-prompt.md) را به‌عنوان اولین پیام کپی کنید — بدون نصب، در ChatGPT، Gemini، Copilot و بقیه هم کار می‌کند |
 
@@ -176,7 +171,7 @@ Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.clau
 و بعد به‌جای انشا، با جدول جواب می‌دهد. قرار است یک نقشهٔ کامل پروژه در یک صفحه جا شود؛ اگر
 استدلال پشت یک انتخاب را می‌خواهید، بپرسید.
 
-## جاهای دیگر: VS Code و ChatGPT
+## جاهای دیگر: VS Code و REST API
 
 این مربی قضاوتی است که نوشته شده، نه قابلیتی مخصوص Claude، پس قابل انتقال است. هر نسخه همان
 رفتارهای مهم را نگه می‌دارد: اول MVP، جدا نگه داشتن سخت‌افزار از فریمور، ترجیح فریمور آماده
@@ -186,16 +181,12 @@ Expand-Archive "$env:TEMP\embedded-iot-mentor.zip" -DestinationPath "$HOME\.clau
 | راه | چه کار می‌کنید | کِی می‌ارزد |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | یک فایل را در `.github/copilot-instructions.md` کپی کنید، یا در Copilot Chat بچسبانید | در VS Code همیشه از همین‌جا شروع کنید — چیزی نصب نمی‌شود |
-| [`vscode-extension/`](./vscode-extension/) | [از Marketplace نصب کنید](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — یک فرمان همان پرامپت را باز و کپی می‌کند | آن‌قدر سراغ پرامپت می‌روید که گشتن دنبال فایل آزارتان می‌دهد |
-| [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | یک GPT بسازید: یک فایل دستورالعمل را بچسبانید و فایل‌های دانش را بارگذاری کنید | در ChatGPT همیشه از همین‌جا شروع کنید — ده دقیقه کار در مرورگر |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | یک سرور کوچک MCP را مستقر کنید — [با یک کلیک روی Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — و آدرسش را به‌عنوان connector اضافه کنید | می‌خواهید محاسبه‌گرها واقعاً اجرا شوند و مرجع‌ها هیچ‌وقت عقب نمانند |
-| [`api/`](./api/) | REST API را مستقر کنید — همان یک کلیک روی Render — و از کد خودتان صدایش بزنید | تماس‌گیرنده یک اسکریپت یا سرویس است، نه آدمی پشت پنجرهٔ گفت‌وگو |
+| [`api/`](./api/) | REST API را مستقر کنید — [با یک کلیک روی Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — و از کد خودتان صدایش بزنید | تماس‌گیرنده یک اسکریپت یا سرویس است، نه آدمی پشت پنجرهٔ گفت‌وگو |
 
-آنچه هر نسخه با خود می‌برد فرق دارد. نسخهٔ Copilot فقط قضاوت است — نه فایل مرجعی دارد نه
-اسکریپتی، پس برای عمر واقعی باتری یا جمع هزینهٔ قطعات هنوز باید سراغ خودِ Skill بروید. در
-GPT، فایل‌های مرجع و هر سه اسکریپت به‌عنوان دانش بارگذاری می‌شوند و در Code Interpreter
-اجرا می‌شوند. connector و REST API از این هم جلوتر می‌روند و هر دو را مستقیم از پوشهٔ
-Skill می‌خوانند، پس هیچ‌کدام از تغییری که اینجا داده شود عقب نمی‌مانند.
+آنچه این دو با خود می‌برند فرق دارد. نسخهٔ Copilot فقط قضاوت است — نه فایل مرجعی دارد نه
+اسکریپتی، پس برای عمر واقعی باتری یا جمع هزینهٔ قطعات هنوز باید سراغ خودِ Skill بروید. REST
+API هر دو را مستقیم از پوشهٔ Skill می‌خواند، پس هیچ‌وقت از تغییری که اینجا داده شود عقب
+نمی‌ماند.
 
 ## خوب است بدانید
 
@@ -228,12 +219,11 @@ Skill می‌خوانند، پس هیچ‌کدام از تغییری که این
 | `assets/install-steps/` | اسکرین‌شات‌های راهنمای آپلود Claude Skill، در بخش نصب بالا. |
 | `docs/index.html` | صفحهٔ فرود ثابت برای GitHub Pages — همان لینک‌های «امتحانش کنید» و دمو، بدون نیاز به چت. |
 | `create_skill_demo_gif.py` | یک GIF نمایشی (`assets/skill-demo-mockup.gif`) از یک سناریوی نوشته‌شده می‌سازد، برای وقتی ضبط واقعی در دسترس نیست. |
-| `scripts/check_links.py` | بررسی می‌کند که همهٔ لینک‌های README و فایل‌های توزیع هنوز کار می‌کنند. با `check-links.yml` در push، PR و هر هفته اجرا می‌شود. |
+| `scripts/check_links.py` | بررسی می‌کند که همهٔ لینک‌های README، صفحهٔ فرود، `CONTRIBUTING.md` و فایل‌های توزیع هنوز کار می‌کنند. با `check-links.yml` در push، PR و هر هفته اجرا می‌شود. |
 | `vscode-copilot/` | نسخهٔ Copilot — پرامپتی که کپی می‌کنید و چند نمونه پرسش. |
-| `vscode-extension/` | افزونهٔ سادهٔ VS Code که همان پرامپت را باز می‌کند. `node_modules/` و `dist/` کامیت نمی‌شوند. |
-| `chatgpt-app/` | نسخهٔ ChatGPT — دستورالعمل و بسته‌ساز یک GPT اختصاصی، و یک سرور MCP برای وصل شدن به‌عنوان connector. |
-| `render.yaml` | نقشهٔ استقرار یک‌کلیکی همان سرور. برای اینکه Render پیدایش کند باید در ریشهٔ مخزن بماند. |
-| `server.json`، `glama.json` | فراداده برای فهرست‌های MCP. هرکدام باید در ریشهٔ مخزن بماند تا فهرست مربوطه پیدایش کند. |
+| `api/` | REST API — کتابخانهٔ مرجع را از پوشهٔ Skill می‌خواند و اسکریپت‌هایش را اجرا می‌کند. |
+| `api/instructions.md` | قوانین مربی، فشرده‌شده به یک پرامپت مستقل، برای `POST /chat` و `GET /instructions`. اگر رفتاری را در `SKILL.md` تغییر دادید، همین‌جا هم منعکسش کنید. |
+| `render.yaml` | نقشهٔ استقرار یک‌کلیکی API. برای اینکه Render پیدایش کند باید در ریشهٔ مخزن بماند. |
 | `.github/DISTRIBUTION.md` | اینکه پروژه کجا فهرست شده و چطور فهرستش کنیم — قدم‌هایی که به‌جای یک workflow نیاز به ورود به حساب دارند. |
 
 نگه داشتن Skill در پوشهٔ اختصاصی خودش مهم است: مشخصات فنی الزام می‌کند که `name` یک Skill با
@@ -266,20 +256,6 @@ python package_skill.py --check  # اعتبارسنجی منبع و بسته، �
 
 مورد آخر مهم است، چون بسته در مخزن کامیت می‌شود: Skill را ویرایش کنید، بازسازی را فراموش
 کنید، و آن‌وقت فایل دانلودی نسخه‌ای متفاوت از پوشهٔ منبع تحویل می‌دهد.
-
-CI یک دروازهٔ دوم هم برای نسخهٔ ChatGPT اجرا می‌کند:
-
-</div>
-
-```bash
-python chatgpt-app/build_chatgpt_bundle.py --check
-```
-
-<div dir="rtl" align="right">
-
-این یکی وقتی شکست می‌خورد که دستورالعمل پورت‌شده از مرز ۸۰۰۰ کاراکتری ChatGPT رد شود، وقتی
-فایل‌های دانش از ۲۰ فایلی که یک GPT می‌پذیرد بیشتر شوند، یا وقتی دستورالعمل به فایلی اشاره
-کند که در بسته نیست. معمولاً بزرگ شدن خودِ Skill است که آن را فعال می‌کند.
 
 ## اسکریپت‌ها
 

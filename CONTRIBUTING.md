@@ -25,7 +25,8 @@ bench experience is the most valuable thing here.
 | `embedded-iot-mentor/examples/` | Worked scenarios. A new one earns its place by showing a *reply shape* the existing three don't. |
 | `embedded-iot-mentor.skill` | **Generated.** A zip of the folder above — don't edit by hand. |
 | `package_skill.py` | Builds, verifies, and installs the bundle. |
-| `vscode-copilot/`, `vscode-extension/`, `chatgpt-app/` | Ports to other assistants. A behaviour change to `SKILL.md` usually belongs in `vscode-copilot/copilot-custom-instruction.md` and `chatgpt-app/custom-gpt/instructions.md` too — say in the pull request if you deliberately left one behind. |
+| `vscode-copilot/` | Port to GitHub Copilot Chat — a paste-in prompt, no build step. A behaviour change to `SKILL.md` usually belongs in `vscode-copilot/copilot-custom-instruction.md` too — say in the pull request if you deliberately left it behind. |
+| `api/` | The REST API. `api/main.py` reads `embedded-iot-mentor/references/` and shells out to its scripts; `api/instructions.md` is the mentor's rules condensed to a self-contained `/chat` system prompt — mirror a `SKILL.md` behaviour change there too. |
 | `.github/workflows/release-reminder.yml` | Weekly check for shipped-surface changes since the last tag — see "Cutting a release" below. |
 | `.github/workflows/reference-review.yml` | Weekly reminder issue to check the reference files for stale prices, stock, or toolchain claims — see "Keeping estimates honest" below. |
 | `CHANGELOG.md` | Human-readable release history, [Keep a Changelog](https://keepachangelog.com/) format. Versions follow `embedded-iot-mentor/SKILL.md`'s `metadata.version`. |
@@ -43,16 +44,15 @@ or move one, update `SKILL.md` too — `--check` fails if you forget.
    ```
    Commit the regenerated `embedded-iot-mentor.skill` alongside your edit — otherwise the
    one-file download and the source folder ship different versions of the skill.
-4. Confirm both gates pass:
+4. Confirm the gate passes, and the API still works if you touched it:
    ```bash
    python package_skill.py --check
-   python chatgpt-app/build_chatgpt_bundle.py --check
+   python api/test_api.py
    ```
-   This is exactly what CI runs. The first checks the frontmatter against the
+   The first is exactly what CI runs: checks the frontmatter against the
    [Agent Skills spec](https://agentskills.io/specification), confirms every file `SKILL.md`
    references exists, and confirms the committed bundle matches the source folder. The second
-   confirms the ChatGPT port still fits ChatGPT's limits: 8000 characters of instructions and
-   20 knowledge files.
+   confirms the API's routes, including `/chat`'s use of `api/instructions.md`.
 5. Open a pull request with a short note on what you changed and why.
 
 If you changed the skill's behaviour, please try it on a couple of real project briefs first
@@ -79,18 +79,14 @@ reviewed, or open a PR first if something needs fixing.
 
 `release-reminder.yml` runs weekly and opens an issue *only* when something in the
 **shipped surface** — `embedded-iot-mentor/` (what `package_skill.py` bundles into the
-`.skill`), `chatgpt-app/custom-gpt/` and `chatgpt-app/build_chatgpt_bundle.py` (the GPT
-zip), `universal-prompt.md`, or `vscode-extension/src` and `vscode-extension/package.json`
-(the `.vsix`) — has changed since the last tag. That's the actual criterion: **does this
-change what a user installs, pastes, or runs?**
+`.skill`) or `universal-prompt.md` — has changed since the last tag. That's the actual
+criterion: **does this change what a user installs or pastes?**
 
 - **Triggers a reminder:** any edit to `SKILL.md`, `references/`, `scripts/`, `examples/`,
-  the GPT instructions, `universal-prompt.md`, the extension's source, or any of the
-  bundling scripts.
+  `universal-prompt.md`, or `package_skill.py` itself.
 - **Doesn't trigger one:** README/translation wording, `docs/index.html`, CI/workflow
-  files, `vscode-copilot/`, the API, or the connector's Docker image (those deploy
-  continuously from `main`, not from a tag). None of that changes what a tagged release
-  installs, so it doesn't need a version bump.
+  files, `vscode-copilot/`, or the API. None of that changes what a tagged release
+  installs, so it doesn't need a version bump — see below for why the API is different.
 
 When a reminder fires, classify the change before tagging:
 
@@ -100,18 +96,21 @@ When a reminder fires, classify the change before tagging:
 | **MINOR** | New capability, backward compatible — an existing recommendation flow still works |
 | **MAJOR** | Breaks or invalidates prior output — a required output-format field removed/renamed, a reject-bar rule reversed |
 
-Then: bump `metadata.version` in `SKILL.md` and `version` in `vscode-extension/package.json`
-to match, rebuild the bundles (`python package_skill.py` and
-`python chatgpt-app/build_chatgpt_bundle.py`), move `CHANGELOG.md`'s entries under the new
-version heading, and tag:
+Then: bump `metadata.version` in `SKILL.md`, rebuild the bundle
+(`python package_skill.py`), move `CHANGELOG.md`'s entries under the new version heading,
+and tag:
 
 ```
 git tag -a vX.Y.Z -m "..." && git push origin vX.Y.Z
 ```
 
-`release.yml` takes it from there — builds all three bundles, checks the tag against
-`SKILL.md` and the extension's `package.json`, and publishes the GitHub Release with
-everything attached.
+`release.yml` takes it from there — builds the bundle, checks the tag against `SKILL.md`,
+and publishes the GitHub Release with it attached.
+
+The API isn't part of any of this: it deploys continuously from `main` on Render, so a fix
+ships the moment it's pushed, with no tag and no version bump. If the fix changed what
+`api/instructions.md` tells the model to do, mirror it in `SKILL.md` too (or the reverse)
+so the two don't quietly describe different mentors.
 
 ## Ground rules
 

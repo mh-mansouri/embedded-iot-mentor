@@ -1,11 +1,11 @@
 name: release
 
-# Push a tag, get a release with the downloadable bundles attached:
+# Push a tag, get a release with the downloadable bundle attached:
 #
 #   git tag -a v1.1.0 -m "..." && git push origin v1.1.0
 #
-# Attaching them by hand is the step that gets skipped, and a release whose
-# assets are missing sends people back to cloning the repository.
+# Attaching it by hand is the step that gets skipped, and a release whose
+# asset is missing sends people back to cloning the repository.
 
 on:
   push:
@@ -32,10 +32,6 @@ jobs:
         with:
           python-version: "3.x"
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - name: Work out the version
         id: version
         run: |
@@ -44,36 +40,17 @@ jobs:
           echo "number=${tag#v}" >> "$GITHUB_OUTPUT"
 
       # The changelog says versions follow metadata.version, so a tag that
-      # disagrees with the skill is a mislabelled download. The extension ships
-      # in the same release, so its version has to agree too — the .vsix carries
-      # the number in its filename and nowhere else.
-      - name: Check the tag matches the skill and the extension
+      # disagrees with the skill is a mislabelled download.
+      - name: Check the tag matches the skill
         run: |
           skill_version=$(grep -Po '^\s+version:\s*"\K[^"]+' embedded-iot-mentor/SKILL.md)
           if [ "$skill_version" != "${{ steps.version.outputs.number }}" ]; then
             echo "tag ${{ steps.version.outputs.tag }} does not match SKILL.md version $skill_version" >&2
             exit 1
           fi
-          ext_version=$(node -p "require('./vscode-extension/package.json').version")
-          if [ "$ext_version" != "${{ steps.version.outputs.number }}" ]; then
-            echo "tag ${{ steps.version.outputs.tag }} does not match vscode-extension version $ext_version" >&2
-            exit 1
-          fi
 
-      - name: Validate and build the bundles
-        run: |
-          python package_skill.py --check
-          python chatgpt-app/build_chatgpt_bundle.py
-
-      # Building the extension here is the point: a .vsix built on a laptop is
-      # whatever that laptop had installed, and "Install from VSIX…" is the only
-      # way to run the extension until it is on the Marketplace.
-      - name: Build the VS Code extension
-        working-directory: vscode-extension
-        run: |
-          npm ci
-          npx --yes @vscode/vsce package \
-            --out "../embedded-iot-mentor-vscode-${{ steps.version.outputs.number }}.vsix"
+      - name: Validate and build the bundle
+        run: python package_skill.py --check
 
       - name: Take the release notes from the changelog
         run: |
@@ -85,8 +62,6 @@ jobs:
           print((match.group(1).strip() if match else "See CHANGELOG.md.") + "\n")
           print("**Downloads**")
           print("- `embedded-iot-mentor.skill` — open in Claude, or unzip into `~/.claude/skills/`.")
-          print("- `embedded-iot-mentor-gpt.zip` — instructions and knowledge files for a Custom GPT.")
-          print(f"- `embedded-iot-mentor-vscode-{version}.vsix` — VS Code extension: Extensions view → ⋯ → Install from VSIX.")
           PY
 
       # Idempotent on purpose. Re-running this from the Actions tab against a tag
@@ -97,18 +72,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag="${{ steps.version.outputs.tag }}"
-          assets=(
-            embedded-iot-mentor.skill
-            chatgpt-app/dist/embedded-iot-mentor-gpt.zip
-            "embedded-iot-mentor-vscode-${{ steps.version.outputs.number }}.vsix"
-          )
           if gh release view "$tag" >/dev/null 2>&1; then
             gh release edit "$tag" \
               --title "Embedded / IoT Mentor $tag" \
               --notes-file notes.md
-            gh release upload "$tag" "${assets[@]}" --clobber
+            gh release upload "$tag" embedded-iot-mentor.skill --clobber
           else
-            gh release create "$tag" "${assets[@]}" \
+            gh release create "$tag" embedded-iot-mentor.skill \
               --title "Embedded / IoT Mentor $tag" \
               --notes-file notes.md \
               --verify-tag

@@ -38,10 +38,10 @@ SKILL_DIR = Path(os.environ.get("EIM_SKILL_DIR", HERE.parent / "embedded-iot-men
 SCRIPTS_DIR = SKILL_DIR / "scripts"
 REFERENCES_DIR = SKILL_DIR / "references"
 
-# The mentor's rules, shared with the ChatGPT ports so no route drifts.
-INSTRUCTIONS = Path(
-    os.environ.get("EIM_INSTRUCTIONS", HERE.parent / "chatgpt-app" / "custom-gpt" / "instructions.md")
-).resolve()
+# The mentor's rules, condensed to a self-contained system prompt: no reliance
+# on Claude's own on-demand file-loading, since the model behind /chat only
+# gets these words plus the three calculator tools below.
+INSTRUCTIONS = Path(os.environ.get("EIM_INSTRUCTIONS", HERE / "instructions.md")).resolve()
 
 SCRIPT_TIMEOUT_S = 20
 

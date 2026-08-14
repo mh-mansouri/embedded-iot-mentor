@@ -1,22 +1,6 @@
-# Blueprint for the two hosted ports — the ChatGPT connector and the REST API —
-# so "Deploy to Render" in the README needs no configuration. Render has to find
-# this file at the repository root.
-#
-# ChatGPT only talks to a connector over HTTPS, which is the step that stops most
-# people running the server locally. A host that terminates TLS removes it.
+# Blueprint for the REST API, so "Deploy to Render" in the README needs no
+# configuration. Render has to find this file at the repository root.
 services:
-  - type: web
-    name: embedded-iot-mentor-mcp
-    runtime: docker
-    plan: free
-    dockerfilePath: ./chatgpt-app/mcp-server/Dockerfile
-    dockerContext: .
-    healthCheckPath: /healthz
-    envVars:
-      # PORT is assigned by Render; the server reads it.
-      - key: HOST
-        value: 0.0.0.0
-
   - type: web
     name: embedded-iot-mentor-api
     runtime: docker
@@ -27,10 +11,10 @@ services:
     envVars:
       - key: HOST
         value: 0.0.0.0
-      # Left open on purpose, like the connector: the docs are public and the
-      # calculators are the skill's own. The per-IP rate limit is the guard.
-      # To close it, set EIM_API_KEY in the Render dashboard — no redeploy needed,
-      # and /healthz keeps answering so the health check still passes.
+      # Left open on purpose: the docs are public and the calculators are the
+      # skill's own. The per-IP rate limit is the guard. To close it, set
+      # EIM_API_KEY in the Render dashboard — no redeploy needed, and
+      # /healthz keeps answering so the health check still passes.
       - key: EIM_RATE_LIMIT_PER_MIN
         value: "60"
       # The origins docs/index.html's chat widget calls from: the custom

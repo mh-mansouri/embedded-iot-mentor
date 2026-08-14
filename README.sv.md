@@ -18,15 +18,10 @@ skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivå
 
 ## Prova den
 
-<!-- När GPT:n är publicerad: lägg dess https://chatgpt.com/g/…-länk i ChatGPT-raden nedan,
-     och i chatgpt-app/README.md. Samma ändring i README.md och README.fa.md. -->
-
 | Var | Ett klick |
 |---|---|
 | **Claude** | [Ladda ner `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) och öppna den |
-| **ChatGPT** | [Bygg GPT:n](./chatgpt-app/custom-gpt/) — klistra in en fil, ladda upp kunskapsfilerna, 10 minuter |
-| **VS Code** | [Installera från Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) |
-| **ChatGPT-koppling** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och lägg sedan in adressen plus `/mcp` under Inställningar → Kopplingar. Samma klick driftsätter även REST-API:et |
+| **VS Code (Copilot Chat)** | Kopiera in prompten från [`vscode-copilot/`](./vscode-copilot/) — inget att installera |
 | **Din egen kod** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och anropa sedan REST-API:et från din egen kod — [rutter](./api/) |
 | **Vilken annan AI-chatt som helst** | Klistra in [`universal-prompt.md`](./universal-prompt.md) som första meddelande — ingen installation, funkar i ChatGPT, Gemini, Copilot och andra |
 
@@ -163,7 +158,7 @@ ställer den ett par korta frågor först — och svarar sedan i tabeller i stä
 utläggningar. En hel projektplan ska få plats på en skärm; vill du ha resonemanget bakom ett
 val får du fråga efter det.
 
-## På andra håll: VS Code och ChatGPT
+## På andra håll: VS Code och REST-API:et
 
 Mentorn är omdöme nedskrivet, inte en funktion i Claude, så den går att flytta. Varje port
 behåller det som betyder något: MVP först, hårdvara och firmware hållna isär, färdig
@@ -173,16 +168,12 @@ handlar om säkerhetskritiskt, fordon eller integritet.
 | Väg | Vad du gör | Värt det när |
 |---|---|---|
 | [`vscode-copilot/`](./vscode-copilot/) | Kopiera en fil till `.github/copilot-instructions.md`, eller klistra in den i Copilot Chat | Börja alltid här i VS Code — inget att installera |
-| [`vscode-extension/`](./vscode-extension/) | [Installera från Marketplace](https://marketplace.visualstudio.com/items?itemName=mh-mansouri.embedded-iot-mentor-vscode) — ett kommando öppnar prompten och kopierar den | Du tar fram prompten så ofta att det stör att leta rätt på filen varje gång |
-| [`chatgpt-app/custom-gpt/`](./chatgpt-app/) | Bygg en GPT: klistra in en instruktionsfil och ladda upp kunskapsfilerna | Börja alltid här i ChatGPT — tio minuter i webbläsaren |
-| [`chatgpt-app/mcp-server/`](./chatgpt-app/mcp-server/) | Driftsätt en liten MCP-server — [ett klick på Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — och lägg till adressen som en egen connector | Du vill att räknehjälpen faktiskt körs och att referenserna aldrig hamnar på efterkälken |
-| [`api/`](./api/) | Driftsätt REST-API:et — samma klick på Render — och anropa det från din egen kod | Callern är ett skript eller en tjänst, inte en människa i ett chattfönster |
+| [`api/`](./api/) | Driftsätt REST-API:et — [ett klick på Render](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) — och anropa det från din egen kod | Callern är ett skript eller en tjänst, inte en människa i ett chattfönster |
 
-Vad portarna får med sig skiljer sig. Copilot-porten är bara omdöme — inga referensfiler,
+Vad de två får med sig skiljer sig. Copilot-porten är bara omdöme — inga referensfiler,
 inga skript, så en riktig drifttid på batteri eller en summa för komponentlistan är
-fortfarande skillens jobb. ChatGPT-GPT:n laddar upp referensfilerna och de tre skripten som
-kunskap och kör dem i Code Interpreter. MCP-connectorn och REST-API:et går längre och läser
-båda direkt ur skill-mappen, så ingen av dem kan hamna efter en ändring som görs här.
+fortfarande skillens jobb. REST-API:et läser båda direkt ur skill-mappen, så det kan aldrig
+hamna efter en ändring som görs här.
 
 ## Bra att veta
 
@@ -212,12 +203,11 @@ projektdata som skillen aldrig läser.
 | `assets/install-steps/` | Skärmdumpar för uppladdningsguiden till Claude Skill, ovan under Installation. |
 | `docs/index.html` | Statisk landningssida för GitHub Pages — "Prova den"-länkarna och demot, ingen chatt behövs. |
 | `create_skill_demo_gif.py` | Genererar en illustrerad demo-GIF (`assets/skill-demo-mockup.gif`) från ett skriptat scenario, för när en riktig inspelning saknas. |
-| `scripts/check_links.py` | Kollar att varje länk i README och distributionsfilerna fortfarande fungerar. Körs av `check-links.yml` vid push, PR och varje vecka. |
+| `scripts/check_links.py` | Kollar att varje länk i README, landningssidan, `CONTRIBUTING.md` och distributionsfilerna fortfarande fungerar. Körs av `check-links.yml` vid push, PR och varje vecka. |
 | `vscode-copilot/` | Porten till Copilot — prompten du klistrar in, och exempelfrågor. |
-| `vscode-extension/` | Ett enkelt VS Code-tillägg som öppnar den prompten. `node_modules/` och `dist/` checkas inte in. |
-| `chatgpt-app/` | Porten till ChatGPT — instruktionerna och paketeraren för en egen GPT, och en MCP-server att koppla in som connector. |
-| `render.yaml` | Ritningen bakom ett-klicks-driftsättningen av den servern. Måste ligga i roten för att Render ska hitta den. |
-| `server.json`, `glama.json` | Katalogmetadata för MCP-registren. Var och en måste ligga i roten för att sitt register ska hitta den. |
+| `api/` | REST-API:et — läser referensbiblioteket från skill-mappen och kör dess skript. |
+| `api/instructions.md` | Mentorns regler, sammanfattade till en fristående prompt, för `POST /chat` och `GET /instructions`. Spegla en beteendeändring här om du gör en i `SKILL.md`. |
+| `render.yaml` | Ritningen bakom ett-klicks-driftsättningen av API:et. Måste ligga i roten för att Render ska hitta den. |
 | `.github/DISTRIBUTION.md` | Var projektet är listat och hur man listar det — stegen som kräver en inloggning i stället för ett arbetsflöde. |
 
 Att skillen ligger i en egen mapp spelar roll: specifikationen kräver att en skills `name`
@@ -246,17 +236,6 @@ när:
 
 Det sista spelar roll eftersom paketet är incheckat: ändra skillen, glöm att bygga om, och
 den som laddar ner filen får en annan version än den i källmappen.
-
-CI kör en andra spärr för ChatGPT-porten:
-
-```bash
-python chatgpt-app/build_chatgpt_bundle.py --check
-```
-
-Den stoppar bygget när de porterade instruktionerna växer förbi ChatGPT:s gräns på 8 000
-tecken, när kunskapsfilerna blir fler än de 20 en GPT tar emot, eller när instruktionerna
-pekar på en kunskapsfil som inte finns med i paketet. Det är oftast en växande skill som
-utlöser den.
 
 ## Skript
 

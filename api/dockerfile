@@ -15,8 +15,6 @@ RUN pip install --no-cache-dir -r api/requirements.txt
 
 COPY api/ api/
 COPY embedded-iot-mentor/ embedded-iot-mentor/
-# /instructions serves the same rules as the ChatGPT ports, so no route drifts.
-COPY chatgpt-app/custom-gpt/instructions.md chatgpt-app/custom-gpt/
 
 # The scripts are run, never written to, so the server needs no write access
 # anywhere in the image.

@@ -1,5 +1,6 @@
-# The build context is the repository root, for both images. Everything here is
-# either rebuilt inside the image or has no business in it.
+# The build context is the repository root, so the API's Dockerfile can carry
+# the skill folder alongside it. Everything here is either rebuilt inside the
+# image or has no business in it.
 .git/
 .github/
 .venv/
@@ -8,10 +9,8 @@ __pycache__/
 .claude/
 .playwright-mcp/
 
-# Ports that no image needs.
-vscode-extension/
+# The image needs api/ and embedded-iot-mentor/, nothing else.
 vscode-copilot/
-chatgpt-app/dist/
 
 # Media only. The 2 MB demo gif is the expensive one; the reference .md files
 # are the product and must stay.
