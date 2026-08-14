@@ -1,0 +1,75 @@
+name: reference-review
+
+# Link-liveness is mechanical and handled weekly by check-links.yml. Whether a
+# price, a part's regional availability, or a toolchain claim in the reference
+# library is still accurate needs a human (or Claude) judgment call -- nothing
+# CI can check. This opens one tracking issue on the same weekly cadence so
+# that review actually happens instead of being implied by CONTRIBUTING.md's
+# "Keeping estimates honest". It never opens a second issue while one is
+# still open.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  open-review-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open (or skip) the weekly reference-review issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Weekly hardware-reference review";
+
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+            });
+            const existing = openIssues.find((issue) => issue.title === title);
+            if (existing) {
+              console.log(`Still open from last week: #${existing.number} — skipping.`);
+              return;
+            }
+
+            const body = [
+              "Automated weekly reminder, paired with the `check-links` workflow (which",
+              "already re-verified that every outbound link resolves).",
+              "",
+              "This half needs judgment: per CONTRIBUTING.md's \"Keeping estimates honest\",",
+              "prices, stock, and toolchain details go stale. Skim each reference file below",
+              "for a claim that's no longer true — a part gone end-of-life or single-source,",
+              "a price range that's drifted, a toolchain or board package that's changed, a",
+              "regional supplier that's stopped shipping somewhere the skill recommends it.",
+              "",
+              "### Reference files",
+              "- [ ] `references/mcu-selection-cheatsheet.md`",
+              "- [ ] `references/connectivity-modules.md`",
+              "- [ ] `references/cost-estimation-guidelines.md`",
+              "- [ ] `references/power-and-battery-notes.md`",
+              "- [ ] `references/data-and-dashboards.md`",
+              "- [ ] `references/pcb-transition-checklist.md`",
+              "- [ ] `references/field-deployment-notes.md`",
+              "- [ ] `references/ota-update-notes.md`",
+              "- [ ] `references/emc-and-compliance.md`",
+              "- [ ] `references/functional-safety-boundary.md`",
+              "- [ ] `references/learning-resources.md`",
+              "",
+              "Close this issue once reviewed. If something's changed, open a PR updating",
+              "the file — and bump `embedded-iot-mentor/SKILL.md`'s version per",
+              "CONTRIBUTING.md → \"Cutting a release\" if the correction is significant enough",
+              "to matter to someone who already read the old numbers.",
+            ].join("\n");
+
+            const created = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+            });
+            console.log(`Opened #${created.data.number}`);

@@ -8,3 +8,4 @@
 # rather than leaving the generated bundle to content detection.
 *.skill binary
 *.gif binary
+*.png binary

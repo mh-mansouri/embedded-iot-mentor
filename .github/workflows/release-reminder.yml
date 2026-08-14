@@ -1,0 +1,115 @@
+name: release-reminder
+
+# The .skill bundle, GPT zip, and .vsix attached to the latest GitHub Release
+# go stale the moment their source changes without a new tag. This checks
+# weekly whether anything in the *shipped surface* -- what release.yml
+# actually packages (embedded-iot-mentor/, the two bundlers, universal-prompt.md,
+# the extension's source and version) -- has moved since the last tag, and
+# opens (never duplicates) a reminder if so.
+#
+# Deliberately narrow: README/translation/index.html/docs-only changes, and
+# vscode-copilot/ or the API/connector (not tag-gated the same way) don't
+# trigger this. See CONTRIBUTING.md's "Cutting a release" for the full criteria.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check-for-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Diff the shipped surface since the last tag
+        id: diff
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "No tags yet — nothing to compare against, skipping."
+            echo "changed=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          PATHS="embedded-iot-mentor/ package_skill.py chatgpt-app/custom-gpt/ chatgpt-app/build_chatgpt_bundle.py universal-prompt.md vscode-extension/src vscode-extension/package.json"
+
+          CHANGED=$(git diff --name-only "$LAST_TAG"..HEAD -- $PATHS)
+
+          echo "last_tag=$LAST_TAG" >> "$GITHUB_OUTPUT"
+          {
+            echo "changed<<EOF"
+            echo "$CHANGED"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          COMMITS=$(git log --oneline "$LAST_TAG"..HEAD -- $PATHS)
+          {
+            echo "commits<<EOF"
+            echo "$COMMITS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open (or skip) the release-reminder issue
+        if: steps.diff.outputs.changed != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Release reminder: unshipped changes since last tag";
+
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+            });
+            if (openIssues.find((issue) => issue.title === title)) {
+              console.log("Already open — skipping.");
+              return;
+            }
+
+            const lastTag = `${{ steps.diff.outputs.last_tag }}`;
+            const changed = `${{ steps.diff.outputs.changed }}`.trim();
+            const commits = `${{ steps.diff.outputs.commits }}`.trim();
+
+            const body = [
+              `Files that ship in the `+"`.skill`"+` bundle, the GPT zip, or the VS Code`,
+              `extension have changed since **${lastTag}**, the last tag. That means the`,
+              `release assets attached to it no longer match what's in `+"`main`"+`.`,
+              "",
+              "### Changed",
+              "```",
+              changed,
+              "```",
+              "",
+              "### Commits",
+              "```",
+              commits,
+              "```",
+              "",
+              "### Before cutting a release",
+              "- [ ] Classify the change: **PATCH** (wording/typo, no behavior change),",
+              "  **MINOR** (new capability, backward compatible), or **MAJOR** (breaks/",
+              "  invalidates an existing recommendation or output shape)",
+              "- [ ] Bump `metadata.version` in `embedded-iot-mentor/SKILL.md` and `version`",
+              "  in `vscode-extension/package.json` to match",
+              "- [ ] Rebuild the bundles: `python package_skill.py` and",
+              "  `python chatgpt-app/build_chatgpt_bundle.py`",
+              "- [ ] Add an entry under the new version heading in `CHANGELOG.md`",
+              "- [ ] Tag and push (`git tag -a vX.Y.Z -m \"...\" && git push origin vX.Y.Z`)",
+              "  — `release.yml` builds and attaches the bundles automatically",
+              "- [ ] Close this issue",
+              "",
+              "Full criteria in CONTRIBUTING.md → \"Cutting a release\".",
+            ].join("\n");
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+            });
