@@ -55,9 +55,9 @@ It idles after about fifteen minutes without traffic and the next request pays t
 start, so treat it as a demo instance rather than something to depend on. Anyone wanting
 their own runs `docker run -p 8000:8000 ghcr.io/mh-mansouri/embedded-iot-mentor-mcp:latest`.
 
-Smithery no longer builds from a repository — it proxies a URL you host — so
-[`smithery.yaml`](../smithery.yaml) configures a path that no longer exists and can be
-deleted whenever you like.
+Smithery no longer builds from a repository — it proxies a URL you host — so the
+`smithery.yaml` that used to configure a build path was removed; the "Through Smithery"
+URL above is a proxy in front of the same hosted connector.
 
 ## VS Code Marketplace
 

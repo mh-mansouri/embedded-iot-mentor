@@ -217,7 +217,7 @@ projektdata som skillen aldrig läser.
 | `vscode-extension/` | Ett enkelt VS Code-tillägg som öppnar den prompten. `node_modules/` och `dist/` checkas inte in. |
 | `chatgpt-app/` | Porten till ChatGPT — instruktionerna och paketeraren för en egen GPT, och en MCP-server att koppla in som connector. |
 | `render.yaml` | Ritningen bakom ett-klicks-driftsättningen av den servern. Måste ligga i roten för att Render ska hitta den. |
-| `server.json`, `smithery.yaml`, `glama.json` | Katalogmetadata för MCP-registren. Var och en måste ligga i roten för att sitt register ska hitta den. |
+| `server.json`, `glama.json` | Katalogmetadata för MCP-registren. Var och en måste ligga i roten för att sitt register ska hitta den. |
 | `.github/DISTRIBUTION.md` | Var projektet är listat och hur man listar det — stegen som kräver en inloggning i stället för ett arbetsflöde. |
 
 Att skillen ligger i en egen mapp spelar roll: specifikationen kräver att en skills `name`

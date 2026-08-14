@@ -210,7 +210,7 @@ packaging and project metadata that the skill never reads.
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 | `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
 | `render.yaml` | Blueprint behind the one-click deploy of that server. Has to sit at the root for Render to find it. |
-| `server.json`, `smithery.yaml`, `glama.json` | Listing metadata for the MCP directories. Each one has to sit at the root for its directory to find it. |
+| `server.json`, `glama.json` | Listing metadata for the MCP directories. Each one has to sit at the root for its directory to find it. |
 | `.github/DISTRIBUTION.md` | Where the project is listed and how to list it — the steps that need a login rather than a workflow. |
 
 Keeping the skill in its own folder matters: the spec requires a skill's `name` to match its
