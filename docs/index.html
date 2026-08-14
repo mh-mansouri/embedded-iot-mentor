@@ -215,7 +215,7 @@
   </div>
 
   <h1 id="h1">Embedded / IoT Mentor</h1>
-  <p class="lead" id="lead">A skill for Claude that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.</p>
+  <p class="lead" id="lead">A skill for <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.</p>
 
   <p class="badge-row">
     <a href="https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml"><img alt="check-skill" src="https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-skill.yml/badge.svg"></a>
@@ -260,7 +260,7 @@ const I18N = {
     pageTitle: "Embedded / IoT Mentor — a Claude Skill",
     metaDescription: "Picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP.",
     h1: "Embedded / IoT Mentor",
-    lead: "A skill for Claude that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP — not a production line you didn't ask for.",
+    lead: 'A skill for <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> that picks the microcontroller, board, and toolchain for your project, estimates cost and time, and stops at a working breadboard MVP — not a production line you didn\'t ask for.',
     askH2: "Ask it something",
     chatPlaceholder: "e.g. soil moisture sensor for a greenhouse, battery-powered",
     chatSend: "Send",
@@ -295,7 +295,7 @@ const I18N = {
     pageTitle: "Embedded / IoT Mentor — en Claude Skill",
     metaDescription: "Väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och stannar vid ett fungerande kopplingsdäck.",
     h1: "Embedded / IoT Mentor",
-    lead: "En skill för Claude som väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och ger en byggplan som slutar vid ett kopplingsdäck som funkar — inte en produktionslinje du aldrig bad om.",
+    lead: 'En skill för <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> som väljer mikrokontroller, kort och verktygskedja åt ditt projekt, uppskattar kostnad och tid, och ger en byggplan som slutar vid ett kopplingsdäck som funkar — inte en produktionslinje du aldrig bad om.',
     askH2: "Fråga den något",
     chatPlaceholder: "t.ex. jordfuktighetssensor för ett växthus, batteridriven",
     chatSend: "Skicka",
@@ -330,7 +330,7 @@ const I18N = {
     pageTitle: "Embedded / IoT Mentor — یک Skill برای Claude",
     metaDescription: "میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان را تخمین می‌زند، و روی یک بردبورد کارکننده تمام می‌شود.",
     h1: "Embedded / IoT Mentor",
-    lead: "یک Skill برای Claude که میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان لازم را تخمین می‌زند، و نقشهٔ ساختی می‌دهد که روی یک بردبورد کارکننده تمام می‌شود — نه خط تولیدی که سراغش را نگرفته‌اید.",
+    lead: 'یک Skill برای <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> که میکروکنترلر، برد و زنجیرهٔ ابزار پروژه‌تان را انتخاب می‌کند، هزینه و زمان لازم را تخمین می‌زند، و نقشهٔ ساختی می‌دهد که روی یک بردبورد کارکننده تمام می‌شود — نه خط تولیدی که سراغش را نگرفته‌اید.',
     askH2: "چیزی بپرسید",
     chatPlaceholder: "مثلاً حسگر رطوبت خاک برای یک گلخانه، باتری‌خور",
     chatSend: "ارسال",
@@ -489,7 +489,7 @@ function applyLanguage(lang) {
   document.getElementById("twitterDescription").setAttribute("content", t.metaDescription);
 
   h1El.textContent = t.h1;
-  leadEl.textContent = t.lead;
+  leadEl.innerHTML = t.lead;
   askH2El.textContent = t.askH2;
   chatInputEl.placeholder = t.chatPlaceholder;
   chatSendEl.textContent = t.chatSend;

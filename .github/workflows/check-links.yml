@@ -1,10 +1,11 @@
 name: check-links
 
-# The README badges, the release download, the Marketplace listing, and the
-# one-click Render deploy are the links a reader actually clicks. A renamed
-# listing or a moved release asset breaks silently otherwise, and nobody
-# notices until someone reports a dead "Install" button. The weekly schedule
-# catches rot on a repository that otherwise goes weeks without a push.
+# The README and landing-page badges, the release download, the Marketplace
+# listing, and the one-click Render deploy are the links a reader actually
+# clicks. A renamed listing or a moved release asset breaks silently
+# otherwise, and nobody notices until someone reports a dead "Install"
+# button. The weekly schedule catches rot on a repository that otherwise
+# goes weeks without a push.
 
 on:
   push:

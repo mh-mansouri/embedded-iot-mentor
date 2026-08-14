@@ -1,4 +1,5 @@
-"""Verify every outbound link in the README files and DISTRIBUTION.md still resolves.
+"""Verify every outbound link in the READMEs, the landing page, and CONTRIBUTING.md
+still resolves.
 
 These are the links a reader actually clicks — badges, the release download, the
 Marketplace listing, the one-click Render deploy, the registry submission pages.
@@ -31,10 +32,19 @@ FILES = [
     ROOT / "README.md",
     ROOT / "README.sv.md",
     ROOT / "README.fa.md",
+    ROOT / "CONTRIBUTING.md",
+    ROOT / "docs" / "index.html",
     ROOT / ".github" / "DISTRIBUTION.md",
 ]
 
-LINK_RE = re.compile(r"]\((https?://[^)\s]+)\)")
+# Markdown `[text](url)` and HTML `href="url"` / `src="url"`, in one pass —
+# docs/index.html carries its badges and links as literal HTML, not Markdown.
+# The href/src alternative excludes quotes and whitespace from the URL itself,
+# not just as the closing delimiter: docs/index.html builds several links by
+# JS string concatenation (`href="https://.../repo=' + REPO + '"`), and a
+# looser class would swallow the `' + REPO + '` fragment into the "URL" and
+# hand urlopen something with a space in it instead of skipping the line.
+LINK_RE = re.compile(r"\]\((https?://[^)\s]+)\)|(?:href|src)=\"(https?://[^\"\s']+)\"")
 
 BOT_PROTECTED_DOMAINS = ("marketplace.visualstudio.com", "claude.ai")
 
@@ -54,7 +64,7 @@ def collect_urls() -> list[tuple[str, str]]:
         if not path.is_file():
             continue
         for match in LINK_RE.finditer(path.read_text(encoding="utf-8")):
-            url = match.group(1).rstrip(".,")
+            url = (match.group(1) or match.group(2)).rstrip(".,")
             if url in seen:
                 continue
             seen.add(url)

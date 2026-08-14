@@ -205,7 +205,7 @@ packaging and project metadata that the skill never reads.
 | `assets/install-steps/` | Screenshots for the Claude Skill upload walkthrough in Install, above. |
 | `docs/index.html` | Static landing page for GitHub Pages — the "Try it" links and the demo, no chat needed. |
 | `create_skill_demo_gif.py` | Generates a mock-up demo GIF (`assets/skill-demo-mockup.gif`) from a scripted scenario, for when a real recording isn't available. |
-| `scripts/check_links.py` | Checks that every README / distribution link still resolves. Run by `check-links.yml` on push, PR, and weekly. |
+| `scripts/check_links.py` | Checks that every README, landing-page, `CONTRIBUTING.md`, and distribution link still resolves. Run by `check-links.yml` on push, PR, and weekly. |
 | `vscode-copilot/` | The Copilot port — the paste-in prompt and example queries. |
 | `vscode-extension/` | A scaffold VS Code extension that opens that prompt. `node_modules/` and `dist/` are ignored. |
 | `chatgpt-app/` | The ChatGPT port — the Custom GPT instructions and bundle builder, and an MCP server for use as a custom connector. |
