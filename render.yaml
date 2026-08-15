@@ -17,10 +17,11 @@ services:
       # /healthz keeps answering so the health check still passes.
       - key: EIM_RATE_LIMIT_PER_MIN
         value: "60"
-      # The origins docs/index.html's chat widget calls from: the custom
-      # domain and the GitHub Pages fallback it's mapped from.
+      # The origin docs/index.html's chat widget calls from. iotmentor.dev
+      # moved to an unrelated product (2026-08-15); this repo's page now
+      # lives only at its default GitHub Pages URL.
       - key: EIM_CORS_ORIGINS
-        value: https://iotmentor.dev,https://mh-mansouri.github.io
+        value: https://mh-mansouri.github.io
       # sync: false means Render prompts for this at deploy time and never
       # stores the value in this repo. Paste your OpenRouter API key there
       # (openrouter.ai/keys) — never into a committed file. /chat calls Claude

@@ -26,8 +26,9 @@ actually built before, then answers at that level.
 | **Any other AI chat** | Copy [`universal-prompt.md`](./universal-prompt.md) into the first message — no install, works in ChatGPT, Gemini, Copilot, and others |
 
 Prefer a page over a chat? [`docs/index.html`](./docs/index.html) is a static overview with the
-same "Try it" links and demo — live at https://iotmentor.dev, or open the file locally, no
-server needed.
+same "Try it" links and demo — live at
+[mh-mansouri.github.io/embedded-iot-mentor](https://mh-mansouri.github.io/embedded-iot-mentor/),
+or open the file locally, no server needed.
 
 Everything below is the longer way round: build it yourself, change it, or read why it
 answers the way it does.
