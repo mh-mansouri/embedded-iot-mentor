@@ -20,6 +20,7 @@ skillen frågar vad du faktiskt har byggt förut, och svarar sedan på den nivå
 
 | Var | Ett klick |
 |---|---|
+| **Webbläsaren** | [iotmentor.dev](https://iotmentor.dev) — en webbapp av samma utvecklare, byggd på samma principer men med egen kod. Inget att installera |
 | **Claude** | [Ladda ner `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) och öppna den |
 | **VS Code (Copilot Chat)** | Kopiera in prompten från [`vscode-copilot/`](./vscode-copilot/) — inget att installera |
 | **Din egen kod** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) och anropa sedan REST-API:et från din egen kod — [rutter](./api/) |

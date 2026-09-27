@@ -20,6 +20,7 @@ actually built before, then answers at that level.
 
 | Where | One click |
 |---|---|
+| **Your browser** | [iotmentor.dev](https://iotmentor.dev) — a web app by the same author, built on the same principles but with its own code. Nothing to install |
 | **Claude** | [Download `embedded-iot-mentor.skill`](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) and open it |
 | **VS Code (Copilot Chat)** | Copy [`vscode-copilot/`](./vscode-copilot/)'s prompt in — nothing to install |
 | **Your own code** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) then call the REST API — [routes](./api/) |

@@ -22,6 +22,7 @@
 
 | کجا | با یک کلیک |
 |---|---|
+| **مرورگر** | [iotmentor.dev](https://iotmentor.dev) — وب‌اپی از همین سازنده که بر پایهٔ همین اصول ساخته شده، ولی کدش جداست. چیزی نصب نمی‌شود |
 | **Claude** | [فایل `embedded-iot-mentor.skill` را بگیرید](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest/download/embedded-iot-mentor.skill) و در Claude بازش کنید |
 | **VS Code (Copilot Chat)** | پرامپت [`vscode-copilot/`](./vscode-copilot/) را کپی کنید — چیزی نصب نمی‌شود |
 | **کد خودتان** | REST API را از کد خودتان صدا بزنید — [مسیرها](./api/) — [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mh-mansouri/embedded-iot-mentor) |
