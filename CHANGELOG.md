@@ -2,6 +2,14 @@
 
 All notable changes to this skill are documented here. Versions follow the `metadata.version` field in `embedded-iot-mentor/SKILL.md`.
 
+## Unreleased
+
+- `POST /chat` now answers `451` to visitors from countries the model provider (Anthropic,
+  via OpenRouter) doesn't serve, read from Cloudflare's `CF-IPCountry` header that Render
+  sets. Without that header the check lets everyone through; following the provider's
+  regional rules is then up to whoever runs the deployment. See the API README's
+  **Regions** note. (2026-10-01)
+
 ## 2.0.0 - 2026-08-14
 
 Drops two of the four ports to keep the surface to what's actually maintained: the skill
