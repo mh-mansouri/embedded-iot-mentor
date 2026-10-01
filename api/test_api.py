@@ -160,6 +160,11 @@ check("off by default", main.OPENROUTER_API_KEY == "")
 check("model slug is an OpenRouter slug, not a bare Anthropic one",
       main.CHAT_MODEL == "anthropic/claude-sonnet-5", main.CHAT_MODEL)
 rejects("no key means 501", lambda: main._chat_client_or_501())
+check("chat open in a supported country", main._chat_country_allowed("SE"))
+check("chat closed where the provider doesn't serve", not any(main._chat_country_allowed(c) for c in ["IR", "RU", "CN", "KP"]))
+check("unknown country or no header stays open", main._chat_country_allowed(None) and main._chat_country_allowed("XX"))
+check("Tor is not let through", not main._chat_country_allowed("T1"))
+check("all 185 provider countries listed", len(main.CHAT_COUNTRIES) >= 185)
 
 # _run_chat_tool goes through the same models/scripts as the REST routes —
 # no network call, so this runs without a key.

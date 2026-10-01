@@ -61,6 +61,13 @@ at [openrouter.ai/keys](https://openrouter.ai/keys). This is **not** the same
 as an Anthropic Console key — Anthropic's own API 401s outright on an
 OpenRouter key, and vice versa.
 
+
+**Regions.** `/chat` answers `451` to visitors from countries the model provider
+doesn't serve (Anthropic's [supported countries](https://www.anthropic.com/supported-countries)),
+read from Cloudflare's `CF-IPCountry` header, which Render sets. Hosted somewhere
+without that header, the check lets everyone through, and following the provider's
+regional rules is up to whoever runs the deployment.
+
 ## Settings
 
 All optional. The defaults suit a local run; a deployment should at least think

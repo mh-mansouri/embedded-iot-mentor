@@ -191,6 +191,39 @@ def _client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+# Where /chat may be used: the model provider's supported regions. /chat goes
+# through OpenRouter to Anthropic (Claude), which only offers its service in
+# the countries on https://www.anthropic.com/supported-countries, and
+# OpenRouter's terms make the operator responsible for respecting that. The
+# country comes from Cloudflare's CF-IPCountry header, which Render's edge sets
+# from the connecting IP. Without that header (self-hosted elsewhere, tests) or
+# with "XX" (unknown) the chat stays open; Tor ("T1") hides the country, so it
+# doesn't. List checked 2026-10-01; territories of listed countries included.
+CHAT_COUNTRIES = frozenset("""
+AL DZ AD AO AG AR AM AU AT AZ BS BH BD BB BE BZ BJ BT BO BA BW BR BN BG BF BI
+CV KH CM CA CF TD CL CO KM CD CG CR CI HR CY CZ DK DJ DM DO EC EG SV GQ ER EE
+SZ ET FJ FI FR GA GM GE DE GH GR GD GT GN GW GY HT HN HU IS IN ID IQ IE IL IT
+JM JP JO KZ KE KI KW KG LA LV LB LS LR LY LI LT LU MG MW MY MV ML MT MH MR MU
+MX FM MD MC MN ME MA MZ NA NR NP NL NZ NI NE NG MK NO OM PK PW PS PA PG PY PE
+PH PL PT QA RO RW KN LC VC WS SM ST SA SN RS SC SL SG SK SI SO SB ZA KR SS ES
+LK SD SR SE CH TW TJ TZ TH TL TG TO TT TN TR TM TV UG UA AE GB US UY UZ VU VA
+VN ZM ZW
+PR GU VI AS MP UM
+GP MQ GF RE YT PM BL MF PF NC WF TF
+AW CW SX BQ
+GL FO
+GI IM JE GG BM KY VG TC AI MS FK SH IO PN GS
+SJ BV AX
+CX CC NF HM
+CK NU TK
+""".split())
+
+
+def _chat_country_allowed(code) -> bool:
+    code = (code or "").strip().upper()
+    return code in ("", "XX") or code in CHAT_COUNTRIES
+
+
 def _check_rate_limit(hits: dict[str, list[float]], lock: threading.Lock, limit: int, ip: str) -> bool:
     """Fixed one-minute window, per process. Good enough for one small instance;
     a second instance would need shared state, which is not worth a Redis."""
@@ -477,6 +510,8 @@ def chat(req: ChatRequest, request: Request) -> ChatResponse:
     """The mentor as a conversation: same instructions, same calculators, but
     Claude — via OpenRouter — does the talking instead of a human
     copy-pasting into a chat app."""
+    if not _chat_country_allowed(request.headers.get("cf-ipcountry")):
+        raise HTTPException(451, "chat: not available in your region (the model provider doesn't offer its service there)")
     if not _within_chat_rate_limit(_client_ip(request)):
         raise HTTPException(429, "chat rate limit exceeded — try again in a minute",
                              headers={"Retry-After": "60"})
