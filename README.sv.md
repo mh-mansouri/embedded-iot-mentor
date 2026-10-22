@@ -6,6 +6,7 @@
 [![check-links](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml)
 [![senaste utgåvan](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
 [![Licens: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Embedded / IoT Mentor MCP på mcprush](https://mcprush.com/badge/embedded-iot-mentor-mcp/score.svg)](https://mcprush.com/to/embedded-iot-mentor-mcp?ref=badge)
 
 En skill för [Claude](https://claude.ai) som är en van mentor inom inbyggda system: den
 väljer mikrokontroller, kort och verktygskedja åt ditt projekt, gissar vad det kommer att

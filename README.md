@@ -6,6 +6,7 @@
 [![check-links](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml/badge.svg)](https://github.com/mh-mansouri/embedded-iot-mentor/actions/workflows/check-links.yml)
 [![latest release](https://img.shields.io/github/v/release/mh-mansouri/embedded-iot-mentor?label=release)](https://github.com/mh-mansouri/embedded-iot-mentor/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Embedded / IoT Mentor MCP on mcprush](https://mcprush.com/badge/embedded-iot-mentor-mcp/score.svg)](https://mcprush.com/to/embedded-iot-mentor-mcp?ref=badge)
 
 A skill for [Claude](https://claude.ai) that acts as an experienced embedded-systems mentor:
 it picks the microcontroller, board, and toolchain for your project, estimates what it will

@@ -6,7 +6,7 @@ Marketplace listing, the one-click Render deploy, the registry submission pages.
 A renamed listing or a moved release asset fails silently otherwise; nobody
 notices until someone reports a dead "Install" button.
 
-Some hosts (Claude.ai, the VS Code Marketplace) return 403 to a plain scripted
+Some hosts (Claude.ai, the VS Code Marketplace, mcprush) return 403 to a plain scripted
 request from a datacenter IP range -- confirmed manually to work fine from a
 real browser -- even though the page itself is live. Those are treated as
 unverifiable rather than failures. Everything else must return a successful or
@@ -46,7 +46,7 @@ FILES = [
 # hand urlopen something with a space in it instead of skipping the line.
 LINK_RE = re.compile(r"\]\((https?://[^)\s]+)\)|(?:href|src)=\"(https?://[^\"\s']+)\"")
 
-BOT_PROTECTED_DOMAINS = ("marketplace.visualstudio.com", "claude.ai")
+BOT_PROTECTED_DOMAINS = ("marketplace.visualstudio.com", "claude.ai", "mcprush.com")
 
 HEADERS = {
     "User-Agent": (
@@ -83,7 +83,8 @@ def check(url: str) -> str | None:
         # Python's redirect handler doesn't chase 308s, but the resource is live.
         if 300 <= exc.code < 400:
             return None
-        if exc.code == 403 and any(domain in url for domain in BOT_PROTECTED_DOMAINS):
+        # mcprush answers scripts with 403 or, once it has seen a few, 429.
+        if exc.code in (403, 429) and any(domain in url for domain in BOT_PROTECTED_DOMAINS):
             return None
         return f"HTTP {exc.code}"
     except urllib.error.URLError as exc:
