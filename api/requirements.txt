@@ -6,3 +6,6 @@ pydantic>=2.7.0
 # OpenAI-compatible endpoint. Absent OPENROUTER_API_KEY disables that route
 # without failing startup, so this stays a hard requirement rather than optional.
 openai>=1.0.0
+# CA bundle used by httpx (openai's HTTP client). 2026.10.19+ drops trust in the
+# compromised eMudhra emSign G3 CA (Oct 2026); the pin makes a rebuild pick it up.
+certifi>=2026.10.19

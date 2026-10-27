@@ -4,6 +4,10 @@ All notable changes to this skill are documented here. Versions follow the `meta
 
 ## Unreleased
 
+- Pinned `certifi>=2026.10.19` in `api/requirements.txt`: that release drops trust in the
+  eMudhra emSign G3 CA whose intermediate keys were compromised in October 2026, so a
+  rebuilt deployment's outgoing HTTPS calls (OpenRouter) no longer accept certificates
+  from it. Redeploy existing deployments to pick it up. (2026-10-27)
 - `POST /chat` now answers `451` to visitors from countries the model provider (Anthropic,
   via OpenRouter) doesn't serve, read from Cloudflare's `CF-IPCountry` header that Render
   sets. Without that header the check lets everyone through; following the provider's
